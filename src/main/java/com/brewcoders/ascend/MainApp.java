@@ -1,6 +1,6 @@
 package com.brewcoders.ascend;
 
-import com.brewcoders.ascend.view.DashboardView;
+import com.brewcoders.ascend.view.navigation.MainLayoutView;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -9,8 +9,8 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        DashboardView dashboardView = new DashboardView();
-        Scene scene = new Scene(dashboardView.getView(), 1100, 700);
+        MainLayoutView mainLayout = new MainLayoutView();
+        Scene scene = new Scene(mainLayout, 1100, 700);
 
         // Attach CSS stylesheet if available
         if (getClass().getResource("/css/styles.css") != null) {
@@ -19,8 +19,12 @@ public class MainApp extends Application {
 
         primaryStage.setTitle("ASCEND - Developer Productivity System");
         primaryStage.setScene(scene);
+
+        // Responsive Window Constraints
+        primaryStage.setResizable(true);
         primaryStage.setMinWidth(900);
         primaryStage.setMinHeight(600);
+
         primaryStage.show();
     }
 
