@@ -19,13 +19,13 @@ public class SignupCourseView extends StackPane {
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.getStyleClass().add("auth-scroll-pane");
 
-        VBox mainContainer = new VBox(20);
+        VBox mainContainer = new VBox(24);
         mainContainer.getStyleClass().add("auth-root");
         mainContainer.setAlignment(Pos.CENTER);
-        mainContainer.setStyle("-fx-padding: 50px 20px;");
+        mainContainer.setStyle("-fx-padding: 60px 20px;");
 
-        // 1. Logo Header
-        HBox logoHeader = new HBox(12);
+        // 1. Header
+        HBox logoHeader = new HBox(14);
         logoHeader.setAlignment(Pos.CENTER);
 
         Label logoBox = new Label("A");
@@ -50,15 +50,15 @@ public class SignupCourseView extends StackPane {
         Label heroTitle = new Label("Create your current course.");
         heroTitle.getStyleClass().add("hero-title");
 
-        Label heroSubtitle = new Label("Your missions, points, history, and achievements will\nbe tied to this course until it ends.");
+        Label heroSubtitle = new Label("Your missions, points, history, and achievements will\nbelong to this course until you begin a new one.");
         heroSubtitle.getStyleClass().add("hero-subtitle");
         heroSubtitle.setStyle("-fx-text-alignment: center;");
         heroSubtitle.setWrapText(true);
 
-        // 4. Main Card Container (520px wide)
-        VBox authCard = new VBox(16);
+        // 4. Main Card Container (680px Wide)
+        VBox authCard = new VBox(20);
         authCard.getStyleClass().add("auth-card");
-        authCard.setMaxWidth(520);
+        authCard.setMaxWidth(680);
         authCard.setAlignment(Pos.TOP_LEFT);
 
         // Back Button
@@ -69,8 +69,8 @@ public class SignupCourseView extends StackPane {
         Label cardTitle = new Label("Set up your course");
         cardTitle.getStyleClass().add("card-title-text");
 
-        // Course Name Field
-        VBox courseBox = new VBox(6);
+        // Course Name
+        VBox courseBox = new VBox(8);
         Label courseLabel = new Label("Course name");
         courseLabel.getStyleClass().add("field-label");
         TextField courseField = new TextField();
@@ -78,23 +78,22 @@ public class SignupCourseView extends StackPane {
         courseField.getStyleClass().add("retro-input");
         courseBox.getChildren().addAll(courseLabel, courseField);
 
-        // Focus Cycle & Subtitle
-        VBox focusBox = new VBox(4);
+        // Focus Cycle
+        VBox focusBox = new VBox(6);
         Label focusLabel = new Label("Focus Cycle");
         focusLabel.getStyleClass().add("field-label");
         
         Label focusSubText = new Label("Pick the first and last day from the calendar.");
-        focusSubText.setStyle("-fx-font-family: 'Press Start 2P'; -fx-font-size: 8px; -fx-text-fill: #4a2810;");
+        focusSubText.setStyle("-fx-font-family: 'Press Start 2P'; -fx-font-size: 10px; -fx-text-fill: #4a2810;");
         focusSubText.setWrapText(true);
-        focusSubText.setMaxWidth(440);
         
         focusBox.getChildren().addAll(focusLabel, focusSubText);
 
-        // Date Pickers Row
-        HBox datesRow = new HBox(12);
+        // Dates Row
+        HBox datesRow = new HBox(16);
         datesRow.setAlignment(Pos.CENTER_LEFT);
 
-        VBox startBox = new VBox(6);
+        VBox startBox = new VBox(8);
         Label startLabel = new Label("Start date");
         startLabel.getStyleClass().add("field-label");
         DatePicker startDatePicker = new DatePicker();
@@ -104,7 +103,7 @@ public class SignupCourseView extends StackPane {
         startBox.getChildren().addAll(startLabel, startDatePicker);
         HBox.setHgrow(startBox, Priority.ALWAYS);
 
-        VBox endBox = new VBox(6);
+        VBox endBox = new VBox(8);
         Label endLabel = new Label("End date");
         endLabel.getStyleClass().add("field-label");
         DatePicker endDatePicker = new DatePicker();
@@ -116,16 +115,13 @@ public class SignupCourseView extends StackPane {
 
         datesRow.getChildren().addAll(startBox, endBox);
 
-        // DATE VALIDATION LOGIC:
-        // When Start Date is chosen, constrain End Date to only allow dates >= Start Date
+        // Date Validation Logic: Disables dates prior to selected start date
         startDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                // If existing end date is before new start date, reset end date
                 if (endDatePicker.getValue() != null && endDatePicker.getValue().isBefore(newValue)) {
                     endDatePicker.setValue(null);
                 }
                 
-                // Disable dates before newValue in endDatePicker
                 endDatePicker.setDayCellFactory(picker -> new DateCell() {
                     @Override
                     public void updateItem(LocalDate date, boolean empty) {
@@ -163,9 +159,9 @@ public class SignupCourseView extends StackPane {
         StackPane overlay = new StackPane();
         overlay.getStyleClass().add("modal-overlay");
 
-        VBox alertCard = new VBox(12);
+        VBox alertCard = new VBox(16);
         alertCard.getStyleClass().add("alert-box");
-        alertCard.setMaxWidth(500);
+        alertCard.setMaxWidth(600);
         alertCard.setMaxHeight(VBox.USE_PREF_SIZE);
         alertCard.setAlignment(Pos.TOP_LEFT);
 
@@ -175,19 +171,17 @@ public class SignupCourseView extends StackPane {
         Label title = new Label(titleText);
         title.getStyleClass().add("alert-title");
         title.setWrapText(true);
-        title.setMaxWidth(450);
 
         Label message = new Label(messageText);
         message.getStyleClass().add("alert-message");
         message.setWrapText(true);
-        message.setMaxWidth(450);
 
         Button okButton = new Button("OK");
         okButton.getStyleClass().add("alert-ok-button");
 
         HBox buttonContainer = new HBox(okButton);
         buttonContainer.setAlignment(Pos.BOTTOM_RIGHT);
-        buttonContainer.setStyle("-fx-padding: 8px 0 0 0;");
+        buttonContainer.setStyle("-fx-padding: 12px 0 0 0;");
 
         okButton.setOnAction(e -> this.getChildren().remove(overlay));
 

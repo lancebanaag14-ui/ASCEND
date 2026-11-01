@@ -1,4 +1,4 @@
-/* Base Root Container */
+/* Custom Pixel Font Loading */
 .auth-root {
     -fx-background-color: linear-gradient(to bottom, #09527a, #15799a, #76b194, #bed89c);
     -fx-font-family: "Press Start 2P", "Courier New", monospace;
@@ -14,90 +14,92 @@
     -fx-background-color: transparent;
 }
 
-/* Brand Header */
+/* Header & Logo */
 .brand-logo-box {
     -fx-background-color: #3b82f6;
     -fx-text-fill: #ffffff;
     -fx-font-family: "Press Start 2P";
-    -fx-font-size: 18px;
-    -fx-padding: 8px 16px;
+    -fx-font-size: 24px;
+    -fx-padding: 12px 22px;
     -fx-border-color: #facc15;
-    -fx-border-width: 3px;
+    -fx-border-width: 4px;
 }
 
 .brand-text {
     -fx-text-fill: #ffffff;
     -fx-font-family: "Press Start 2P";
-    -fx-font-size: 26px;
+    -fx-font-size: 34px;
 }
 
-/* Top Pill Badge */
+/* Badge Pill */
 .badge-pill {
     -fx-background-color: #174233;
     -fx-border-color: #3d875a;
     -fx-border-width: 2px;
     -fx-border-radius: 20px;
     -fx-background-radius: 20px;
-    -fx-padding: 6px 18px;
+    -fx-padding: 10px 28px;
 }
 
 .badge-text {
     -fx-text-fill: #80e0a7;
     -fx-font-family: "Press Start 2P";
-    -fx-font-size: 9px;
+    -fx-font-size: 11px;
 }
 
 /* Hero Headings */
 .hero-title {
     -fx-text-fill: #ffffff;
     -fx-font-family: "Press Start 2P";
-    -fx-font-size: 22px;
+    -fx-font-size: 32px;
+    -fx-padding: 10px 0 0 0;
 }
 
 .hero-subtitle {
     -fx-text-fill: #e0f2fe;
     -fx-font-family: "Press Start 2P";
-    -fx-font-size: 10px;
-    -fx-line-spacing: 8px;
+    -fx-font-size: 13px;
+    -fx-line-spacing: 12px;
 }
 
-/* Form Card */
+/* Main Form Card (Targeting 680px Width) */
 .auth-card {
     -fx-background-color: #fbe6af;
     -fx-border-color: #4a2810;
-    -fx-border-width: 4px;
-    -fx-padding: 32px 40px;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 12, 0, 5, 5);
+    -fx-border-width: 5px;
+    -fx-padding: 44px 52px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.35), 16, 0, 6, 6);
 }
 
 .card-welcome-text {
     -fx-text-fill: #1b5230;
     -fx-font-family: "Press Start 2P";
-    -fx-font-size: 9px;
+    -fx-font-size: 11px;
 }
 
 .card-title-text {
     -fx-text-fill: #4a2810;
     -fx-font-family: "Press Start 2P";
-    -fx-font-size: 18px;
+    -fx-font-size: 24px;
+    -fx-padding: 4px 0 6px 0;
 }
 
-/* Tab Container & Buttons */
+/* Tab Bar */
 .tab-bar {
     -fx-background-color: #e4be71;
     -fx-border-color: #4a2810;
     -fx-border-width: 3px;
-    -fx-padding: 4px;
+    -fx-padding: 5px;
 }
 
 .tab-button-active {
     -fx-background-color: #216131;
     -fx-text-fill: #ffffff;
     -fx-font-family: "Press Start 2P";
-    -fx-font-size: 11px;
+    -fx-font-size: 13px;
     -fx-border-color: #123d1e;
     -fx-border-width: 2px;
-    -fx-padding: 10px;
+    -fx-padding: 14px;
     -fx-background-radius: 0;
     -fx-border-radius: 0;
     -fx-cursor: hand;
@@ -107,29 +109,29 @@
     -fx-background-color: #8c8245;
     -fx-text-fill: #ffffff;
     -fx-font-family: "Press Start 2P";
-    -fx-font-size: 11px;
+    -fx-font-size: 13px;
     -fx-border-color: #4a2810;
     -fx-border-width: 2px;
-    -fx-padding: 10px;
+    -fx-padding: 14px;
     -fx-background-radius: 0;
     -fx-border-radius: 0;
     -fx-cursor: hand;
 }
 
-/* Labels and Inputs */
+/* Inputs & Labels */
 .field-label {
     -fx-text-fill: #4a2810;
     -fx-font-family: "Press Start 2P";
-    -fx-font-size: 10px;
+    -fx-font-size: 12px;
 }
 
 .retro-input {
     -fx-background-color: #ffffff;
     -fx-border-color: #4a2810;
-    -fx-border-width: 3px;
-    -fx-padding: 12px;
+    -fx-border-width: 4px;
+    -fx-padding: 16px 16px;
     -fx-font-family: "Press Start 2P";
-    -fx-font-size: 10px;
+    -fx-font-size: 12px;
     -fx-prompt-text-fill: #949494;
     -fx-background-radius: 0;
     -fx-border-radius: 0;
@@ -139,15 +141,15 @@
     -fx-border-color: #216131;
 }
 
-/* Main Action Button */
+/* Gold Action Button */
 .gold-action-button {
     -fx-background-color: #ffc23d;
     -fx-text-fill: #4a2810;
     -fx-font-family: "Press Start 2P";
-    -fx-font-size: 14px;
+    -fx-font-size: 16px;
     -fx-border-color: #4a2810;
-    -fx-border-width: 3px;
-    -fx-padding: 14px;
+    -fx-border-width: 4px;
+    -fx-padding: 18px;
     -fx-background-radius: 0;
     -fx-border-radius: 0;
     -fx-cursor: hand;
@@ -157,61 +159,20 @@
     -fx-background-color: #f7b322;
 }
 
-/* Modal Overlay Styles */
-.modal-overlay {
-    -fx-background-color: rgba(15, 35, 35, 0.65);
-}
-
-.alert-box {
-    -fx-background-color: #fbe6af;
-    -fx-border-color: #4a2810;
-    -fx-border-width: 4px;
-    -fx-padding: 24px;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 12, 0, 5, 5);
-}
-
-.alert-welcome {
-    -fx-text-fill: #1b5230;
-    -fx-font-family: "Press Start 2P";
-    -fx-font-size: 8px;
-}
-
-.alert-title {
+.back-button {
+    -fx-background-color: transparent;
     -fx-text-fill: #4a2810;
     -fx-font-family: "Press Start 2P";
-    -fx-font-size: 14px;
-}
-
-
-.alert-message {
-    -fx-text-fill: #4a2810;
-    -fx-font-family: "Press Start 2P";
-    -fx-font-size: 8px;
-    -fx-line-spacing: 5px;
-}
-
-.alert-ok-button {
-    -fx-background-color: #ffc23d;
-    -fx-text-fill: #4a2810;
-    -fx-font-family: "Press Start 2P";
-    -fx-font-size: 10px;
-    -fx-border-color: #4a2810;
-    -fx-border-width: 2px;
-    -fx-padding: 8px 18px;
-    -fx-background-radius: 0;
-    -fx-border-radius: 0;
+    -fx-font-size: 12px;
     -fx-cursor: hand;
+    -fx-padding: 0 0 4px 0;
 }
 
-.alert-ok-button:hover {
-    -fx-background-color: #f7b322;
-}
-
-/* Retro DatePicker Styling */
+/* Retro DatePicker */
 .retro-date-picker {
     -fx-background-color: #ffffff;
     -fx-border-color: #4a2810;
-    -fx-border-width: 3px;
+    -fx-border-width: 4px;
     -fx-background-radius: 0;
     -fx-border-radius: 0;
 }
@@ -219,15 +180,15 @@
 .retro-date-picker .text-field {
     -fx-background-color: transparent;
     -fx-font-family: "Press Start 2P";
-    -fx-font-size: 9px;
+    -fx-font-size: 11px;
     -fx-prompt-text-fill: #949494;
-    -fx-padding: 10px 6px;
+    -fx-padding: 14px 10px;
 }
 
 .retro-date-picker .arrow-button {
     -fx-background-color: #ffc23d;
     -fx-border-color: #4a2810;
-    -fx-border-width: 0 0 0 2px;
+    -fx-border-width: 0 0 0 3px;
     -fx-background-radius: 0;
     -fx-border-radius: 0;
     -fx-cursor: hand;
@@ -237,17 +198,17 @@
     -fx-background-color: #4a2810;
 }
 
-/* Calendar Popup Styling */
+/* Calendar Popup */
 .date-picker-popup {
     -fx-background-color: #fbe6af;
     -fx-border-color: #4a2810;
-    -fx-border-width: 3px;
+    -fx-border-width: 4px;
     -fx-font-family: "Press Start 2P";
 }
 
 .date-picker-popup .month-year-pane {
     -fx-background-color: #e4be71;
-    -fx-font-size: 10px;
+    -fx-font-size: 11px;
 }
 
 .date-picker-popup .spinner .button {
@@ -257,7 +218,7 @@
 .date-picker-popup .day-cell {
     -fx-background-color: #fbe6af;
     -fx-text-fill: #4a2810;
-    -fx-font-size: 9px;
+    -fx-font-size: 10px;
 }
 
 .date-picker-popup .day-cell:hover {
@@ -267,4 +228,54 @@
 .date-picker-popup .selected {
     -fx-background-color: #216131;
     -fx-text-fill: #ffffff;
+}
+
+/* Alert Modal Box */
+.modal-overlay {
+    -fx-background-color: rgba(15, 35, 35, 0.65);
+}
+
+.alert-box {
+    -fx-background-color: #fbe6af;
+    -fx-border-color: #4a2810;
+    -fx-border-width: 4px;
+    -fx-padding: 36px 40px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.45), 14, 0, 6, 6);
+}
+
+.alert-welcome {
+    -fx-text-fill: #1b5230;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 10px;
+}
+
+.alert-title {
+    -fx-text-fill: #4a2810;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 20px;
+    -fx-padding: 4px 0 6px 0;
+}
+
+.alert-message {
+    -fx-text-fill: #4a2810;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 11px;
+    -fx-line-spacing: 10px;
+}
+
+.alert-ok-button {
+    -fx-background-color: #ffc23d;
+    -fx-text-fill: #4a2810;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 13px;
+    -fx-border-color: #4a2810;
+    -fx-border-width: 3px;
+    -fx-padding: 10px 28px;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-cursor: hand;
+}
+
+.alert-ok-button:hover {
+    -fx-background-color: #f7b322;
 }

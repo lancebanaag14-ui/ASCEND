@@ -19,13 +19,13 @@ public class LoginView extends StackPane {
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.getStyleClass().add("auth-scroll-pane");
 
-        VBox mainContainer = new VBox(20);
+        VBox mainContainer = new VBox(24);
         mainContainer.getStyleClass().add("auth-root");
         mainContainer.setAlignment(Pos.CENTER);
-        mainContainer.setStyle("-fx-padding: 50px 20px;");
+        mainContainer.setStyle("-fx-padding: 60px 20px;");
 
-        // 1. Logo Header
-        HBox logoHeader = new HBox(12);
+        // 1. Header
+        HBox logoHeader = new HBox(14);
         logoHeader.setAlignment(Pos.CENTER);
 
         Label logoBox = new Label("A");
@@ -36,7 +36,7 @@ public class LoginView extends StackPane {
 
         logoHeader.getChildren().addAll(logoBox, brandName);
 
-        // 2. Badge
+        // 2. Badge Pill
         HBox badgePill = new HBox();
         badgePill.setAlignment(Pos.CENTER);
         badgePill.getStyleClass().add("badge-pill");
@@ -46,7 +46,7 @@ public class LoginView extends StackPane {
         badgeText.getStyleClass().add("badge-text");
         badgePill.getChildren().add(badgeText);
 
-        // 3. Hero Headlines
+        // 3. Hero Titles
         Label heroTitle = new Label("Turn every mission into progress.");
         heroTitle.getStyleClass().add("hero-title");
 
@@ -54,10 +54,10 @@ public class LoginView extends StackPane {
         heroSubtitle.getStyleClass().add("hero-subtitle");
         heroSubtitle.setStyle("-fx-text-alignment: center;");
 
-        // 4. Main Card Container (Width set to 520px for scaled display)
-        VBox authCard = new VBox(18);
+        // 4. Main Card Container (Width set to 680px)
+        VBox authCard = new VBox(22);
         authCard.getStyleClass().add("auth-card");
-        authCard.setMaxWidth(520);
+        authCard.setMaxWidth(680);
         authCard.setAlignment(Pos.CENTER);
 
         Label welcomeLabel = new Label("WELCOME TO ASCEND");
@@ -83,7 +83,7 @@ public class LoginView extends StackPane {
         tabBar.getChildren().addAll(loginTab, signupTab);
 
         // Username Field
-        VBox usernameBox = new VBox(6);
+        VBox usernameBox = new VBox(8);
         usernameBox.setAlignment(Pos.CENTER_LEFT);
         Label usernameLabel = new Label("Username");
         usernameLabel.getStyleClass().add("field-label");
@@ -93,7 +93,7 @@ public class LoginView extends StackPane {
         usernameBox.getChildren().addAll(usernameLabel, usernameField);
 
         // Password Field
-        VBox passwordBox = new VBox(6);
+        VBox passwordBox = new VBox(8);
         passwordBox.setAlignment(Pos.CENTER_LEFT);
         Label passwordLabel = new Label("Password");
         passwordLabel.getStyleClass().add("field-label");
@@ -107,7 +107,7 @@ public class LoginView extends StackPane {
         actionButton.getStyleClass().add("gold-action-button");
         actionButton.setMaxWidth(Double.MAX_VALUE);
 
-        // Mode Switching
+        // Tab Switch Logic
         loginTab.setOnAction(e -> {
             if (!isLoginMode) {
                 isLoginMode = true;
@@ -128,7 +128,7 @@ public class LoginView extends StackPane {
             }
         });
 
-        // Validation & Action Execution
+        // Action Execution & Validation
         actionButton.setOnAction(e -> {
             String user = usernameField.getText().trim();
             String pass = passwordField.getText().trim();
@@ -157,9 +157,9 @@ public class LoginView extends StackPane {
         StackPane overlay = new StackPane();
         overlay.getStyleClass().add("modal-overlay");
 
-        VBox alertCard = new VBox(12);
+        VBox alertCard = new VBox(16);
         alertCard.getStyleClass().add("alert-box");
-        alertCard.setMaxWidth(500); // Increased width from 440 to 500 to accommodate pixel text
+        alertCard.setMaxWidth(600);
         alertCard.setMaxHeight(VBox.USE_PREF_SIZE);
         alertCard.setAlignment(Pos.TOP_LEFT);
 
@@ -168,20 +168,18 @@ public class LoginView extends StackPane {
 
         Label title = new Label(titleText);
         title.getStyleClass().add("alert-title");
-        title.setWrapText(true); // Ensures long titles break into two lines if needed
-        title.setMaxWidth(450);
+        title.setWrapText(true);
 
         Label message = new Label(messageText);
         message.getStyleClass().add("alert-message");
         message.setWrapText(true);
-        message.setMaxWidth(450);
 
         Button okButton = new Button("OK");
         okButton.getStyleClass().add("alert-ok-button");
 
         HBox buttonContainer = new HBox(okButton);
         buttonContainer.setAlignment(Pos.BOTTOM_RIGHT);
-        buttonContainer.setStyle("-fx-padding: 8px 0 0 0;");
+        buttonContainer.setStyle("-fx-padding: 12px 0 0 0;");
 
         okButton.setOnAction(e -> this.getChildren().remove(overlay));
 
