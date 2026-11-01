@@ -279,3 +279,11 @@
 .alert-ok-button:hover {
     -fx-background-color: #f7b322;
 }
+
+.brand-logo-image-box {
+    -fx-background-color: #0b1d3a; 
+    -fx-border-color: #ffc23d;     
+    -fx-border-width: 4px;
+    -fx-padding: 6px;
+    -fx-alignment: center;
+}

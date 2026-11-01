@@ -1,5 +1,7 @@
 package com.brewcoders.ascend.view.auth;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import java.time.LocalDate;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -25,11 +27,23 @@ public class SignupCourseView extends StackPane {
         mainContainer.setStyle("-fx-padding: 60px 20px;");
 
         // 1. Header
-        HBox logoHeader = new HBox(14);
+        HBox logoHeader = new HBox(16);
         logoHeader.setAlignment(Pos.CENTER);
 
-        Label logoBox = new Label("A");
-        logoBox.getStyleClass().add("brand-logo-box");
+        ImageView logoIcon = new ImageView();
+        try {
+            Image logoImg = new Image(getClass().getResourceAsStream("/images/logo.png"));
+            logoIcon.setImage(logoImg);
+            logoIcon.setFitWidth(40);
+            logoIcon.setFitHeight(40);
+            logoIcon.setPreserveRatio(true);
+        } catch (Exception e) {
+            System.err.println("Could not load logo image from /images/logo.png");
+        }
+
+        // Wrapper to apply the original logo border styling (#facc15 border)
+        StackPane logoBox = new StackPane(logoIcon);
+        logoBox.getStyleClass().add("brand-logo-image-box");
 
         Label brandName = new Label("ASCEND");
         brandName.getStyleClass().add("brand-text");

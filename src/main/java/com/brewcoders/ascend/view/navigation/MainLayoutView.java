@@ -21,9 +21,8 @@ public class MainLayoutView extends BorderPane {
         this.setCenter(centerContainer);
     }
 
-    /**
-     * Call this method whenever you want to switch the view in the center container!
-     */
+    //Call this method whenever you want to switch the view in the center container!
+     
     public VBox getCenterContainer() {
         return centerContainer;
     }
