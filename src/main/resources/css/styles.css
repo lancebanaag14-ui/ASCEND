@@ -1,10 +1,270 @@
-/* Base responsive root settings */
-.root {
-    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+/* Base Root Container */
+.auth-root {
+    -fx-background-color: linear-gradient(to bottom, #09527a, #15799a, #76b194, #bed89c);
+    -fx-font-family: "Press Start 2P", "Courier New", monospace;
 }
 
-/* Fluid content container utility class */
-.content-pane {
-    -fx-max-width: infinity;
-    -fx-max-height: infinity;
+/* ScrollPane Reset */
+.auth-scroll-pane {
+    -fx-background-color: transparent;
+    -fx-fit-to-width: true;
+    -fx-fit-to-height: true;
+}
+.auth-scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Brand Header */
+.brand-logo-box {
+    -fx-background-color: #3b82f6;
+    -fx-text-fill: #ffffff;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 18px;
+    -fx-padding: 8px 16px;
+    -fx-border-color: #facc15;
+    -fx-border-width: 3px;
+}
+
+.brand-text {
+    -fx-text-fill: #ffffff;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 26px;
+}
+
+/* Top Pill Badge */
+.badge-pill {
+    -fx-background-color: #174233;
+    -fx-border-color: #3d875a;
+    -fx-border-width: 2px;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+    -fx-padding: 6px 18px;
+}
+
+.badge-text {
+    -fx-text-fill: #80e0a7;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 9px;
+}
+
+/* Hero Headings */
+.hero-title {
+    -fx-text-fill: #ffffff;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 22px;
+}
+
+.hero-subtitle {
+    -fx-text-fill: #e0f2fe;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 10px;
+    -fx-line-spacing: 8px;
+}
+
+/* Form Card */
+.auth-card {
+    -fx-background-color: #fbe6af;
+    -fx-border-color: #4a2810;
+    -fx-border-width: 4px;
+    -fx-padding: 32px 40px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 12, 0, 5, 5);
+}
+
+.card-welcome-text {
+    -fx-text-fill: #1b5230;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 9px;
+}
+
+.card-title-text {
+    -fx-text-fill: #4a2810;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 18px;
+}
+
+/* Tab Container & Buttons */
+.tab-bar {
+    -fx-background-color: #e4be71;
+    -fx-border-color: #4a2810;
+    -fx-border-width: 3px;
+    -fx-padding: 4px;
+}
+
+.tab-button-active {
+    -fx-background-color: #216131;
+    -fx-text-fill: #ffffff;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 11px;
+    -fx-border-color: #123d1e;
+    -fx-border-width: 2px;
+    -fx-padding: 10px;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-cursor: hand;
+}
+
+.tab-button-inactive {
+    -fx-background-color: #8c8245;
+    -fx-text-fill: #ffffff;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 11px;
+    -fx-border-color: #4a2810;
+    -fx-border-width: 2px;
+    -fx-padding: 10px;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-cursor: hand;
+}
+
+/* Labels and Inputs */
+.field-label {
+    -fx-text-fill: #4a2810;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 10px;
+}
+
+.retro-input {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #4a2810;
+    -fx-border-width: 3px;
+    -fx-padding: 12px;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 10px;
+    -fx-prompt-text-fill: #949494;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+}
+
+.retro-input:focused {
+    -fx-border-color: #216131;
+}
+
+/* Main Action Button */
+.gold-action-button {
+    -fx-background-color: #ffc23d;
+    -fx-text-fill: #4a2810;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 14px;
+    -fx-border-color: #4a2810;
+    -fx-border-width: 3px;
+    -fx-padding: 14px;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-cursor: hand;
+}
+
+.gold-action-button:hover {
+    -fx-background-color: #f7b322;
+}
+
+/* Modal Overlay Styles */
+.modal-overlay {
+    -fx-background-color: rgba(15, 35, 35, 0.65);
+}
+
+.alert-box {
+    -fx-background-color: #fbe6af;
+    -fx-border-color: #4a2810;
+    -fx-border-width: 4px;
+    -fx-padding: 24px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 12, 0, 5, 5);
+}
+
+.alert-welcome {
+    -fx-text-fill: #1b5230;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 8px;
+}
+
+.alert-title {
+    -fx-text-fill: #4a2810;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 14px;
+}
+
+
+.alert-message {
+    -fx-text-fill: #4a2810;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 8px;
+    -fx-line-spacing: 5px;
+}
+
+.alert-ok-button {
+    -fx-background-color: #ffc23d;
+    -fx-text-fill: #4a2810;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 10px;
+    -fx-border-color: #4a2810;
+    -fx-border-width: 2px;
+    -fx-padding: 8px 18px;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-cursor: hand;
+}
+
+.alert-ok-button:hover {
+    -fx-background-color: #f7b322;
+}
+
+/* Retro DatePicker Styling */
+.retro-date-picker {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #4a2810;
+    -fx-border-width: 3px;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+}
+
+.retro-date-picker .text-field {
+    -fx-background-color: transparent;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 9px;
+    -fx-prompt-text-fill: #949494;
+    -fx-padding: 10px 6px;
+}
+
+.retro-date-picker .arrow-button {
+    -fx-background-color: #ffc23d;
+    -fx-border-color: #4a2810;
+    -fx-border-width: 0 0 0 2px;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-cursor: hand;
+}
+
+.retro-date-picker .arrow-button .arrow {
+    -fx-background-color: #4a2810;
+}
+
+/* Calendar Popup Styling */
+.date-picker-popup {
+    -fx-background-color: #fbe6af;
+    -fx-border-color: #4a2810;
+    -fx-border-width: 3px;
+    -fx-font-family: "Press Start 2P";
+}
+
+.date-picker-popup .month-year-pane {
+    -fx-background-color: #e4be71;
+    -fx-font-size: 10px;
+}
+
+.date-picker-popup .spinner .button {
+    -fx-background-color: #ffc23d;
+}
+
+.date-picker-popup .day-cell {
+    -fx-background-color: #fbe6af;
+    -fx-text-fill: #4a2810;
+    -fx-font-size: 9px;
+}
+
+.date-picker-popup .day-cell:hover {
+    -fx-background-color: #ffc23d;
+}
+
+.date-picker-popup .selected {
+    -fx-background-color: #216131;
+    -fx-text-fill: #ffffff;
 }
