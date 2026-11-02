@@ -1,5 +1,6 @@
 package com.brewcoders.ascend.view.auth;
 
+import com.brewcoders.ascend.view.navigation.MainLayoutView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import java.time.LocalDate;
@@ -154,13 +155,22 @@ public class SignupCourseView extends StackPane {
         createCourseBtn.getStyleClass().add("gold-action-button");
         createCourseBtn.setMaxWidth(Double.MAX_VALUE);
 
-        createCourseBtn.setOnAction(e -> {
-            if (courseField.getText().trim().isEmpty() || startDatePicker.getValue() == null || endDatePicker.getValue() == null) {
-                showCustomAlert("Course details incomplete", "Please enter a course name and select both\nstart and end dates.");
-            } else {
-                showCustomAlert("Success", "Course created successfully!");
-            }
-        });
+       createCourseBtn.setOnAction(e -> {
+    if (courseField.getText().trim().isEmpty() || startDatePicker.getValue() == null || endDatePicker.getValue() == null) {
+        showCustomAlert("Course details incomplete", "Please enter a course name and select both\nstart and end dates.");
+    } else {
+        String courseName = courseField.getText().trim();
+        java.time.format.DateTimeFormatter fmt = java.time.format.DateTimeFormatter.ofPattern("MMM d, yyyy");
+        String formattedDates = startDatePicker.getValue().format(fmt) + " - " + endDatePicker.getValue().format(fmt);
+
+        if (this.getScene() != null) {
+            this.getScene().setRoot(new MainLayoutView(
+                courseName,
+                formattedDates
+            ));
+        }
+    }
+});
 
         authCard.getChildren().addAll(backButton, cardTitle, courseBox, focusBox, datesRow, createCourseBtn);
         mainContainer.getChildren().addAll(logoHeader, badgePill, heroTitle, heroSubtitle, authCard);

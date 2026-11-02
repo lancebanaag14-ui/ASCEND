@@ -1,15 +1,124 @@
 package com.brewcoders.ascend.view.navigation;
 
+import com.brewcoders.ascend.view.auth.LoginView;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 public class SidebarView extends VBox {
-    public SidebarView() {
-        this.setSpacing(15);
-        this.getChildren().addAll(
-            new Label("ASCEND Navigation"),
-            new Label("• Missions"),
-            new Label("• Profile")
-        );
+
+    private Button missionsBtn;
+    private Button profileBtn;
+
+    public SidebarView(String courseName, String focusCycleDates, Runnable onMissionsSelected, Runnable onProfileSelected) {
+        this.setPrefWidth(260);
+        this.setMinWidth(260);
+        this.setMaxWidth(260);
+        this.getStyleClass().add("sidebar-root");
+        this.setAlignment(Pos.TOP_LEFT);
+        this.setSpacing(20);
+
+        // 1. Top Brand (Logo + ASCEND)
+        HBox brandHeader = new HBox(12);
+        brandHeader.setAlignment(Pos.CENTER_LEFT);
+
+        ImageView logoIcon = new ImageView();
+        try {
+            Image logoImg = new Image(getClass().getResourceAsStream("/images/logo.png"));
+            logoIcon.setImage(logoImg);
+            logoIcon.setFitWidth(32);
+            logoIcon.setFitHeight(32);
+            logoIcon.setPreserveRatio(true);
+        } catch (Exception e) {
+            System.err.println("Could not load logo image from /images/logo.png");
+        }
+
+        StackPane logoBox = new StackPane(logoIcon);
+        logoBox.getStyleClass().add("sidebar-logo-box");
+
+        Label brandName = new Label("ASCEND");
+        brandName.getStyleClass().add("sidebar-brand-text");
+
+        brandHeader.getChildren().addAll(logoBox, brandName);
+
+       // 2. Current Course Box
+        VBox courseCard = new VBox(8);
+        courseCard.getStyleClass().add("sidebar-course-card");
+        courseCard.setMaxWidth(Double.MAX_VALUE);
+        Label courseBadge = new Label("CURRENT COURSE");
+        courseBadge.getStyleClass().add("sidebar-course-badge");
+
+       Label courseTitle = new Label(courseName != null && !courseName.isEmpty() ? courseName : "oop");
+        courseTitle.getStyleClass().add("sidebar-course-title");
+        courseTitle.setWrapText(true);
+        courseTitle.setMaxWidth(Double.MAX_VALUE);
+
+        Label courseDates = new Label("Focus Cycle " + (focusCycleDates != null && !focusCycleDates.isEmpty() ? focusCycleDates : "Nov 2, 2026 - Nov 26, 2026"));
+        courseDates.getStyleClass().add("sidebar-course-dates");
+        courseDates.setWrapText(true);
+        courseDates.setMaxWidth(Double.MAX_VALUE);
+
+        courseCard.getChildren().addAll(courseBadge, courseTitle, courseDates);
+
+        // 3. Navigation Links Section
+        VBox navBox = new VBox(12);
+        Label navTitle = new Label("MAIN MENU");
+        navTitle.getStyleClass().add("sidebar-menu-header");
+
+        missionsBtn = new Button("Missions");
+        missionsBtn.getStyleClass().add("sidebar-nav-btn-active");
+        missionsBtn.setMaxWidth(Double.MAX_VALUE);
+
+        profileBtn = new Button("Profile");
+        profileBtn.getStyleClass().add("sidebar-nav-btn-inactive");
+        profileBtn.setMaxWidth(Double.MAX_VALUE);
+
+        // Selection Logic
+        missionsBtn.setOnAction(e -> {
+            setActiveTab(true);
+            if (onMissionsSelected != null) onMissionsSelected.run();
+        });
+
+        profileBtn.setOnAction(e -> {
+            setActiveTab(false);
+            if (onProfileSelected != null) onProfileSelected.run();
+        });
+
+        navBox.getChildren().addAll(navTitle, missionsBtn, profileBtn);
+
+        // 4. Back to Front Page Button
+        Button backToFrontBtn = new Button("< Back to Front Page");
+        backToFrontBtn.getStyleClass().add("sidebar-back-btn");
+        backToFrontBtn.setOnAction(e -> {
+            if (this.getScene() != null) {
+                this.getScene().setRoot(new LoginView());
+            }
+        });
+
+        // Spacer to push footer to the very bottom
+        VBox spacer = new VBox();
+        VBox.setVgrow(spacer, Priority.ALWAYS);
+
+        // 5. Footer Text
+        Label footerLabel = new Label("BY BREW CODERS SINCE 2026");
+        footerLabel.getStyleClass().add("sidebar-footer-text");
+
+        this.getChildren().addAll(brandHeader, courseCard, navBox, backToFrontBtn, spacer, footerLabel);
+    }
+
+    public void setActiveTab(boolean isMissions) {
+        if (isMissions) {
+            missionsBtn.getStyleClass().setAll("sidebar-nav-btn-active");
+            profileBtn.getStyleClass().setAll("sidebar-nav-btn-inactive");
+        } else {
+            profileBtn.getStyleClass().setAll("sidebar-nav-btn-active");
+            missionsBtn.getStyleClass().setAll("sidebar-nav-btn-inactive");
+        }
     }
 }

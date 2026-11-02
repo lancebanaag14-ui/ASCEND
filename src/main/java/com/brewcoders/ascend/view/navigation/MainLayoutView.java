@@ -1,29 +1,89 @@
 package com.brewcoders.ascend.view.navigation;
 
+import com.brewcoders.ascend.view.missions.MissionsView;
+import com.brewcoders.ascend.view.profile.ProfileMainView;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 public class MainLayoutView extends BorderPane {
 
+    private SidebarView sidebarView;
+    private Label breadcrumbLabel;
+    private Button newMissionBtn;
     private VBox centerContainer;
 
-    public MainLayoutView() {
-        // 1. Initialize empty center container for dynamic sub-views
-        centerContainer = new VBox();
-        
-        // 2. Preserve responsiveness rules (growth priority & infinite max dimensions)
-        VBox.setVgrow(centerContainer, Priority.ALWAYS);
-        centerContainer.setMaxWidth(Double.MAX_VALUE);
-        centerContainer.setMaxHeight(Double.MAX_VALUE);
+    private String courseName;
+    private String focusCycleDates;
 
-        // 3. Set center layout
-        this.setCenter(centerContainer);
+    public MainLayoutView(String courseName, String focusCycleDates) {
+        this.courseName = (courseName != null && !courseName.isEmpty()) ? courseName : "oop";
+        this.focusCycleDates = (focusCycleDates != null && !focusCycleDates.isEmpty()) ? focusCycleDates : "Nov 2, 2026 - Nov 26, 2026";
+
+        this.getStyleClass().add("main-layout-root");
+
+        // 1. Sidebar View Setup
+        sidebarView = new SidebarView(
+            this.courseName,
+            this.focusCycleDates,
+            this::showMissionsView,
+            this::showProfileView
+        );
+        this.setLeft(sidebarView);
+
+        // 2. Right Side Layout (Top Header + Content Area)
+        VBox rightLayout = new VBox();
+        HBox.setHgrow(rightLayout, Priority.ALWAYS);
+
+        // Top Navigation / Breadcrumb Header
+        HBox topBar = new HBox();
+        topBar.getStyleClass().add("main-top-bar");
+        topBar.setAlignment(Pos.CENTER_LEFT);
+
+        breadcrumbLabel = new Label("ASCEND  >  MISSIONS");
+        breadcrumbLabel.getStyleClass().add("main-breadcrumb-text");
+
+        Region headerSpacer = new Region();
+        HBox.setHgrow(headerSpacer, Priority.ALWAYS);
+
+        newMissionBtn = new Button("+ New Mission");
+        newMissionBtn.getStyleClass().add("gold-action-button");
+        newMissionBtn.setOnAction(e -> openCreateMissionPage());
+
+        topBar.getChildren().addAll(breadcrumbLabel, headerSpacer, newMissionBtn);
+
+        // Main Content Area Container
+        centerContainer = new VBox();
+        VBox.setVgrow(centerContainer, Priority.ALWAYS);
+
+        rightLayout.getChildren().addAll(topBar, centerContainer);
+        this.setCenter(rightLayout);
+
+        // Default to Missions View on initial load
+        showMissionsView();
     }
 
-    //Call this method whenever you want to switch the view in the center container!
-     
-    public VBox getCenterContainer() {
-        return centerContainer;
+    public void showMissionsView() {
+        breadcrumbLabel.setText("ASCEND  >  MISSIONS");
+        sidebarView.setActiveTab(true);
+        MissionsView missionsView = new MissionsView(courseName, this::openCreateMissionPage);
+        centerContainer.getChildren().setAll(missionsView);
+    }
+
+    public void showProfileView() {
+        breadcrumbLabel.setText("ASCEND  >  PROFILE");
+        sidebarView.setActiveTab(false);
+        ProfileMainView profileView = new ProfileMainView();
+        centerContainer.getChildren().setAll(profileView);
+    }
+
+    private void openCreateMissionPage() {
+        System.out.println("Navigating to Create New Mission Page...");
+        // TODO: Route to CreateMissionView when created
     }
 }

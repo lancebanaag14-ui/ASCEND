@@ -141,22 +141,24 @@
     -fx-border-color: #216131;
 }
 
-/* Gold Action Button */
+/* Gold Action Buttons */
 .gold-action-button {
     -fx-background-color: #ffc23d;
     -fx-text-fill: #4a2810;
     -fx-font-family: "Press Start 2P";
-    -fx-font-size: 16px;
+    -fx-font-size: 11px;
     -fx-border-color: #4a2810;
-    -fx-border-width: 4px;
-    -fx-padding: 18px;
+    -fx-border-width: 3px;
+    -fx-padding: 10px 18px;
+    -fx-min-height: 44px;
+    -fx-pref-height: 44px;
     -fx-background-radius: 0;
     -fx-border-radius: 0;
     -fx-cursor: hand;
 }
 
 .gold-action-button:hover {
-    -fx-background-color: #f7b322;
+    -fx-background-color: #facc15;
 }
 
 .back-button {
@@ -286,4 +288,355 @@
     -fx-border-width: 4px;
     -fx-padding: 6px;
     -fx-alignment: center;
+}
+
+/* ==========================================================
+   MAIN DASHBOARD LAYOUT & TOP BAR
+   ========================================================== */
+.main-layout-root {
+    -fx-background-color: #9ee079;
+}
+
+.main-top-bar {
+    -fx-background-color: #fbe6af;
+    -fx-border-color: #4a2810;
+    -fx-border-width: 0 0 4px 0;
+    -fx-padding: 20px 36px;
+    -fx-min-height: 80px;
+    -fx-pref-height: 80px;
+}
+
+.main-breadcrumb-text {
+    -fx-text-fill: #4a2810;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 13px;
+}
+
+/* ==========================================================
+   SIDEBAR COMPONENT STYLING
+   ========================================================== */
+.sidebar-root {
+    -fx-background-color: #0b4b2e;
+    -fx-padding: 24px 18px;
+    -fx-border-color: #4a2810;
+    -fx-border-width: 0 4px 0 0;
+    -fx-min-width: 260px;
+    -fx-pref-width: 260px;
+}
+
+.sidebar-logo-box {
+    -fx-background-color: #0b1d3a;
+    -fx-border-color: #facc15;
+    -fx-border-width: 3px;
+    -fx-padding: 4px;
+}
+
+.sidebar-brand-text {
+    -fx-text-fill: #ffffff;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 18px;
+}
+
+/* Sidebar Current Course Box Fix */
+.sidebar-course-card, .sidebar-course-box {
+    -fx-background-color: #c47844;
+    -fx-border-color: #4a2810;
+    -fx-border-width: 4px;
+    -fx-padding: 14px 12px;
+    -fx-min-height: -fx-use-pref-size;
+    -fx-max-width: Infinity;
+}
+
+.sidebar-course-badge, .sidebar-course-tag {
+    -fx-text-fill: #fbe6af;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 8px;
+    -fx-padding: 0 0 4px 0;
+}
+
+.sidebar-course-title, .sidebar-course-name {
+    -fx-text-fill: #ffffff;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 18px;
+    -fx-padding: 2px 0 6px 0;
+}
+
+.sidebar-course-dates {
+    -fx-text-fill: #fbe6af;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 8px;
+    -fx-line-spacing: 4px;
+}
+
+/* Sidebar Navigation Buttons */
+.sidebar-menu-header, .sidebar-menu-title {
+    -fx-text-fill: #4ade80;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 10px;
+    -fx-padding: 12px 0 4px 0;
+}
+
+.sidebar-nav-btn-active {
+    -fx-background-color: #ffc23d;
+    -fx-text-fill: #4a2810;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 11px;
+    -fx-border-color: #4a2810;
+    -fx-border-width: 3px;
+    -fx-padding: 12px 16px;
+    -fx-min-height: 44px;
+    -fx-alignment: center-left;
+    -fx-cursor: hand;
+}
+
+.sidebar-nav-btn-inactive {
+    -fx-background-color: #d99a4e;
+    -fx-text-fill: #4a2810;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 11px;
+    -fx-border-color: #4a2810;
+    -fx-border-width: 3px;
+    -fx-padding: 12px 16px;
+    -fx-min-height: 44px;
+    -fx-alignment: center-left;
+    -fx-cursor: hand;
+}
+
+.sidebar-back-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #9ee079;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 9px;
+    -fx-border-color: #9ee079;
+    -fx-border-width: 2px;
+    -fx-padding: 10px 12px;
+    -fx-min-height: 38px;
+    -fx-cursor: hand;
+    -fx-alignment: center-left;
+}
+
+.sidebar-footer-text {
+    -fx-text-fill: #4ade80;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 7px;
+}
+
+/* ==========================================================
+   MISSIONS CONTENT BACKGROUND GRID & VIEWS
+   ========================================================== */
+.missions-scroll-pane {
+    -fx-background-color: #9ee079;
+    -fx-fit-to-width: true;
+    -fx-fit-to-height: true;
+}
+
+.missions-scroll-pane > .viewport {
+    -fx-background-color: #9ee079;
+}
+
+.missions-root {
+    -fx-background-color: repeating-linear-gradient(
+        0deg,
+        #9ee079 0px, #9ee079 24px,
+        #93d76e 24px, #93d76e 48px
+    );
+    -fx-padding: 32px 40px 60px 40px;
+    -fx-max-width: Infinity;
+}
+
+/* Course Header */
+.missions-course-badge {
+    -fx-background-color: transparent;
+    -fx-border-color: #4a2810;
+    -fx-border-width: 2px;
+    -fx-text-fill: #1b5230;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 8px;
+    -fx-padding: 5px 10px;
+}
+
+.missions-course-title {
+    -fx-text-fill: #1b5230;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 32px;
+}
+
+.missions-course-subtext {
+    -fx-text-fill: #2d6a43;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 11px;
+}
+
+/* Avatar Card */
+/* Card Container */
+.missions-avatar-card {
+    -fx-background-color: #fbe6af;
+    -fx-border-color: #4a2810;
+    -fx-border-width: 3px;
+    -fx-padding: 18px 24px;
+}
+
+/* Rounded Square Avatar Frame */
+.missions-avatar-frame {
+    -fx-min-width: 90px;
+    -fx-min-height: 90px;
+    -fx-pref-width: 90px;
+    -fx-pref-height: 90px;
+    -fx-max-width: 90px;
+    -fx-max-height: 90px;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #4a2810;
+    -fx-border-width: 3px;
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+    -fx-alignment: center;
+}
+
+/* Text Colors & Pixel Fonts */
+.missions-avatar-badge {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 8px;
+    -fx-text-fill: #2d6851;
+}
+
+.missions-rank-name {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 20px;
+    -fx-text-fill: #4a2810;
+}
+
+.missions-total-points-label {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 9px;
+    -fx-text-fill: #4a2810;
+}
+
+.missions-next-rank-text {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 8px;
+    -fx-text-fill: #2d6851;
+}
+
+.missions-points-count {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 9px;
+    -fx-text-fill: #4a2810;
+}
+
+/* Dark Brown Progress Bar */
+.missions-xp-bar {
+    -fx-pref-height: 18px;
+    -fx-max-width: Infinity;
+}
+
+.missions-xp-bar > .track {
+    -fx-background-color: #e6ce9a;
+    -fx-border-color: #4a2810;
+    -fx-border-width: 2px;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+}
+
+.missions-xp-bar > .bar {
+    -fx-background-color: #4a2810;
+    -fx-background-radius: 0;
+}
+
+/* Active Missions Section Headers */
+.missions-section-title {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 16px;
+    -fx-text-fill: #1a1a1a;
+}
+
+.missions-section-sub {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 8px;
+    -fx-text-fill: #4a2810;
+}
+
+.missions-pending-count {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 9px;
+    -fx-text-fill: #1a1a1a;
+}
+
+/* Empty State Card & Green Pixel Icon */
+.missions-empty-card {
+    -fx-background-color: #fbe6af;
+    -fx-border-color: #4a2810;
+    -fx-border-width: 4px;
+    -fx-padding: 36px 20px;
+}
+
+.missions-empty-icon-frame {
+    -fx-min-width: 32px;
+    -fx-min-height: 32px;
+    -fx-pref-width: 32px;
+    -fx-pref-height: 32px;
+    -fx-max-width: 32px;
+    -fx-max-height: 32px;
+    -fx-background-color: #41c48c;
+    -fx-border-color: #4a2810;
+    -fx-border-width: 3px;
+    -fx-alignment: center;
+}
+
+.missions-empty-icon-dot {
+    -fx-min-width: 8px;
+    -fx-min-height: 8px;
+    -fx-max-width: 8px;
+    -fx-max-height: 8px;
+    -fx-background-color: #ffffff;
+}
+
+.missions-empty-title {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 12px;
+    -fx-text-fill: #1a1a1a;
+}
+
+.missions-empty-sub {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 8px;
+    -fx-text-fill: #4a2810;
+}
+
+.gold-action-button {
+    -fx-background-color: #ffc233;
+    -fx-border-color: #4a2810;
+    -fx-border-width: 3px;
+    -fx-text-fill: #1a1a1a;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 10px;
+    -fx-padding: 10px 16px;
+    -fx-cursor: hand;
+}
+
+.gold-action-button:hover {
+    -fx-background-color: #ffd255;
+}
+
+/* Course Header Styles */
+.missions-course-badge {
+    -fx-background-color: #9ee079;
+    -fx-border-color: #4a2810;
+    -fx-border-width: 2px;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 8px;
+    -fx-text-fill: #4a2810;
+    -fx-padding: 3px 6px;
+}
+
+.missions-course-title {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1a1a1a;
+}
+
+.missions-course-subtext {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 9px;
+    -fx-text-fill: #4a2810;
 }

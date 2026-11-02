@@ -1,5 +1,6 @@
 package com.brewcoders.ascend.view.auth;
 
+import com.brewcoders.ascend.view.navigation.MainLayoutView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.geometry.Pos;
@@ -143,23 +144,29 @@ public class LoginView extends StackPane {
         });
 
         // Action Execution & Validation
-        actionButton.setOnAction(e -> {
-            String user = usernameField.getText().trim();
-            String pass = passwordField.getText().trim();
+    actionButton.setOnAction(e -> {
+    String user = usernameField.getText().trim();
+    String pass = passwordField.getText().trim();
 
-            if (user.isEmpty() || pass.isEmpty()) {
-                if (isLoginMode) {
-                    showCustomAlert("Login details incomplete", "Please complete both the username and password\nbefore logging in.");
-                } else {
-                    showCustomAlert("Signup details incomplete", "Please complete both the username and password\nbefore signing up.");
-                }
-            } else {
-                if (!isLoginMode) {
-                    this.getScene().setRoot(new SignupCourseView());
-                }
+    if (user.isEmpty() || pass.isEmpty()) {
+        if (isLoginMode) {
+            showCustomAlert("Login details incomplete", "Please complete both the username and password\nbefore logging in.");
+        } else {
+            showCustomAlert("Signup details incomplete", "Please complete both the username and password\nbefore signing up.");
+        }
+    } else {
+        if (!isLoginMode) {
+            if (this.getScene() != null) {
+                this.getScene().setRoot(new SignupCourseView());
             }
-        });
-
+        } else {
+            // Direct redirect to Main Menu Dashboard
+            if (this.getScene() != null) {
+                this.getScene().setRoot(new MainLayoutView("oop", "Nov 2, 2026 - Nov 26, 2026"));
+            }
+        }
+    }
+});
         authCard.getChildren().addAll(welcomeLabel, cardTitle, tabBar, usernameBox, passwordBox, actionButton);
         mainContainer.getChildren().addAll(logoHeader, badgePill, heroTitle, heroSubtitle, authCard);
 
