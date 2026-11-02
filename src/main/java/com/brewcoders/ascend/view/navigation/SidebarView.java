@@ -26,7 +26,8 @@ public class SidebarView extends VBox {
 
         // 1. Top Brand (Logo + ASCEND)
         HBox brandHeader = new HBox(12);
-        brandHeader.setAlignment(Pos.CENTER_LEFT);
+        brandHeader.setAlignment(Pos.CENTER);
+        brandHeader.setMaxWidth(Double.MAX_VALUE);
 
         ImageView logoIcon = new ImageView();
         try {
@@ -48,20 +49,27 @@ public class SidebarView extends VBox {
         brandHeader.getChildren().addAll(logoBox, brandName);
 
        // 2. Current Course Box
-        VBox courseCard = new VBox(8);
+        VBox courseCard = new VBox(10);
         courseCard.getStyleClass().add("sidebar-course-card");
         courseCard.setMaxWidth(Double.MAX_VALUE);
+        courseCard.setAlignment(Pos.CENTER);
+
         Label courseBadge = new Label("CURRENT COURSE");
         courseBadge.getStyleClass().add("sidebar-course-badge");
+        courseBadge.setAlignment(Pos.CENTER);
+        courseBadge.setMaxWidth(Double.MAX_VALUE);
 
-       Label courseTitle = new Label(courseName != null && !courseName.isEmpty() ? courseName : "oop");
+        Label courseTitle = new Label(courseName != null && !courseName.isEmpty() ? courseName : "Course Title Here");
         courseTitle.getStyleClass().add("sidebar-course-title");
         courseTitle.setWrapText(true);
+        courseTitle.setAlignment(Pos.CENTER);
         courseTitle.setMaxWidth(Double.MAX_VALUE);
 
-        Label courseDates = new Label("Focus Cycle " + (focusCycleDates != null && !focusCycleDates.isEmpty() ? focusCycleDates : "Nov 2, 2026 - Nov 26, 2026"));
+       String dateVal = (focusCycleDates != null && !focusCycleDates.isEmpty()) ? focusCycleDates : "Nov 4, 2026 - Nov 19, 2026";
+        Label courseDates = new Label("FOCUS CYCLE:\n" + dateVal);
         courseDates.getStyleClass().add("sidebar-course-dates");
         courseDates.setWrapText(true);
+        courseDates.setAlignment(Pos.CENTER);
         courseDates.setMaxWidth(Double.MAX_VALUE);
 
         courseCard.getChildren().addAll(courseBadge, courseTitle, courseDates);

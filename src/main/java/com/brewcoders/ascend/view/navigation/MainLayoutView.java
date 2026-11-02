@@ -86,4 +86,9 @@ public class MainLayoutView extends BorderPane {
         System.out.println("Navigating to Create New Mission Page...");
         // TODO: Route to CreateMissionView when created
     }
+
+    public MainLayoutView() {
+    this("oop", "Nov 2, 2026 - Nov 26, 2026");
+    }
+
 }

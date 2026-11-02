@@ -7,6 +7,6 @@ import javafx.scene.layout.VBox;
 public class ProfileMainView extends VBox {
     public ProfileMainView() {
         this.setAlignment(Pos.CENTER);
-        this.getChildren().add(new Label("Profile Main Container - Assigned to Developer B"));
+        this.getChildren().add(new Label("To be follow :>"));
     }
 }

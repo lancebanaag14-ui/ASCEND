@@ -63,11 +63,20 @@ public class LoginView extends StackPane {
 
         // 3. Hero Titles
         Label heroTitle = new Label("Turn every mission into progress.");
-        heroTitle.getStyleClass().add("hero-title");
+        heroTitle.getStyleClass().add("auth-headline");
+        heroTitle.setWrapText(true);
+        heroTitle.setAlignment(Pos.CENTER);
+        heroTitle.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+        // Bind width so text wraps dynamically as the parent resizes
+        heroTitle.prefWidthProperty().bind(mainContainer.widthProperty().subtract(40));
 
-        Label heroSubtitle = new Label("Create missions, earn points, and advance your\navatar throughout the cycle.");
-        heroSubtitle.getStyleClass().add("hero-subtitle");
-        heroSubtitle.setStyle("-fx-text-alignment: center;");
+        // Subtitle
+        Label heroSubtitle = new Label("Create missions, earn points, and advance your avatar throughout the cycle.");
+        heroSubtitle.getStyleClass().add("auth-subheadline");
+        heroSubtitle.setWrapText(true);
+        heroSubtitle.setAlignment(Pos.CENTER);
+        heroSubtitle.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+        heroSubtitle.prefWidthProperty().bind(mainContainer.widthProperty().subtract(60));
 
         // 4. Main Card Container (Width set to 680px)
         VBox authCard = new VBox(22);
@@ -122,6 +131,14 @@ public class LoginView extends StackPane {
         actionButton.getStyleClass().add("gold-action-button");
         actionButton.setMaxWidth(Double.MAX_VALUE);
 
+        // Tab Button Alignment & Expansion
+        loginTab.setAlignment(Pos.CENTER);
+        signupTab.setAlignment(Pos.CENTER);
+        loginTab.setMaxWidth(Double.MAX_VALUE);
+        signupTab.setMaxWidth(Double.MAX_VALUE);
+        HBox.setHgrow(loginTab, Priority.ALWAYS);
+        HBox.setHgrow(signupTab, Priority.ALWAYS);
+        
         // Tab Switch Logic
         loginTab.setOnAction(e -> {
             if (!isLoginMode) {

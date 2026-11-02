@@ -4,6 +4,7 @@ import com.brewcoders.ascend.view.navigation.MainLayoutView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.DateCell;
@@ -15,6 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+
 
 public class SignupCourseView extends StackPane {
 
@@ -42,7 +44,7 @@ public class SignupCourseView extends StackPane {
             System.err.println("Could not load logo image from /images/logo.png");
         }
 
-        // Wrapper to apply the original logo border styling (#facc15 border)
+        // Wrapper to apply the original logo border styling 
         StackPane logoBox = new StackPane(logoIcon);
         logoBox.getStyleClass().add("brand-logo-image-box");
 
@@ -61,16 +63,22 @@ public class SignupCourseView extends StackPane {
         badgeText.getStyleClass().add("badge-text");
         badgePill.getChildren().add(badgeText);
 
-        // 3. Hero Headlines
+       // 3. Hero Headlines
         Label heroTitle = new Label("Create your current course.");
         heroTitle.getStyleClass().add("hero-title");
 
-        Label heroSubtitle = new Label("Your missions, points, history, and achievements will\nbelong to this course until you begin a new one.");
-        heroSubtitle.getStyleClass().add("hero-subtitle");
-        heroSubtitle.setStyle("-fx-text-alignment: center;");
-        heroSubtitle.setWrapText(true);
+        // Split into two distinct labels inside a dedicated VBox to guarantee full height rendering
+        Label subtitleLine1 = new Label("Your missions, points, history, and achievements will belong");
+        subtitleLine1.getStyleClass().add("hero-subtitle");
 
-        // 4. Main Card Container (680px Wide)
+        Label subtitleLine2 = new Label("to this course until you begin a new one.");
+        subtitleLine2.getStyleClass().add("hero-subtitle");
+
+        VBox subtitleBox = new VBox(6); 
+        subtitleBox.setAlignment(Pos.CENTER);
+        subtitleBox.getChildren().addAll(subtitleLine1, subtitleLine2);
+
+        // 4. Main Card Container 
         VBox authCard = new VBox(20);
         authCard.getStyleClass().add("auth-card");
         authCard.setMaxWidth(680);
@@ -108,6 +116,8 @@ public class SignupCourseView extends StackPane {
         HBox datesRow = new HBox(16);
         datesRow.setAlignment(Pos.CENTER_LEFT);
 
+        LocalDate today = LocalDate.now();
+
         VBox startBox = new VBox(8);
         Label startLabel = new Label("Start date");
         startLabel.getStyleClass().add("field-label");
@@ -130,7 +140,34 @@ public class SignupCourseView extends StackPane {
 
         datesRow.getChildren().addAll(startBox, endBox);
 
-        // Date Validation Logic: Disables dates prior to selected start date
+        // --- Date Restrictions Setup ---
+        
+        // 1. Prevent selecting past dates on Start Date Picker
+        startDatePicker.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                if (date != null && date.isBefore(today)) {
+                    setDisable(true);
+                    setStyle("-fx-background-color: #d1c7b7; -fx-text-fill: #888888;");
+                }
+            }
+        });
+
+        // 2. Prevent selecting dates before today (or before Start Date) on End Date Picker
+        endDatePicker.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                LocalDate minDate = startDatePicker.getValue() != null ? startDatePicker.getValue() : today;
+                if (date != null && date.isBefore(minDate)) {
+                    setDisable(true);
+                    setStyle("-fx-background-color: #d1c7b7; -fx-text-fill: #888888;");
+                }
+            }
+        });
+
+        // 3. Listener to update End Date options when Start Date changes
         startDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 if (endDatePicker.getValue() != null && endDatePicker.getValue().isBefore(newValue)) {
@@ -141,7 +178,7 @@ public class SignupCourseView extends StackPane {
                     @Override
                     public void updateItem(LocalDate date, boolean empty) {
                         super.updateItem(date, empty);
-                        if (date.isBefore(newValue)) {
+                        if (date != null && date.isBefore(newValue)) {
                             setDisable(true);
                             setStyle("-fx-background-color: #d1c7b7; -fx-text-fill: #888888;");
                         }
@@ -155,25 +192,31 @@ public class SignupCourseView extends StackPane {
         createCourseBtn.getStyleClass().add("gold-action-button");
         createCourseBtn.setMaxWidth(Double.MAX_VALUE);
 
-       createCourseBtn.setOnAction(e -> {
-    if (courseField.getText().trim().isEmpty() || startDatePicker.getValue() == null || endDatePicker.getValue() == null) {
-        showCustomAlert("Course details incomplete", "Please enter a course name and select both\nstart and end dates.");
-    } else {
-        String courseName = courseField.getText().trim();
-        java.time.format.DateTimeFormatter fmt = java.time.format.DateTimeFormatter.ofPattern("MMM d, yyyy");
-        String formattedDates = startDatePicker.getValue().format(fmt) + " - " + endDatePicker.getValue().format(fmt);
+        createCourseBtn.setOnAction(e -> {
+            if (courseField.getText().trim().isEmpty() || startDatePicker.getValue() == null || endDatePicker.getValue() == null) {
+                showCustomAlert("Course details incomplete", "Please enter a course name and select both\nstart and end dates.");
+            } else {
+                String courseName = courseField.getText().trim();
+                DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MMM d, yyyy");
+                String formattedDates = startDatePicker.getValue().format(fmt) + " - " + endDatePicker.getValue().format(fmt);
 
-        if (this.getScene() != null) {
-            this.getScene().setRoot(new MainLayoutView(
-                courseName,
-                formattedDates
-            ));
-        }
-    }
-});
+                if (this.getScene() != null) {
+                    this.getScene().setRoot(new MainLayoutView(
+                        courseName,
+                        formattedDates
+                    ));
+                }
+            }
+        });
 
         authCard.getChildren().addAll(backButton, cardTitle, courseBox, focusBox, datesRow, createCourseBtn);
-        mainContainer.getChildren().addAll(logoHeader, badgePill, heroTitle, heroSubtitle, authCard);
+        mainContainer.getChildren().addAll(logoHeader, badgePill, heroTitle, subtitleBox, authCard);
+
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scrollPane.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
 
         scrollPane.setContent(mainContainer);
         this.getChildren().add(scrollPane);
