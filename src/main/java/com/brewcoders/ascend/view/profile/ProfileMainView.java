@@ -41,7 +41,7 @@ public class ProfileMainView extends BorderPane {
         headerBox.getChildren().addAll(pillWrapper, titleAndSubtitleGroup);
 
         // 2. Navigation Tabs
-        HBox tabsRow = new HBox(12);
+        HBox tabsRow = new HBox(16);
         
         personalInfoBtn = createTabButton("● Personal Information", true);
         historyBtn = createTabButton("● History", false);
@@ -71,13 +71,15 @@ public class ProfileMainView extends BorderPane {
         this.setCenter(scrollPane);
     }
 
-    private Button createTabButton(String text, boolean active) {
-        Button btn = new Button(text);
-        btn.getStyleClass().add("profile-tab-btn");
-        if (active) {
-            btn.getStyleClass().add("profile-tab-btn-active");
-        }
-        return btn;
+    private Button createTabButton(String text, boolean isActive) {
+    Button btn = new Button(text);
+    btn.getStyleClass().add("profile-tab-button"); // Ensure this class is added
+    
+    if (isActive) {
+        btn.getStyleClass().add("active");
+    }
+    
+    return btn;
     }
 
     private void switchTab(Button selectedBtn, Pane view) {

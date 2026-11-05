@@ -725,26 +725,28 @@
 }
 
 /* Tab Navigation Buttons */
-.profile-tab-btn {
+.profile-tab-button {
     -fx-font-family: "Press Start 2P";
-    -fx-font-size: 9px;
+    -fx-font-size: 10px;                  /* Increased font size for readability */
     -fx-text-fill: #ffffff;
-    -fx-background-color: #3b4c3a;
-    -fx-border-color: #1a2419;
+    -fx-background-color: #1f3a2b;       /* Dark retro tab fill */
+    -fx-border-color: #0f1f16;
     -fx-border-width: 2px;
-    -fx-border-radius: 4px;
-    -fx-background-radius: 4px;
-    -fx-padding: 8px 16px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 10px 18px;               /* Generous top/bottom and left/right padding */
+    -fx-min-height: 38px;                 /* Prevents compressed height */
     -fx-cursor: hand;
 }
 
-.profile-tab-btn-active {
-    -fx-background-color: #1b4332; 
-    -fx-text-fill: #ffffff;
-    -fx-border-color: #0b1d16;
-    -fx-border-width: 2px;
-    -fx-border-radius: 4px;
-    -fx-background-radius: 4px;
+.profile-tab-button:hover {
+    -fx-background-color: #2a4c39;
+}
+
+.profile-tab-button:selected,
+.profile-tab-button.active {
+    -fx-background-color: #0b2216;       /* Active tab background */
+    -fx-border-color: #102a1b;
 }
 
 /* Retro Warm Cards */
