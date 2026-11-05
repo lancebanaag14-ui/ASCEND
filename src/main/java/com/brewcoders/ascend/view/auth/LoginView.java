@@ -9,10 +9,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.TextAlignment;
+
+import java.util.function.UnaryOperator;
 
 public class LoginView extends StackPane {
 
@@ -106,6 +110,24 @@ public class LoginView extends StackPane {
 
         tabBar.getChildren().addAll(loginTab, signupTab);
 
+        // Username Filter: Alphanumeric & underscores, max 30 chars, no whitespace
+        UnaryOperator<TextFormatter.Change> usernameFilter = change -> {
+            String newText = change.getControlNewText();
+            if (newText.length() <= 30 && !change.getText().contains(" ")) {
+                return change;
+            }
+            return null; // Reject change
+        };
+
+        // Password Filter: Max 64 chars, no whitespace
+        UnaryOperator<TextFormatter.Change> passwordFilter = change -> {
+            String newText = change.getControlNewText();
+            if (newText.length() <= 64 && !change.getText().contains(" ")) {
+                return change;
+            }
+            return null; // Reject change
+        };
+
         // Username Field
         VBox usernameBox = new VBox(8);
         usernameBox.setAlignment(Pos.CENTER_LEFT);
@@ -114,6 +136,7 @@ public class LoginView extends StackPane {
         TextField usernameField = new TextField();
         usernameField.setPromptText("Enter your username");
         usernameField.getStyleClass().add("retro-input");
+        usernameField.setTextFormatter(new TextFormatter<>(usernameFilter));
         usernameBox.getChildren().addAll(usernameLabel, usernameField);
 
         // Password Field
@@ -124,6 +147,7 @@ public class LoginView extends StackPane {
         PasswordField passwordField = new PasswordField();
         passwordField.setPromptText("Enter your password");
         passwordField.getStyleClass().add("retro-input");
+        passwordField.setTextFormatter(new TextFormatter<>(passwordFilter));
         passwordBox.getChildren().addAll(passwordLabel, passwordField);
 
         // Action Button
@@ -161,29 +185,48 @@ public class LoginView extends StackPane {
         });
 
         // Action Execution & Validation
-    actionButton.setOnAction(e -> {
-    String user = usernameField.getText().trim();
-    String pass = passwordField.getText().trim();
+        actionButton.setOnAction(e -> {
+            String user = usernameField.getText().trim();
+            String pass = passwordField.getText();
 
-    if (user.isEmpty() || pass.isEmpty()) {
-        if (isLoginMode) {
-            showCustomAlert("Login details incomplete", "Please complete both the username and password\nbefore logging in.");
-        } else {
-            showCustomAlert("Signup details incomplete", "Please complete both the username and password\nbefore signing up.");
-        }
-    } else {
-        if (!isLoginMode) {
-            if (this.getScene() != null) {
-                this.getScene().setRoot(new SignupCourseView());
+            // 1. Incomplete Details Check
+            if (user.isEmpty() || pass.isEmpty()) {
+                if (isLoginMode) {
+                    showCustomAlert("Login details incomplete", "Please complete both the username and password\nbefore logging in.");
+                } else {
+                    showCustomAlert("Signup details incomplete", "Please complete both the username and password\nbefore signing up.");
+                }
+                return;
             }
-        } else {
-            // Direct redirect to Main Menu Dashboard
-            if (this.getScene() != null) {
-                this.getScene().setRoot(new MainLayoutView("oop", "Nov 2, 2026 - Nov 26, 2026"));
+
+    
+
+            // 2. Signup Rules Check
+            if (isLoginMode || !isLoginMode) {
+                if (user.length() < 3) {
+                    showCustomAlert("Invalid Username", "Username must be at least 3 characters long.");
+                    return;
+                }
+                 if (!user.matches("^[a-zA-Z0-9_]+$")) {
+                showCustomAlert("Invalid Username", "Username can only contain letters, numbers, and underscores.");
+                return;
+                }
+                if (pass.length() < 8) {
+                    showCustomAlert("Weak Password", "Password must be at least 8 characters long.");
+                    return;
+                }
             }
-        }
-    }
-});
+
+            // Route to next view
+            if (this.getScene() != null) {
+                if (!isLoginMode) {
+                    this.getScene().setRoot(new SignupCourseView());
+                } else {
+                    this.getScene().setRoot(new MainLayoutView("oop", "Nov 2, 2026 - Nov 26, 2026"));
+                }
+            }
+        });
+
         authCard.getChildren().addAll(welcomeLabel, cardTitle, tabBar, usernameBox, passwordBox, actionButton);
         mainContainer.getChildren().addAll(logoHeader, badgePill, heroTitle, heroSubtitle, authCard);
 
