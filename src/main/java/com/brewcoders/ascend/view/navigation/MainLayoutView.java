@@ -156,7 +156,7 @@ public class MainLayoutView extends BorderPane {
         Image patternImage = canvas.snapshot(null, null);
         return new ImagePattern(patternImage, 0, 0, tileSize * 2, tileSize * 2, false);
     }
-    
+
     public MainLayoutView() {
         this("oop", "Nov 2, 2026 - Nov 26, 2026");
     }

@@ -5,11 +5,20 @@ import java.util.List;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.*;
-import javafx.scene.Node;
+import javafx.scene.image.WritableImage;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 
 public class ProfileMainView extends BorderPane {
 
@@ -17,13 +26,19 @@ public class ProfileMainView extends BorderPane {
     private final Button personalInfoBtn;
     private final Button historyBtn;
     private final Button achievementsBtn;
+    private List<Button> tabButtons = new ArrayList<>();
 
     public ProfileMainView() {
+
         this.getStyleClass().add("profile-root");
 
         VBox contentContainer = new VBox(20);
         contentContainer.setPadding(new Insets(70, 80, 80, 80));
 
+        // Apply Pixel Grid Pattern to contentContainer
+        ImagePattern checkerboardPattern = createPixelGridPattern();
+        Background gridBackground = new Background(new BackgroundFill(checkerboardPattern, CornerRadii.EMPTY, Insets.EMPTY));
+        contentContainer.setBackground(gridBackground);
 
         // 1. Header Section
         Label badgePill = new Label("USER PROFILE");
@@ -46,11 +61,11 @@ public class ProfileMainView extends BorderPane {
 
         // 2. Navigation Tabs
         HBox tabsRow = new HBox(16);
-        
+
         personalInfoBtn = createTabButton("• Personal Information", true);
         historyBtn = createTabButton("• History", false);
         achievementsBtn = createTabButton("• Achievements", false);
-        
+
         tabsRow.getChildren().addAll(personalInfoBtn, historyBtn, achievementsBtn);
 
         // 3. Dynamic Content Area (Loads default sub-view)
@@ -75,16 +90,31 @@ public class ProfileMainView extends BorderPane {
         this.setCenter(scrollPane);
     }
 
-    private List<Button> tabButtons = new ArrayList<>();
+    private ImagePattern createPixelGridPattern() {
+        int size = 16;
+        WritableImage image = new WritableImage(size, size);
+
+        // Retro green checkerboard colors
+        Color color1 = Color.web("#a3d95b");
+        Color color2 = Color.web("#8ecb45");
+
+        for (int y = 0; y < size; y++) {
+            for (int x = 0; x < size; x++) {
+                boolean isEven = (x / 8 + y / 8) % 2 == 0;
+                image.getPixelWriter().setColor(x, y, isEven ? color1 : color2);
+            }
+        }
+        return new ImagePattern(image, 0, 0, size, size, false);
+    }
 
     private Button createTabButton(String text, boolean isActive) {
         Button btn = new Button(text);
         btn.getStyleClass().add("profile-tab-button");
-        
+
         if (isActive) {
             btn.getStyleClass().add("active");
         }
-        
+
         tabButtons.add(btn);
         return btn;
     }
@@ -94,10 +124,10 @@ public class ProfileMainView extends BorderPane {
         for (Button btn : tabButtons) {
             btn.getStyleClass().remove("active");
         }
-        
+
         // 2. Mark clicked button as active
         selectedButton.getStyleClass().add("active");
-        
+
         // 3. Swap the content area view
         tabContentArea.getChildren().setAll(newContentView);
     }
