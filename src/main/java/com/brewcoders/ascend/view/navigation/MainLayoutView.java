@@ -69,19 +69,28 @@ public class MainLayoutView extends BorderPane {
     }
 
     public void showMissionsView() {
-        breadcrumbLabel.setText("ASCEND  >  MISSIONS");
-        sidebarView.setActiveTab(true);
-        MissionsView missionsView = new MissionsView(courseName, this::openCreateMissionPage);
-        centerContainer.getChildren().setAll(missionsView);
-    }
+    breadcrumbLabel.setText("ASCEND  >  MISSIONS");
+    sidebarView.setActiveTab(true);
+    
+    // Show top-right button on Missions view
+    newMissionBtn.setVisible(true);
+    newMissionBtn.setManaged(true);
 
-    public void showProfileView() {
-        breadcrumbLabel.setText("ASCEND  >  PROFILE");
-        sidebarView.setActiveTab(false);
-        ProfileMainView profileView = new ProfileMainView();
-        centerContainer.getChildren().setAll(profileView);
-    }
+    MissionsView missionsView = new MissionsView(courseName, this::openCreateMissionPage);
+    centerContainer.getChildren().setAll(missionsView);
+}
 
+public void showProfileView() {
+    breadcrumbLabel.setText("ASCEND  >  PROFILE");
+    sidebarView.setActiveTab(false);
+    
+    // Hide top-right button on Profile view
+    newMissionBtn.setVisible(false);
+    newMissionBtn.setManaged(false);
+
+    ProfileMainView profileView = new ProfileMainView();
+    centerContainer.getChildren().setAll(profileView);
+}
     private void openCreateMissionPage() {
         System.out.println("Navigating to Create New Mission Page...");
         // TODO: Route to CreateMissionView when created

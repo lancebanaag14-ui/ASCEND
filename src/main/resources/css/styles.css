@@ -432,14 +432,16 @@
 }
 
 .sidebar-footer-text {
-    -fx-text-fill: #4ade80;
     -fx-font-family: "Press Start 2P";
     -fx-font-size: 7px;
+    -fx-text-fill: #9ee079;
+    -fx-text-alignment: center;
+    -fx-alignment: center;
+    -fx-max-width: infinity;
 }
 
-/* ==========================================================
-   MISSIONS CONTENT BACKGROUND GRID & VIEWS
-   ========================================================== */
+
+   /* MISSIONS CONTENT BACKGROUND GRID & VIEWS*/
 .missions-scroll-pane {
     -fx-background-color: #9ee079;
     -fx-fit-to-width: true;
@@ -462,12 +464,14 @@
 
 /* Course Header */
 .missions-course-badge {
-    -fx-background-color: transparent;
-    -fx-border-color: #4a2810;
+     -fx-background-color: transparent;
+    -fx-border-color: #1b5230;
     -fx-border-width: 2px;
+    -fx-border-radius: 4px;
     -fx-text-fill: #1b5230;
     -fx-font-family: "Press Start 2P";
-    -fx-font-size: 8px;
+    -fx-font-size: 13px;
+    -fx-font-weight: normal;
     -fx-padding: 5px 10px;
 }
 
@@ -669,7 +673,7 @@
 .header-course-subtitle {
     -fx-font-family: "Press Start 2P";
     -fx-font-size: 11px;
-    -fx-line-spacing: 4px; /* Adjusts line spacing for multi-line wrapped text */
+    -fx-line-spacing: 4px; 
     -fx-text-fill: #4a2810;
     -fx-padding: 2px 0 0 0;
 }
@@ -680,4 +684,178 @@
 
 .scroll-pane > .viewport {
     -fx-background-color: transparent;
+}
+
+/*PROFILE VIEW STYLES*/
+
+.profile-root {
+    -fx-background-color: #9ee079; 
+}
+
+/* Header Elements */
+.profile-badge-pill {
+    -fx-background-color: transparent;
+    -fx-border-color: #1b5230;
+    -fx-border-width: 2px;
+    -fx-border-radius: 4px;
+    -fx-text-fill: #1b5230;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 13px;
+    -fx-font-weight: normal;
+    -fx-padding: 5px 10px;
+}
+
+/* Main Title */
+.profile-main-title {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 32px;
+    -fx-text-fill: #1c2d1b;
+    -fx-padding: 0;
+}
+
+
+/* Subtitle Paragraph Spacing */
+.profile-subtitle {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 11px;
+    -fx-text-fill: #455d38;
+    -fx-opacity: 0.9;
+    -fx-padding: 0px;
+    -fx-line-spacing: 6px;
+}
+
+/* Tab Navigation Buttons */
+.profile-tab-btn {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 9px;
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #3b4c3a;
+    -fx-border-color: #1a2419;
+    -fx-border-width: 2px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 8px 16px;
+    -fx-cursor: hand;
+}
+
+.profile-tab-btn-active {
+    -fx-background-color: #1b4332; 
+    -fx-text-fill: #ffffff;
+    -fx-border-color: #0b1d16;
+    -fx-border-width: 2px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+}
+
+/* Retro Warm Cards */
+.profile-card {
+    -fx-background-color: #fce7a8; /* Figma Warm Yellow-Tan Card */
+    -fx-border-color: #29180e;
+    -fx-border-width: 2px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 4, 0, 0, 4);
+}
+
+.profile-card-header {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 11px;
+    -fx-text-fill: #29180e;
+}
+
+.profile-card-value {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 9px;
+    -fx-text-fill: #594539;
+}
+
+/* Initials Avatar Box (Dark Green Square) */
+.profile-initials-avatar-frame {
+    -fx-background-color: #0b3c2c;
+    -fx-border-color: #041711;
+    -fx-border-width: 2px;
+    -fx-border-radius: 16px;
+    -fx-background-radius: 16px;
+    -fx-min-width: 140px;
+    -fx-min-height: 140px;
+    -fx-max-width: 140px;
+    -fx-max-height: 140px;
+}
+
+.profile-avatar-initial {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 52px;
+    -fx-text-fill: #ffffff;
+}
+
+/* Delete Card & Button */
+.profile-delete-title {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 8px;
+    -fx-text-fill: #29180e;
+}
+
+.profile-delete-subtitle {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 7px;
+    -fx-text-fill: #6e584a;
+}
+
+.profile-delete-btn {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 9px;
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #f43f5e;
+    -fx-border-color: #881337;
+    -fx-border-width: 2px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 8px 16px;
+    -fx-cursor: hand;
+}
+
+/* Rank Avatar & About Inner Box */
+.profile-rank-image-frame {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #29180e;
+    -fx-border-width: 2px;
+    -fx-border-radius: 16px;
+    -fx-background-radius: 16px;
+    -fx-min-width: 130px;
+    -fx-min-height: 130px;
+    -fx-max-width: 130px;
+    -fx-max-height: 130px;
+}
+
+.profile-rank-title {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 11px;
+    -fx-text-fill: #29180e;
+}
+
+.profile-about-header {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 10px;
+    -fx-text-fill: #29180e;
+}
+
+.profile-about-card {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #29180e;
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+.profile-quote {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 9px;
+    -fx-text-fill: #15803d;
+}
+
+.profile-desc {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 8px;
+    -fx-text-fill: #475569;
+    -fx-line-spacing: 5px;
 }

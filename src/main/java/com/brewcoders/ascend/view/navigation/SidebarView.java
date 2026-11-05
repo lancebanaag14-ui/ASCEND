@@ -10,6 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.TextAlignment;
 
 public class SidebarView extends VBox {
 
@@ -116,6 +117,16 @@ public class SidebarView extends VBox {
         // 5. Footer Text
         Label footerLabel = new Label("BY BREW CODERS SINCE 2026");
         footerLabel.getStyleClass().add("sidebar-footer-text");
+
+        // 1. Center the text inside the Label node
+        footerLabel.setTextAlignment(TextAlignment.CENTER);
+        footerLabel.setAlignment(Pos.CENTER);
+        footerLabel.setMaxWidth(Double.MAX_VALUE); // Expands label across full parent width
+
+        // 2. Wrap in a centered container (if using HBox/VBox at sidebar bottom)
+        HBox footerContainer = new HBox(footerLabel);
+        footerContainer.setAlignment(Pos.CENTER);
+        footerContainer.setMaxWidth(Double.MAX_VALUE);
 
         this.getChildren().addAll(brandHeader, courseCard, navBox, backToFrontBtn, spacer, footerLabel);
     }

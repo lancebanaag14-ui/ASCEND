@@ -28,8 +28,7 @@ public class MissionsView extends ScrollPane {
 
         // Inside MissionsView.java constructor:
         VBox contentContainer = new VBox(24);
-        contentContainer.getStyleClass().add("missions-root");
-        contentContainer.setMaxWidth(Double.MAX_VALUE);
+        contentContainer.setPadding(new Insets(70, 80, 80, 80));
 
         // --- 1. Course Header Section ---
         VBox courseHeader = new VBox(15);
@@ -94,8 +93,8 @@ public class MissionsView extends ScrollPane {
         // 3. Right Progress Container 
         VBox progressBox = new VBox(6);
         progressBox.setAlignment(Pos.CENTER_LEFT);
-        progressBox.setPrefWidth(1200); 
-        progressBox.setMaxWidth(1200);
+        progressBox.setPrefWidth(1000); 
+        progressBox.setMaxWidth(1000);
 
         BorderPane progressHeader = new BorderPane();
         progressHeader.setMaxWidth(Double.MAX_VALUE);
