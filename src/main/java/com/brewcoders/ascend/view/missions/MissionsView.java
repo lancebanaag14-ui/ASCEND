@@ -8,6 +8,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -20,6 +21,10 @@ public class MissionsView extends ScrollPane {
     private final Runnable onCreateMissionClicked;
 
     public MissionsView(String courseName, Runnable onCreateMissionClicked) {
+
+        this.setBackground(Background.EMPTY);
+        this.setStyle("-fx-background-color: transparent;");
+        
         this.onCreateMissionClicked = onCreateMissionClicked;
 
         this.setFitToWidth(true);

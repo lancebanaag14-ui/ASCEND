@@ -2,12 +2,18 @@ package com.brewcoders.ascend.view.profile;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 
 public class ProfileMainView extends BorderPane {
+    
 
     private final StackPane tabContentArea;
     private final Button personalInfoBtn;
@@ -15,10 +21,16 @@ public class ProfileMainView extends BorderPane {
     private final Button achievementsBtn;
 
     public ProfileMainView() {
+
         this.getStyleClass().add("profile-root");
 
         VBox contentContainer = new VBox(20);
         contentContainer.setPadding(new Insets(70, 80, 80, 80));
+
+        // Apply Pixel Grid Pattern to contentContainer
+        ImagePattern checkerboardPattern = createPixelGridPattern();
+        Background gridBackground = new Background(new BackgroundFill(checkerboardPattern, CornerRadii.EMPTY, Insets.EMPTY));
+        contentContainer.setBackground(gridBackground);
 
 
         // 1. Header Section
@@ -69,6 +81,36 @@ public class ProfileMainView extends BorderPane {
         scrollPane.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
 
         this.setCenter(scrollPane);
+    }
+
+    private ImagePattern createPixelGridPattern() {
+        int tileSize = 20; 
+        Canvas canvas = new Canvas(tileSize * 2, tileSize * 2);
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+
+        Color c1 = Color.web("#b4e380"); // Light background square
+        Color c2 = Color.web("#abe076"); // Horizontal/Vertical band tint
+        Color c3 = Color.web("#abe076"); // Horizontal/Vertical band tint
+        Color c4 = Color.web("#a3da6f"); // Dark intersection square
+
+        // Top-left
+        gc.setFill(c1);
+        gc.fillRect(0, 0, tileSize, tileSize);
+
+        // Top-right
+        gc.setFill(c2);
+        gc.fillRect(tileSize, 0, tileSize, tileSize);
+
+        // Bottom-left
+        gc.setFill(c3);
+        gc.fillRect(0, tileSize, tileSize, tileSize);
+
+        // Bottom-right (Intersection)
+        gc.setFill(c4);
+        gc.fillRect(tileSize, tileSize, tileSize, tileSize);
+
+        Image patternImage = canvas.snapshot(null, null);
+        return new ImagePattern(patternImage, 0, 0, tileSize * 2, tileSize * 2, false);
     }
 
     private Button createTabButton(String text, boolean active) {
