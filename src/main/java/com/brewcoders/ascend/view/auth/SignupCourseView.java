@@ -63,7 +63,7 @@ public class SignupCourseView extends StackPane {
         badgeText.getStyleClass().add("badge-text");
         badgePill.getChildren().add(badgeText);
 
-       // 3. Hero Headlines
+        // 3. Hero Headlines
         Label heroTitle = new Label("Create your current course.");
         heroTitle.getStyleClass().add("hero-title");
 
@@ -122,6 +122,7 @@ public class SignupCourseView extends StackPane {
         Label startLabel = new Label("Start date");
         startLabel.getStyleClass().add("field-label");
         DatePicker startDatePicker = new DatePicker();
+        startDatePicker.setEditable(false); // Disables manual typing
         startDatePicker.setPromptText("mm/dd/yyyy");
         startDatePicker.getStyleClass().add("retro-date-picker");
         startDatePicker.setMaxWidth(Double.MAX_VALUE);
@@ -132,6 +133,7 @@ public class SignupCourseView extends StackPane {
         Label endLabel = new Label("End date");
         endLabel.getStyleClass().add("field-label");
         DatePicker endDatePicker = new DatePicker();
+        endDatePicker.setEditable(false); // Disables manual typing
         endDatePicker.setPromptText("mm/dd/yyyy");
         endDatePicker.getStyleClass().add("retro-date-picker");
         endDatePicker.setMaxWidth(Double.MAX_VALUE);

@@ -1,5 +1,6 @@
 package com.brewcoders.ascend.view.navigation;
 
+import com.brewcoders.ascend.view.missions.CreateMissionModal;
 import com.brewcoders.ascend.view.missions.MissionsView;
 import com.brewcoders.ascend.view.profile.ProfileMainView;
 
@@ -20,6 +21,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
+import javafx.stage.Stage;
 
 public class MainLayoutView extends BorderPane {
 
@@ -27,10 +29,12 @@ public class MainLayoutView extends BorderPane {
     private Label breadcrumbLabel;
     private Button newMissionBtn;
     private VBox centerContainer;
+    private MissionsView missionsView; 
 
     private String courseName;
     private String focusCycleDates;
 
+    
     public MainLayoutView(String courseName, String focusCycleDates) {
         this.courseName = (courseName != null && !courseName.isEmpty()) ? courseName : "oop";
         this.focusCycleDates = (focusCycleDates != null && !focusCycleDates.isEmpty()) ? focusCycleDates : "Nov 2, 2026 - Nov 26, 2026";
@@ -84,31 +88,43 @@ public class MainLayoutView extends BorderPane {
     }
 
     public void showMissionsView() {
-    breadcrumbLabel.setText("ASCEND  >  MISSIONS");
-    sidebarView.setActiveTab(true);
-    
-    // Show top-right button on Missions view
-    newMissionBtn.setVisible(true);
-    newMissionBtn.setManaged(true);
+        breadcrumbLabel.setText("ASCEND  >  MISSIONS");
+        sidebarView.setActiveTab(true);
+        
+        // Show top-right button on Missions view
+        newMissionBtn.setVisible(true);
+        newMissionBtn.setManaged(true);
 
-    MissionsView missionsView = new MissionsView(courseName, this::openCreateMissionPage);
-    centerContainer.getChildren().setAll(missionsView);
-}
+        if (this.missionsView == null) {
+            this.missionsView = new MissionsView(courseName, this::openCreateMissionPage);
+        }
+        centerContainer.getChildren().setAll(this.missionsView);
+    }
 
-public void showProfileView() {
-    breadcrumbLabel.setText("ASCEND  >  PROFILE");
-    sidebarView.setActiveTab(false);
-    
-    // Hide top-right button on Profile view
-    newMissionBtn.setVisible(false);
-    newMissionBtn.setManaged(false);
+    public void showProfileView() {
+        breadcrumbLabel.setText("ASCEND  >  PROFILE");
+        sidebarView.setActiveTab(false);
+        
+        // Hide top-right button on Profile view
+        newMissionBtn.setVisible(false);
+        newMissionBtn.setManaged(false);
 
-    ProfileMainView profileView = new ProfileMainView();
-    centerContainer.getChildren().setAll(profileView);
-}
+        ProfileMainView profileView = new ProfileMainView();
+        centerContainer.getChildren().setAll(profileView);
+    }
+
     private void openCreateMissionPage() {
-        System.out.println("Navigating to Create New Mission Page...");
-        // TODO: Route to CreateMissionView when created
+        Stage ownerStage = (Stage) this.getScene().getWindow();
+
+        java.time.LocalDate cycleStart = sidebarView.getFocusCycleStart();
+        java.time.LocalDate cycleEnd = sidebarView.getFocusCycleEnd();
+
+        // Pass the callback to handle mission creation
+        CreateMissionModal.display(ownerStage, cycleStart, cycleEnd, newMission -> {
+            if (this.missionsView != null && newMission != null) {
+                this.missionsView.addMissionCard(newMission);
+            }
+        });
     }
 
     private ImagePattern createPixelGridPattern() {
@@ -142,7 +158,6 @@ public void showProfileView() {
     }
     
     public MainLayoutView() {
-    this("oop", "Nov 2, 2026 - Nov 26, 2026");
+        this("oop", "Nov 2, 2026 - Nov 26, 2026");
     }
-
 }

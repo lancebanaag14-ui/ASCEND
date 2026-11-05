@@ -12,12 +12,18 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 
-public class SidebarView extends VBox {
 
+public class SidebarView extends VBox {
+    private java.time.LocalDate currentCycleStart;
+    private java.time.LocalDate currentCycleEnd;
     private Button missionsBtn;
     private Button profileBtn;
+    
 
-    public SidebarView(String courseName, String focusCycleDates, Runnable onMissionsSelected, Runnable onProfileSelected) {
+   public SidebarView(String courseName, String focusCycleDates, Runnable onMissionsSelected, Runnable onProfileSelected){
+        // 1. Dynamically parse incoming focus cycle dates (e.g., "Nov 2, 2026 - Nov 26, 2026" or "Dec 1, 2026 - Dec 28, 2026")
+    parseAndSetCycleDates(focusCycleDates);
+
         this.setPrefWidth(260);
         this.setMinWidth(260);
         this.setMaxWidth(260);
@@ -140,4 +146,34 @@ public class SidebarView extends VBox {
             missionsBtn.getStyleClass().setAll("sidebar-nav-btn-inactive");
         }
     }
+
+
+    // Method to parse date strings dynamically
+private void parseAndSetCycleDates(String rawDateString) {
+    try {
+        if (rawDateString != null && rawDateString.contains("-")) {
+            String[] parts = rawDateString.split("-");
+            java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("MMM d, yyyy", java.util.Locale.ENGLISH);
+            
+            this.currentCycleStart = java.time.LocalDate.parse(parts[0].trim(), formatter);
+            this.currentCycleEnd = java.time.LocalDate.parse(parts[1].trim(), formatter);
+            return;
+        }
+    } catch (Exception e) {
+        // Fallback if format parsing fails
+    }
+    // Default fallback if string is empty or invalid
+    this.currentCycleStart = java.time.LocalDate.now();
+    this.currentCycleEnd = this.currentCycleStart.plusDays(28);
 }
+
+// Getters used by MainLayoutView
+public java.time.LocalDate getFocusCycleStart() {
+    return this.currentCycleStart;
+}
+
+public java.time.LocalDate getFocusCycleEnd() {
+    return this.currentCycleEnd;
+}
+}
+

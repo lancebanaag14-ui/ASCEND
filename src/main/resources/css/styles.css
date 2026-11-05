@@ -727,31 +727,35 @@
 /* Tab Navigation Buttons */
 .profile-tab-button {
     -fx-font-family: "Press Start 2P";
-    -fx-font-size: 10px;                  /* Increased font size for readability */
+    -fx-font-size: 10px;                  
     -fx-text-fill: #ffffff;
-    -fx-background-color: #1f3a2b;       /* Dark retro tab fill */
+    -fx-background-color: #1f3a2b;       
     -fx-border-color: #0f1f16;
     -fx-border-width: 2px;
     -fx-border-radius: 6px;
     -fx-background-radius: 6px;
-    -fx-padding: 10px 18px;               /* Generous top/bottom and left/right padding */
-    -fx-min-height: 38px;                 /* Prevents compressed height */
+    -fx-padding: 10px 18px;               
+    -fx-min-height: 38px;                 
     -fx-cursor: hand;
 }
 
 .profile-tab-button:hover {
-    -fx-background-color: #2a4c39;
+    -fx-background-color: #334a39;
 }
 
-.profile-tab-button:selected,
+/* Active Selected Tab Button */
 .profile-tab-button.active {
-    -fx-background-color: #0b2216;       /* Active tab background */
-    -fx-border-color: #102a1b;
+    -fx-background-color: #0b1d13;       
+    -fx-border-color: #050e09;
+}
+
+.profile-tab-button.active:hover {
+    -fx-background-color: #0b1d13;       
 }
 
 /* Retro Warm Cards */
 .profile-card {
-    -fx-background-color: #fce7a8; /* Figma Warm Yellow-Tan Card */
+    -fx-background-color: #fce7a8; 
     -fx-border-color: #29180e;
     -fx-border-width: 2px;
     -fx-border-radius: 6px;
@@ -860,4 +864,47 @@
     -fx-font-size: 8px;
     -fx-text-fill: #475569;
     -fx-line-spacing: 5px;
+}
+
+/* Style for pixel-art TextArea with internal breathing room */
+.text-area .scroll-pane .content {
+    -fx-background-color: #ffffff;
+    -fx-background-insets: 0;
+    -fx-padding: 16px 12px 12px 12px; 
+}
+
+.text-area .scroll-pane {
+    -fx-background-color: transparent;
+    -fx-padding: 6px 0px 0px 4px; 
+}
+
+.text-area .scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.text-area .scroll-pane .content {
+    -fx-background-color: #ffffff;
+    -fx-background-insets: 0;
+    -fx-padding: 6px; 
+}
+
+/* Force line-height and line-spacing for wrapped pixel fonts */
+.text-area .text {
+    -fx-bounds-type: logical;
+    -fx-line-spacing: 12px;
+}
+
+.text-area .content {
+    -fx-line-spacing: 12px;
+}
+
+/* DatePicker non-editable field styling */
+.date-picker .text-field {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-cursor: hand;
+}
+
+.date-picker:readonly .text-field {
+    -fx-opacity: 1.0;
 }

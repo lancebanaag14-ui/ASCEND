@@ -1,5 +1,7 @@
 package com.brewcoders.ascend.view.missions;
 
+import com.brewcoders.ascend.model.Mission;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -15,9 +17,17 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
 public class MissionsView extends ScrollPane {
 
     private final Runnable onCreateMissionClicked;
+    private VBox missionsContainer = new VBox(12);
+    private VBox emptyStateBox = new VBox(14);
+    private VBox mainCardBox = new VBox(); // Outer yellow/cream container box
+    private Label pendingCountLabel = new Label("0 Pending missions");
+    private int pendingCount = 0;
 
     public MissionsView(String courseName, Runnable onCreateMissionClicked) {
         this.onCreateMissionClicked = onCreateMissionClicked;
@@ -26,7 +36,6 @@ public class MissionsView extends ScrollPane {
         this.setFitToHeight(true);
         this.getStyleClass().add("missions-scroll-pane");
 
-        // Inside MissionsView.java constructor:
         VBox contentContainer = new VBox(24);
         contentContainer.setPadding(new Insets(70, 80, 80, 80));
 
@@ -47,14 +56,13 @@ public class MissionsView extends ScrollPane {
 
         courseHeader.getChildren().addAll(badgeLabel, courseTitle, courseSubtext);
 
-       // --- 2. Avatar Progress Card ---
+        // --- 2. Avatar Progress Card ---
         HBox avatarCard = new HBox(16);
         avatarCard.getStyleClass().add("missions-avatar-card");
         avatarCard.setAlignment(Pos.CENTER_LEFT);
         avatarCard.setMaxWidth(Double.MAX_VALUE);
-        avatarCard.setPadding(new Insets(16, 20, 16, 16)); 
+        avatarCard.setPadding(new Insets(16, 20, 16, 16));
 
-        // 1. Avatar Icon Square (Fixed size, rounded corners)
         StackPane avatarFrame = new StackPane();
         avatarFrame.getStyleClass().add("missions-avatar-frame");
         avatarFrame.setMinWidth(76);
@@ -74,7 +82,6 @@ public class MissionsView extends ScrollPane {
         }
         avatarFrame.getChildren().add(avatarView);
 
-        // 2. Avatar Info Column
         VBox avatarInfo = new VBox(3);
         avatarInfo.setAlignment(Pos.CENTER_LEFT);
         avatarInfo.setMinWidth(150);
@@ -90,10 +97,9 @@ public class MissionsView extends ScrollPane {
 
         avatarInfo.getChildren().addAll(currentAvatarBadge, avatarName, totalPointsLabel);
 
-        // 3. Right Progress Container 
         VBox progressBox = new VBox(6);
         progressBox.setAlignment(Pos.CENTER_LEFT);
-        progressBox.setPrefWidth(1000); 
+        progressBox.setPrefWidth(1000);
         progressBox.setMaxWidth(1000);
 
         BorderPane progressHeader = new BorderPane();
@@ -117,10 +123,9 @@ public class MissionsView extends ScrollPane {
         Region cardSpacer = new Region();
         HBox.setHgrow(cardSpacer, Priority.ALWAYS);
 
-        // Assemble card 
         avatarCard.getChildren().setAll(avatarFrame, avatarInfo, cardSpacer, progressBox);
 
-        // --- 3. Active Missions Section & Empty State Card ---
+        // --- 3. Active Missions Section ---
         VBox missionsSection = new VBox(14);
         missionsSection.setMaxWidth(Double.MAX_VALUE);
 
@@ -139,42 +144,187 @@ public class MissionsView extends ScrollPane {
         Region headerSpacer = new Region();
         HBox.setHgrow(headerSpacer, Priority.ALWAYS);
 
-        Label pendingCount = new Label("0 Pending missions");
-        pendingCount.getStyleClass().add("missions-pending-count");
+        pendingCountLabel.getStyleClass().add("missions-pending-count");
 
-        sectionHeader.getChildren().addAll(sectionTitleBox, headerSpacer, pendingCount);
+        sectionHeader.getChildren().addAll(sectionTitleBox, headerSpacer, pendingCountLabel);
 
-        // Empty State Box
-        VBox emptyCard = new VBox(14);
-        emptyCard.getStyleClass().add("missions-empty-card");
-        emptyCard.setAlignment(Pos.CENTER);
-        emptyCard.setMaxWidth(Double.MAX_VALUE);
+        // Configure main yellow retro container box
+        mainCardBox.setStyle(
+            "-fx-background-color: #fce8ac; " +
+            "-fx-border-color: #453018; " +
+            "-fx-border-width: 3px; " +
+            "-fx-padding: 24;"
+        );
+        mainCardBox.setMaxWidth(Double.MAX_VALUE);
+
+        // Configure Empty State View
+        emptyStateBox.setAlignment(Pos.CENTER);
+        emptyStateBox.setPadding(new Insets(40, 20, 40, 20));
 
         StackPane emptyIconFrame = new StackPane();
-        emptyIconFrame.getStyleClass().add("missions-empty-icon-frame");
+        emptyIconFrame.setStyle("-fx-background-color: #72bf36; -fx-border-color: #453018; -fx-border-width: 2px; -fx-background-radius: 8px; -fx-border-radius: 8px;");
+        emptyIconFrame.setMinSize(56, 56);
+        emptyIconFrame.setMaxSize(56, 56);
 
-        Region innerDot = new Region();
-        innerDot.getStyleClass().add("missions-empty-icon-dot");
-        emptyIconFrame.getChildren().add(innerDot);
+        Label circleDot = new Label("●");
+        circleDot.setStyle("-fx-text-fill: #ffffff; -fx-font-size: 24px;");
+        emptyIconFrame.getChildren().add(circleDot);
 
-        Label emptyTitle = new Label("No active missions");
-        emptyTitle.getStyleClass().add("missions-empty-title");
+        Label noMissionsText = new Label("No active missions");
+        noMissionsText.setStyle("-fx-font-family: 'Press Start 2P'; -fx-font-size: 13px; -fx-text-fill: #1f2d18;");
 
-        Label emptySub = new Label("Create a mission to begin earning points");
-        emptySub.getStyleClass().add("missions-empty-sub");
+        Label createSubText = new Label("Create a mission to begin earning points");
+        createSubText.setStyle("-fx-font-family: 'Press Start 2P'; -fx-font-size: 10px; -fx-text-fill: #555555;");
 
-        Button createBtn = new Button("+ Create Mission");
-        createBtn.getStyleClass().add("gold-action-button");
-        createBtn.setOnAction(e -> {
+        Button emptyCreateBtn = new Button("+ Create Mission");
+        emptyCreateBtn.setStyle(
+            "-fx-font-family: 'Press Start 2P'; " +
+            "-fx-font-size: 10px; " +
+            "-fx-background-color: #f7ce68; " +
+            "-fx-text-fill: #1f2d18; " +
+            "-fx-border-color: #453018; " +
+            "-fx-border-width: 2px; " +
+            "-fx-padding: 10 18; " +
+            "-fx-cursor: hand;"
+        );
+
+        // Call the Runnable here to clear the unused field warning:
+        emptyCreateBtn.setOnAction(e -> {
             if (this.onCreateMissionClicked != null) {
                 this.onCreateMissionClicked.run();
             }
         });
 
-        emptyCard.getChildren().addAll(emptyIconFrame, emptyTitle, emptySub, createBtn);
-        missionsSection.getChildren().addAll(sectionHeader, emptyCard);
+        emptyStateBox.getChildren().addAll(emptyIconFrame, noMissionsText, createSubText, emptyCreateBtn);
 
-                contentContainer.getChildren().addAll(courseHeader, avatarCard, missionsSection);
-                this.setContent(contentContainer);
+        // Setup missions container
+        this.missionsContainer.setSpacing(12);
+        this.missionsContainer.setMaxWidth(Double.MAX_VALUE);
+
+        // Default layout: empty state box inside outer main card box
+        mainCardBox.getChildren().add(emptyStateBox);
+
+        missionsSection.getChildren().addAll(sectionHeader, mainCardBox);
+
+        contentContainer.getChildren().addAll(courseHeader, avatarCard, missionsSection);
+        this.setContent(contentContainer);
+    }
+
+        public MissionsView(String courseName) {
+            this(courseName, null);
+        }
+
+    public void addMissionCard(Mission mission) {
+        if (mission == null) return;
+
+        // Hide empty state on first card creation
+        if (pendingCount == 0) {
+            mainCardBox.getChildren().clear();
+            mainCardBox.getChildren().add(this.missionsContainer);
+        }
+
+        // Inner Card Container: Lighter cream fill (#fff3cf) with NO inner border lines
+        HBox card = new HBox(18);
+        card.setAlignment(Pos.CENTER_LEFT);
+        card.setPadding(new Insets(16, 20, 16, 20));
+        card.setMaxWidth(Double.MAX_VALUE);
+        card.setStyle(
+            "-fx-background-color: #fff3cf; " +
+            "-fx-border-width: 0px;"
+        );
+
+        // 1. Date Badge (solid blue box with white dot)
+        HBox dateBox = new HBox(10);
+        dateBox.setAlignment(Pos.CENTER);
+        dateBox.setPrefHeight(46);
+        dateBox.setPadding(new Insets(0, 16, 0, 16));
+        dateBox.setStyle(
+            "-fx-background-color: #0d9edb; " +
+            "-fx-border-color: #453018; " +
+            "-fx-border-width: 2.5px;"
+        );
+
+        StackPane whiteCircle = new StackPane();
+        whiteCircle.setStyle("-fx-background-color: #ffffff; -fx-background-radius: 50%;");
+        whiteCircle.setMinSize(14, 14);
+        whiteCircle.setMaxSize(14, 14);
+
+        DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.ENGLISH);
+        Label dateLabel = new Label(mission.getDueDate() != null ? mission.getDueDate().format(dateFmt) : "");
+        dateLabel.setStyle("-fx-font-family: 'Press Start 2P'; -fx-font-size: 10px; -fx-text-fill: #ffffff;");
+        dateBox.getChildren().addAll(whiteCircle, dateLabel);
+
+        // 2. Mission Info Column
+        VBox infoBox = new VBox(6);
+        
+        HBox titleRow = new HBox(10);
+        titleRow.setAlignment(Pos.CENTER_LEFT);
+
+        Label nameLabel = new Label(mission.getName());
+        nameLabel.setStyle("-fx-font-family: 'Press Start 2P'; -fx-font-size: 13px; -fx-text-fill: #1f2d18;");
+
+        Label diffBadge = new Label(mission.getDifficulty());
+        diffBadge.setPadding(new Insets(3, 7, 3, 7));
+        diffBadge.setStyle(
+            "-fx-font-family: 'Press Start 2P'; " +
+            "-fx-font-size: 8px; " +
+            "-fx-background-color: #f7be3b; " +
+            "-fx-border-color: #453018; " +
+            "-fx-border-width: 1.5px; " +
+            "-fx-text-fill: #1f2d18;"
+        );
+        titleRow.getChildren().addAll(nameLabel, diffBadge);
+
+        Label descLabel = new Label(mission.getDescription());
+        descLabel.setStyle("-fx-font-family: 'Press Start 2P'; -fx-font-size: 10px; -fx-text-fill: #444444;");
+
+        Label catLabel = new Label(mission.getCategory());
+        catLabel.setStyle("-fx-font-family: 'Press Start 2P'; -fx-font-size: 10px; -fx-text-fill: #006666;");
+
+        infoBox.getChildren().addAll(titleRow, descLabel, catLabel);
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        // 3. Reward Banner & Point Count
+        VBox rewardBox = new VBox(4);
+        rewardBox.setAlignment(Pos.CENTER_RIGHT);
+
+        Label rewardTitle = new Label("REWARD");
+        rewardTitle.setStyle("-fx-font-family: 'Press Start 2P'; -fx-font-size: 8px; -fx-text-fill: #453018;");
+
+        Label rewardValue = new Label("+ " + mission.getPoints());
+        rewardValue.setStyle("-fx-font-family: 'Press Start 2P'; -fx-font-size: 12px; -fx-text-fill: #1f2d18;");
+        rewardBox.getChildren().addAll(rewardTitle, rewardValue);
+
+        // 4. Complete Action Button
+        Button completeBtn = new Button("Complete");
+        completeBtn.setStyle(
+            "-fx-font-family: 'Press Start 2P'; " +
+            "-fx-font-size: 12px; " +
+            "-fx-background-color: #6bc832; " +
+            "-fx-text-fill: #ffffff; " +
+            "-fx-border-color: #453018; " +
+            "-fx-border-width: 2.5px; " +
+            "-fx-padding: 12 20; " +
+            "-fx-cursor: hand;"
+        );
+
+        completeBtn.setOnAction(e -> {
+            this.missionsContainer.getChildren().remove(card);
+            pendingCount--;
+            pendingCountLabel.setText(pendingCount + " Pending missions");
+
+            if (pendingCount == 0) {
+                mainCardBox.getChildren().clear();
+                mainCardBox.getChildren().add(emptyStateBox);
             }
+        });
+
+        card.getChildren().addAll(dateBox, infoBox, spacer, rewardBox, completeBtn);
+
+        this.missionsContainer.getChildren().add(card);
+        pendingCount++;
+        pendingCountLabel.setText(pendingCount + " Pending missions");
+    }
 }

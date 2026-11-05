@@ -1,11 +1,15 @@
 package com.brewcoders.ascend.view.profile;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
+import javafx.scene.Node;
 
 public class ProfileMainView extends BorderPane {
 
@@ -43,9 +47,9 @@ public class ProfileMainView extends BorderPane {
         // 2. Navigation Tabs
         HBox tabsRow = new HBox(16);
         
-        personalInfoBtn = createTabButton("● Personal Information", true);
-        historyBtn = createTabButton("● History", false);
-        achievementsBtn = createTabButton("● Achievements", false);
+        personalInfoBtn = createTabButton("• Personal Information", true);
+        historyBtn = createTabButton("• History", false);
+        achievementsBtn = createTabButton("• Achievements", false);
         
         tabsRow.getChildren().addAll(personalInfoBtn, historyBtn, achievementsBtn);
 
@@ -71,23 +75,30 @@ public class ProfileMainView extends BorderPane {
         this.setCenter(scrollPane);
     }
 
+    private List<Button> tabButtons = new ArrayList<>();
+
     private Button createTabButton(String text, boolean isActive) {
-    Button btn = new Button(text);
-    btn.getStyleClass().add("profile-tab-button"); // Ensure this class is added
-    
-    if (isActive) {
-        btn.getStyleClass().add("active");
-    }
-    
-    return btn;
+        Button btn = new Button(text);
+        btn.getStyleClass().add("profile-tab-button");
+        
+        if (isActive) {
+            btn.getStyleClass().add("active");
+        }
+        
+        tabButtons.add(btn);
+        return btn;
     }
 
-    private void switchTab(Button selectedBtn, Pane view) {
-        personalInfoBtn.getStyleClass().remove("profile-tab-btn-active");
-        historyBtn.getStyleClass().remove("profile-tab-btn-active");
-        achievementsBtn.getStyleClass().remove("profile-tab-btn-active");
-
-        selectedBtn.getStyleClass().add("profile-tab-btn-active");
-        tabContentArea.getChildren().setAll(view);
+    private void switchTab(Button selectedButton, Node newContentView) {
+        // 1. Reset 'active' class on all tab buttons
+        for (Button btn : tabButtons) {
+            btn.getStyleClass().remove("active");
+        }
+        
+        // 2. Mark clicked button as active
+        selectedButton.getStyleClass().add("active");
+        
+        // 3. Swap the content area view
+        tabContentArea.getChildren().setAll(newContentView);
     }
 }
