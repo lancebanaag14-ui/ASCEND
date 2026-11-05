@@ -689,7 +689,7 @@
 /*PROFILE VIEW STYLES*/
 
 .profile-root {
-    -fx-background-color: #9ee079; 
+    -fx-background-color: transparent;
 }
 
 /* Header Elements */
@@ -907,4 +907,17 @@
 
 .date-picker:readonly .text-field {
     -fx-opacity: 1.0;
+}
+
+/* Fix JavaFX ScrollPane viewport backgrounds */
+.transparent-scroll-pane,
+.transparent-scroll-pane > .viewport,
+.transparent-scroll-pane .scroll-bar {
+    -fx-background-color: transparent !important;
+    -fx-background: transparent !important;
+}
+
+/* Ensure root profile view inherits the main app background pattern */
+.profile-root {
+    -fx-background-color: transparent !important;
 }
