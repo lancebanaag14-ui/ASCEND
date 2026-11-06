@@ -10,9 +10,16 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
 
 public class PersonalInfoView extends HBox {
+
+    private Label pointsValue;
+    private ImageView rankImageView;
+    private Label rankTitle;
+    private Label quoteLabel;
+    private Label descLabel;
 
     public PersonalInfoView() {
         this.setSpacing(24);
@@ -45,7 +52,9 @@ public class PersonalInfoView extends HBox {
 
         Label pointsHeader = new Label("Total Points");
         pointsHeader.getStyleClass().add("profile-card-header");
-        Label pointsValue = new Label("0");
+        
+        // Dynamic Total Points Label
+        pointsValue = new Label("0");
         pointsValue.getStyleClass().add("profile-card-value");
         VBox pointsBox = new VBox(6, pointsHeader, pointsValue);
         pointsBox.setAlignment(Pos.CENTER);
@@ -90,17 +99,19 @@ public class PersonalInfoView extends HBox {
         StackPane rankImageFrame = new StackPane();
         rankImageFrame.getStyleClass().add("profile-rank-image-frame");
         
-        try {
-            ImageView rankImageView = new ImageView(new Image(getClass().getResourceAsStream("/images/avatars/avatar_noob.jpg")));
-            rankImageView.setFitWidth(110);
-            rankImageView.setFitHeight(110);
-            rankImageView.setPreserveRatio(true);
-            rankImageFrame.getChildren().add(rankImageView);
-        } catch (Exception e) {
-            // Fallback image frame
-        }
+        rankImageView = new ImageView();
+        rankImageView.setFitWidth(110);
+        rankImageView.setFitHeight(110);
+        rankImageView.setPreserveRatio(false);
 
-        Label rankTitle = new Label("The Noob");
+        Rectangle clip = new Rectangle(110, 110);
+        clip.setArcWidth(20);
+        clip.setArcHeight(20);
+        rankImageView.setClip(clip);
+
+        rankImageFrame.getChildren().add(rankImageView);
+
+        rankTitle = new Label("The Noob");
         rankTitle.getStyleClass().add("profile-rank-title");
 
         // About Box
@@ -108,12 +119,12 @@ public class PersonalInfoView extends HBox {
         aboutCard.getStyleClass().add("profile-about-card");
         aboutCard.setPadding(new Insets(20, 24, 20, 24));
 
-        Label quoteLabel = new Label("\"Hello World! (And goodbye to my syntax errors.)\"");
+        quoteLabel = new Label("\"Hello World! (And goodbye to my syntax errors.)\"");
         quoteLabel.getStyleClass().add("profile-quote");
         quoteLabel.setWrapText(true);
         quoteLabel.setTextAlignment(TextAlignment.CENTER);
 
-        Label descLabel = new Label("Your journey into coding begins here. You are learning the ropes, setting up your first development cycles, and discovering that debugging takes twice as long as writing the code in the first place.");
+        descLabel = new Label("Your journey into coding begins here. You are learning the ropes, setting up your first development cycles, and discovering that debugging takes twice as long as writing the code in the first place.");
         descLabel.getStyleClass().add("profile-desc");
         descLabel.setWrapText(true);
         descLabel.setTextAlignment(TextAlignment.CENTER);
@@ -130,13 +141,55 @@ public class PersonalInfoView extends HBox {
         rightColumn.getChildren().add(avatarInfoCard);
 
         this.getChildren().addAll(leftColumn, rightColumn);
+
+        // Synchronize dynamic user point totals and rank visuals
+        refreshUserData();
+    }
+
+    public void refreshUserData() {
+        int totalPoints = MissionManager.getInstance().getTotalPoints();
+        
+        // Update Total Points label
+        pointsValue.setText(String.valueOf(totalPoints));
+
+        // Dynamic threshold checks for current avatar rank display
+        String imagePath = "/images/avatars/avatar_noob.jpg";
+        String title = "The Noob";
+        String quote = "\"Hello World! (And goodbye to my syntax errors.)\"";
+        String desc = "Your journey into coding begins here. You are learning the ropes, setting up your first development cycles, and discovering that debugging takes twice as long as writing the code in the first place.";
+
+        if (totalPoints >= 3000) {
+            imagePath = "/images/avatars/avatar_wildcard.jpg";
+            title = "The Wildcard";
+            quote = "\"Predictable? Never. Effective? Always.\"";
+            desc = "Master of unexpected solutions and out-of-the-box thinking. You write code that surprises everyone, including yourself, and somehow it runs with zero errors.";
+        } else if (totalPoints >= 2000) {
+            imagePath = "/images/avatars/avatar_grinder.jpg";
+            title = "The Grinder";
+            quote = "\"Consistency is key. One line at a time.\"";
+            desc = "Pushing through endless mission logs and refactoring legacy code without flinching. Your discipline turns complex problems into clean, functional algorithms.";
+        } else if (totalPoints >= 1000) {
+            imagePath = "/images/avatars/avatar_nightCoder.jpg";
+            title = "The Night Coder";
+            quote = "\"Powered by dark mode and late night breakthroughs.\"";
+            desc = "Thriving when the sun goes down. The quiet hours of the night are when your best logic comes to life and unit tests pass effortlessly.";
+        }
+
+        try {
+            rankImageView.setImage(new Image(getClass().getResourceAsStream(imagePath)));
+        } catch (Exception e) {
+            System.err.println("Could not load rank image: " + imagePath);
+        }
+
+        rankTitle.setText(title);
+        quoteLabel.setText(quote);
+        descLabel.setText(desc);
     }
 
     private void showDeleteConfirmationModal() {
         Scene scene = this.getScene();
         if (scene == null) return;
 
-        // Wrap root scene in StackPane if needed so modal centers over full screen
         if (!(scene.getRoot() instanceof StackPane)) {
             Pane currentRoot = (Pane) scene.getRoot();
             StackPane wrapperRoot = new StackPane();
@@ -146,12 +199,10 @@ public class PersonalInfoView extends HBox {
 
         StackPane rootStackPane = (StackPane) scene.getRoot();
 
-        // Fullscreen translucent overlay layer
         StackPane overlay = new StackPane();
         overlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.45);");
         overlay.setAlignment(Pos.CENTER);
 
-        // Retro Dialog Box Container
         VBox alertCard = new VBox(20);
         alertCard.setMaxWidth(540);
         alertCard.setMaxHeight(VBox.USE_PREF_SIZE);
@@ -187,7 +238,6 @@ public class PersonalInfoView extends HBox {
         );
         message.setWrapText(true);
 
-        // Cancel Button
         Button cancelBtn = new Button("Cancel");
         cancelBtn.setStyle(
             "-fx-font-family: 'Press Start 2P'; " +
@@ -201,7 +251,6 @@ public class PersonalInfoView extends HBox {
         );
         cancelBtn.setOnAction(e -> rootStackPane.getChildren().remove(overlay));
 
-        // Confirm Delete Button -> Clears state and redirects directly to LoginView
         Button confirmDeleteBtn = new Button("Delete all progress");
         confirmDeleteBtn.setStyle(
             "-fx-font-family: 'Press Start 2P'; " +

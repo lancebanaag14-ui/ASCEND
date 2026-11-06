@@ -18,6 +18,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -30,6 +31,14 @@ public class MissionsView extends ScrollPane {
     private VBox emptyStateBox = new VBox(14);
     private VBox mainCardBox = new VBox(); // Outer yellow/cream container box
     private Label pendingCountLabel = new Label("0 Pending missions");
+
+    // Dynamic Header Components
+    private ImageView avatarView = new ImageView();
+    private Label avatarName = new Label("The Noob");
+    private Label totalPointsValueLabel = new Label("TOTAL POINTS : 0");
+    private Label nextRankLabel = new Label("NEXT RANK: THE NIGHT CODER");
+    private Label pointsCountLabel = new Label("0 / 1,000 points");
+    private ProgressBar progressBar = new ProgressBar(0.0);
 
     public MissionsView(String courseName, Runnable onCreateMissionClicked) {
 
@@ -75,33 +84,38 @@ public class MissionsView extends ScrollPane {
         avatarFrame.setMinHeight(76);
         avatarFrame.setPrefSize(76, 76);
         avatarFrame.setMaxSize(76, 76);
+        avatarFrame.setStyle(
+            "-fx-background-color: #ffffff; " +
+            "-fx-border-color: #453018; " +
+            "-fx-border-width: 2.5px; " +
+            "-fx-background-radius: 12px; " +
+            "-fx-border-radius: 12px;"
+        );
 
-        ImageView avatarView = new ImageView();
-        try {
-            Image avatarImg = new Image(getClass().getResourceAsStream("/images/avatars/avatar_noob.png"));
-            avatarView.setImage(avatarImg);
-            avatarView.setFitWidth(68);
-            avatarView.setFitHeight(68);
-            avatarView.setPreserveRatio(true);
-        } catch (Exception e) {
-            System.err.println("Could not load avatar image");
-        }
+        // Avatar Image Configuration & Clipping
+        avatarView.setFitWidth(70);
+        avatarView.setFitHeight(70);
+        avatarView.setPreserveRatio(false);
+
+        Rectangle clip = new Rectangle(70, 70);
+        clip.setArcWidth(16);
+        clip.setArcHeight(16);
+        avatarView.setClip(clip);
+
         avatarFrame.getChildren().add(avatarView);
 
         VBox avatarInfo = new VBox(3);
         avatarInfo.setAlignment(Pos.CENTER_LEFT);
-        avatarInfo.setMinWidth(150);
+        avatarInfo.setMinWidth(180);
 
         Label currentAvatarBadge = new Label("CURRENT AVATAR");
         currentAvatarBadge.getStyleClass().add("missions-avatar-badge");
 
-        Label avatarName = new Label("The Noob");
         avatarName.getStyleClass().add("missions-avatar-name");
 
-        Label totalPointsLabel = new Label("TOTAL POINTS :");
-        totalPointsLabel.getStyleClass().add("missions-total-points");
+        totalPointsValueLabel.getStyleClass().add("missions-total-points");
 
-        avatarInfo.getChildren().addAll(currentAvatarBadge, avatarName, totalPointsLabel);
+        avatarInfo.getChildren().addAll(currentAvatarBadge, avatarName, totalPointsValueLabel);
 
         VBox progressBox = new VBox(6);
         progressBox.setAlignment(Pos.CENTER_LEFT);
@@ -111,18 +125,23 @@ public class MissionsView extends ScrollPane {
         BorderPane progressHeader = new BorderPane();
         progressHeader.setMaxWidth(Double.MAX_VALUE);
 
-        Label nextRankLabel = new Label("NEXT RANK: THE NIGHT CODER");
         nextRankLabel.getStyleClass().add("missions-next-rank");
 
-        Label pointsCountLabel = new Label("0 / 1,000 points");
         pointsCountLabel.getStyleClass().add("missions-points-count");
 
         progressHeader.setLeft(nextRankLabel);
         progressHeader.setRight(pointsCountLabel);
 
-        ProgressBar progressBar = new ProgressBar(0.0);
+        // Styled Progress Bar with Green Fill (-fx-accent: #6bc832)
         progressBar.getStyleClass().add("missions-progress-bar");
         progressBar.setMaxWidth(Double.MAX_VALUE);
+        progressBar.setPrefHeight(18);
+        progressBar.setStyle(
+            "-fx-accent: #6bc832; " +                   // Retro bright green fill bar
+            "-fx-control-inner-background: #453018; " +  // Dark brown background track
+            "-fx-border-color: #453018; " +
+            "-fx-border-width: 2px;"
+        );
 
         progressBox.getChildren().addAll(progressHeader, progressBar);
 
@@ -167,15 +186,6 @@ public class MissionsView extends ScrollPane {
         emptyStateBox.setAlignment(Pos.CENTER);
         emptyStateBox.setPadding(new Insets(40, 20, 40, 20));
 
-        StackPane emptyIconFrame = new StackPane();
-        emptyIconFrame.setStyle("-fx-background-color: #72bf36; -fx-border-color: #453018; -fx-border-width: 2px; -fx-background-radius: 8px; -fx-border-radius: 8px;");
-        emptyIconFrame.setMinSize(56, 56);
-        emptyIconFrame.setMaxSize(56, 56);
-
-        Label circleDot = new Label("●");
-        circleDot.setStyle("-fx-text-fill: #ffffff; -fx-font-size: 24px;");
-        emptyIconFrame.getChildren().add(circleDot);
-
         Label noMissionsText = new Label("No active missions");
         noMissionsText.setStyle("-fx-font-family: 'Press Start 2P'; -fx-font-size: 13px; -fx-text-fill: #1f2d18;");
 
@@ -200,7 +210,7 @@ public class MissionsView extends ScrollPane {
             }
         });
 
-        emptyStateBox.getChildren().addAll(emptyIconFrame, noMissionsText, createSubText, emptyCreateBtn);
+        emptyStateBox.getChildren().addAll(noMissionsText, createSubText, emptyCreateBtn);
 
         // Setup missions container
         this.missionsContainer.setSpacing(12);
@@ -233,6 +243,10 @@ public class MissionsView extends ScrollPane {
         this.missionsContainer.getChildren().clear();
         List<Mission> activeMissions = MissionManager.getInstance().getActiveMissions();
 
+        // 1. Update Avatar Banner & Progress
+        updateAvatarProgress();
+
+        // 2. Update Active Missions List
         int count = activeMissions.size();
         pendingCountLabel.setText(count + " Pending missions");
 
@@ -246,6 +260,55 @@ public class MissionsView extends ScrollPane {
             for (Mission mission : activeMissions) {
                 this.missionsContainer.getChildren().add(createMissionRowCard(mission));
             }
+        }
+    }
+
+    private void updateAvatarProgress() {
+        int totalPoints = MissionManager.getInstance().getTotalPoints();
+        totalPointsValueLabel.setText("TOTAL POINTS : " + totalPoints);
+
+        String imagePath = "/images/avatars/avatar_noob.jpg";
+        String rankTitle = "The Noob";
+        String nextRankTitle = "NEXT RANK: THE NIGHT CODER";
+        int prevThreshold = 0;
+        int nextThreshold = 1000;
+
+        if (totalPoints >= 3000) {
+            imagePath = "/images/avatars/avatar_wildcard.jpg";
+            rankTitle = "The Wildcard";
+            nextRankTitle = "MAX RANK REACHED!";
+            prevThreshold = 3000;
+            nextThreshold = 3000;
+        } else if (totalPoints >= 2000) {
+            imagePath = "/images/avatars/avatar_grinder.jpg";
+            rankTitle = "The Grinder";
+            nextRankTitle = "NEXT RANK: THE WILDCARD";
+            prevThreshold = 2000;
+            nextThreshold = 3000;
+        } else if (totalPoints >= 1000) {
+            imagePath = "/images/avatars/avatar_nightCoder.jpg";
+            rankTitle = "The Night Coder";
+            nextRankTitle = "NEXT RANK: THE GRINDER";
+            prevThreshold = 1000;
+            nextThreshold = 2000;
+        }
+
+        try {
+            avatarView.setImage(new Image(getClass().getResourceAsStream(imagePath)));
+        } catch (Exception e) {
+            System.err.println("Could not load avatar image at path: " + imagePath);
+        }
+
+        avatarName.setText(rankTitle);
+        nextRankLabel.setText(nextRankTitle);
+
+        if (prevThreshold == nextThreshold) {
+            pointsCountLabel.setText(String.format("%,d points", totalPoints));
+            progressBar.setProgress(1.0);
+        } else {
+            pointsCountLabel.setText(String.format("%,d / %,d points", totalPoints, nextThreshold));
+            double progress = (double) (totalPoints - prevThreshold) / (nextThreshold - prevThreshold);
+            progressBar.setProgress(Math.min(1.0, Math.max(0.0, progress)));
         }
     }
 

@@ -533,16 +533,13 @@
 }
 
 .missions-progress-bar .track {
-    -fx-background-color: #6e3b23;      
-    -fx-background-radius: 0px;
-    -fx-border-color: #4a2810;
-    -fx-border-width: 1px;
+    -fx-background-color: #453018;
+    -fx-background-radius: 0;
 }
 
 .missions-progress-bar .bar {
-    -fx-background-color: #fbe6af;      
-    -fx-background-radius: 0px;
-    -fx-background-insets: 0;
+    -fx-background-color: #6bc832;
+    -fx-background-radius: 0;
 }
 
 /* Active Missions Section Headers */

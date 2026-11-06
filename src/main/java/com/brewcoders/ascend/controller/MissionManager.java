@@ -46,6 +46,10 @@ public class MissionManager {
         missions.add(mission);
     }
 
+    public List<Mission> getAllMissions() {
+        return new ArrayList<>(missions);
+    }
+
     public List<Mission> getActiveMissions() {
         LocalDate today = LocalDate.now();
         // Automatically mark active missions whose due dates have passed as FAILED
@@ -64,6 +68,16 @@ public class MissionManager {
         return missions.stream()
                 .filter(m -> "COMPLETED".equalsIgnoreCase(m.getStatus()) || "FAILED".equalsIgnoreCase(m.getStatus()))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Sums up points earned from all completed missions.
+     */
+    public int getTotalPoints() {
+        return missions.stream()
+                .filter(m -> "COMPLETED".equalsIgnoreCase(m.getStatus()))
+                .mapToInt(Mission::getPoints)
+                .sum();
     }
 
     public void completeMission(Mission mission) {
