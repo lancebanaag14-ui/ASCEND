@@ -1,5 +1,6 @@
 package com.brewcoders.ascend.view.missions;
 
+import com.brewcoders.ascend.controller.MissionManager;
 import com.brewcoders.ascend.model.Mission;
 
 import javafx.geometry.Insets;
@@ -19,6 +20,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Locale;
 
 public class MissionsView extends ScrollPane {
@@ -28,7 +30,6 @@ public class MissionsView extends ScrollPane {
     private VBox emptyStateBox = new VBox(14);
     private VBox mainCardBox = new VBox(); // Outer yellow/cream container box
     private Label pendingCountLabel = new Label("0 Pending missions");
-    private int pendingCount = 0;
 
     public MissionsView(String courseName, Runnable onCreateMissionClicked) {
 
@@ -193,7 +194,6 @@ public class MissionsView extends ScrollPane {
             "-fx-cursor: hand;"
         );
 
-        // Call the Runnable here to clear the unused field warning:
         emptyCreateBtn.setOnAction(e -> {
             if (this.onCreateMissionClicked != null) {
                 this.onCreateMissionClicked.run();
@@ -206,29 +206,51 @@ public class MissionsView extends ScrollPane {
         this.missionsContainer.setSpacing(12);
         this.missionsContainer.setMaxWidth(Double.MAX_VALUE);
 
-        // Default layout: empty state box inside outer main card box
-        mainCardBox.getChildren().add(emptyStateBox);
-
         missionsSection.getChildren().addAll(sectionHeader, mainCardBox);
 
         contentContainer.getChildren().addAll(courseHeader, avatarCard, missionsSection);
         this.setContent(contentContainer);
+
+        // Initial view refresh from MissionManager
+        refreshMissionsList();
     }
 
-        public MissionsView(String courseName) {
-            this(courseName, null);
-        }
+    public MissionsView(String courseName) {
+        this(courseName, null);
+    }
 
     public void addMissionCard(Mission mission) {
         if (mission == null) return;
 
-        // Hide empty state on first card creation
-        if (pendingCount == 0) {
+        // Register new active mission in MissionManager store
+        MissionManager.getInstance().addMission(mission);
+        
+        // Refresh active list view
+        refreshMissionsList();
+    }
+
+    public void refreshMissionsList() {
+        this.missionsContainer.getChildren().clear();
+        List<Mission> activeMissions = MissionManager.getInstance().getActiveMissions();
+
+        int count = activeMissions.size();
+        pendingCountLabel.setText(count + " Pending missions");
+
+        if (count == 0) {
+            mainCardBox.getChildren().clear();
+            mainCardBox.getChildren().add(emptyStateBox);
+        } else {
             mainCardBox.getChildren().clear();
             mainCardBox.getChildren().add(this.missionsContainer);
-        }
 
-        // Inner Card Container: Lighter cream fill (#fff3cf) with NO inner border lines
+            for (Mission mission : activeMissions) {
+                this.missionsContainer.getChildren().add(createMissionRowCard(mission));
+            }
+        }
+    }
+
+    private HBox createMissionRowCard(Mission mission) {
+        // Inner Card Container: Lighter cream fill (#fff3cf)
         HBox card = new HBox(18);
         card.setAlignment(Pos.CENTER_LEFT);
         card.setPadding(new Insets(16, 20, 16, 20));
@@ -316,20 +338,12 @@ public class MissionsView extends ScrollPane {
         );
 
         completeBtn.setOnAction(e -> {
-            this.missionsContainer.getChildren().remove(card);
-            pendingCount--;
-            pendingCountLabel.setText(pendingCount + " Pending missions");
-
-            if (pendingCount == 0) {
-                mainCardBox.getChildren().clear();
-                mainCardBox.getChildren().add(emptyStateBox);
-            }
+            // Update status in shared store and refresh current view
+            MissionManager.getInstance().completeMission(mission);
+            refreshMissionsList();
         });
 
         card.getChildren().addAll(dateBox, infoBox, spacer, rewardBox, completeBtn);
-
-        this.missionsContainer.getChildren().add(card);
-        pendingCount++;
-        pendingCountLabel.setText(pendingCount + " Pending missions");
+        return card;
     }
 }

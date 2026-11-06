@@ -307,9 +307,7 @@
     -fx-alignment: center;
 }
 
-/* ==========================================================
-   MAIN DASHBOARD LAYOUT & TOP BAR
-   ========================================================== */
+/*MAIN DASHBOARD LAYOUT & TOP BAR*/
 .main-layout-root {
     -fx-background-color: #9ee079;
 }
@@ -329,9 +327,7 @@
     -fx-font-size: 13px;
 }
 
-/* ==========================================================
-   SIDEBAR COMPONENT STYLING
-   ========================================================== */
+/*SIDEBAR COMPONENT STYLING*/
 .sidebar-root {
     -fx-background-color: #0b4b2e;
     -fx-padding: 24px 18px;
@@ -920,4 +916,109 @@
 /* Ensure root profile view inherits the main app background pattern */
 .profile-root {
     -fx-background-color: transparent !important;
+}
+
+/* --- HISTORY VIEW STYLING --- */
+
+.history-sort-label {
+    -fx-font-family: 'Press Start 2P', monospace;
+    -fx-font-size: 11px;
+    -fx-text-fill: #4a2810;
+}
+
+/* Outer retro yellow container box */
+.history-card-container {
+    -fx-background-color: #f7e2b7;
+    -fx-border-color: #4a2810;
+    -fx-border-width: 3px;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+}
+
+/* Empty state text styling */
+.history-empty-text {
+    -fx-font-family: 'Press Start 2P', monospace;
+    -fx-font-size: 11px;
+    -fx-text-fill: #8c7355;
+    -fx-alignment: center;
+}
+
+/* Individual mission row card */
+.history-item-row {
+    -fx-background-color: #fceecb;
+    -fx-border-color: transparent;
+}
+
+/* Text styles */
+.history-item-title {
+    -fx-font-family: 'Press Start 2P', monospace;
+    -fx-font-size: 13px;
+    -fx-text-fill: #222222;
+}
+
+.history-item-subtext {
+    -fx-font-family: 'Press Start 2P', monospace;
+    -fx-font-size: 9px;
+    -fx-text-fill: #665544;
+}
+
+.history-item-points {
+    -fx-font-family: 'Press Start 2P', monospace;
+    -fx-font-size: 11px;
+    -fx-text-fill: #333333;
+}
+
+/* Icon Box - Completed (Green) */
+.status-icon-box-success {
+    -fx-background-color: #55a832;
+    -fx-border-color: #3b1d08;
+    -fx-border-width: 2px;
+    -fx-min-width: 44px;
+    -fx-min-height: 44px;
+    -fx-max-width: 44px;
+    -fx-max-height: 44px;
+}
+
+.status-icon-text-success {
+    -fx-font-family: 'Press Start 2P', monospace;
+    -fx-font-size: 18px;
+    -fx-text-fill: #ffffff;
+}
+
+/* Icon Box - Failed (Red) */
+.status-icon-box-failed {
+    -fx-background-color: #c84c4c;
+    -fx-border-color: #3b1d08;
+    -fx-border-width: 2px;
+    -fx-min-width: 44px;
+    -fx-min-height: 44px;
+    -fx-max-width: 44px;
+    -fx-max-height: 44px;
+}
+
+.status-icon-text-failed {
+    -fx-font-family: 'Press Start 2P', monospace;
+    -fx-font-size: 18px;
+    -fx-text-fill: #ffffff;
+}
+
+/* Status Badges */
+.status-badge-completed {
+    -fx-background-color: #55a832;
+    -fx-text-fill: #ffffff;
+    -fx-font-family: 'Press Start 2P', monospace;
+    -fx-font-size: 10px;
+    -fx-padding: 8px 16px;
+    -fx-border-color: #3b1d08;
+    -fx-border-width: 2px;
+}
+
+.status-badge-failed {
+    -fx-background-color: #c84c4c;
+    -fx-text-fill: #ffffff;
+    -fx-font-family: 'Press Start 2P', monospace;
+    -fx-font-size: 10px;
+    -fx-padding: 8px 16px;
+    -fx-border-color: #3b1d08;
+    -fx-border-width: 2px;
 }

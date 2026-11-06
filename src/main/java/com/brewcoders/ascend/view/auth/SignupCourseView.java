@@ -1,5 +1,6 @@
 package com.brewcoders.ascend.view.auth;
 
+import com.brewcoders.ascend.controller.MissionManager;
 import com.brewcoders.ascend.view.navigation.MainLayoutView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -198,6 +199,9 @@ public class SignupCourseView extends StackPane {
             if (courseField.getText().trim().isEmpty() || startDatePicker.getValue() == null || endDatePicker.getValue() == null) {
                 showCustomAlert("Course details incomplete", "Please enter a course name and select both\nstart and end dates.");
             } else {
+                // Clear previous session/course mission data before starting the new course
+                MissionManager.getInstance().clearMissions();
+
                 String courseName = courseField.getText().trim();
                 DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MMM d, yyyy");
                 String formattedDates = startDatePicker.getValue().format(fmt) + " - " + endDatePicker.getValue().format(fmt);
