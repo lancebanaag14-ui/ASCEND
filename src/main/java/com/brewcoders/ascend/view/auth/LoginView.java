@@ -1,6 +1,7 @@
 package com.brewcoders.ascend.view.auth;
 
 import com.brewcoders.ascend.view.navigation.MainLayoutView;
+import javafx.animation.PauseTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.geometry.Pos;
@@ -14,6 +15,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 
 import java.util.function.UnaryOperator;
@@ -110,22 +112,117 @@ public class LoginView extends StackPane {
 
         tabBar.getChildren().addAll(loginTab, signupTab);
 
-        // Username Filter: Alphanumeric & underscores, max 30 chars, no whitespace
-        UnaryOperator<TextFormatter.Change> usernameFilter = change -> {
+        // 6. Error Popup Labels
+        Label usernameErrorLabel = createErrorPopup();
+        Label passwordErrorLabel = createErrorPopup();
+
+        // Username Error Timer
+        PauseTransition usernameTimer =
+            new PauseTransition(Duration.seconds(3));
+
+        usernameTimer.setOnFinished(e -> {
+            usernameErrorLabel.setVisible(false);
+            usernameErrorLabel.setManaged(false);
+        });
+
+        // Password Error Timer
+        PauseTransition passwordTimer =
+            new PauseTransition(Duration.seconds(3));
+
+        passwordTimer.setOnFinished(e -> {
+            passwordErrorLabel.setVisible(false);
+            passwordErrorLabel.setManaged(false);
+        });
+
+        // 7. Username Filter
+        // Maximum 30 characters
+        // Letters, numbers, and underscores only
+       UnaryOperator<TextFormatter.Change> usernameFilter = change -> {
+
+            String addedText = change.getText();
             String newText = change.getControlNewText();
-            if (newText.length() <= 30 && !change.getText().contains(" ")) {
-                return change;
+
+            if (!addedText.isEmpty()) {
+
+                if (newText.length() > 30) {
+                    showError(usernameErrorLabel, usernameTimer,
+                            "⚠ Max 30 characters allowed!");
+                    return null;
+                }
+
+                if (addedText.matches(".*\\s+.*")) {
+                    showError(usernameErrorLabel, usernameTimer,
+                            "⚠ Whitespace is not allowed!");
+                    return null;
+                }
+
+                if (!addedText.matches("[a-zA-Z0-9_]+")) {
+                    showError(usernameErrorLabel, usernameTimer,
+                            "⚠ Special characters are not allowed!");
+                    return null;
+                }
             }
-            return null; // Reject change
+
+            // Minimum length warning
+            if (!newText.isEmpty() && newText.length() < 3) {
+                showError(
+                    usernameErrorLabel,
+                    usernameTimer,
+                    "⚠ Username must be at least 3 characters!"
+                );
+            } else {
+                usernameErrorLabel.setVisible(false);
+                usernameErrorLabel.setManaged(false);
+                usernameTimer.stop();
+            }
+
+            return change;
         };
 
-        // Password Filter: Max 64 chars, no whitespace
+        // 8. Password Filter
+        // min 8 chars
+        // Maximum 64 characters
+        // No whitespace allowed
         UnaryOperator<TextFormatter.Change> passwordFilter = change -> {
+
+            String addedText = change.getText();
             String newText = change.getControlNewText();
-            if (newText.length() <= 64 && !change.getText().contains(" ")) {
-                return change;
+
+            if (!addedText.isEmpty()) {
+
+                if (newText.length() > 64) {
+                    showError(
+                        passwordErrorLabel,
+                        passwordTimer,
+                        "⚠ Max 64 characters allowed!"
+                    );
+                    return null;
+                }
+
+                if (addedText.matches(".*\\s+.*")) {
+                    showError(
+                        passwordErrorLabel,
+                        passwordTimer,
+                        "⚠ Whitespace is not allowed!"
+                    );
+                    return null;
+                }
             }
-            return null; // Reject change
+
+           // Minimum length warning
+            if (!newText.isEmpty() && newText.length() < 8) {
+                showError(
+                    passwordErrorLabel,
+                    passwordTimer,
+                    "⚠ Password must be at least 8 characters!"
+                );
+            } else {
+                passwordErrorLabel.setVisible(false);
+                passwordErrorLabel.setManaged(false);
+                passwordTimer.stop();
+            }
+
+            return change;
         };
 
         // Username Field
@@ -137,7 +234,7 @@ public class LoginView extends StackPane {
         usernameField.setPromptText("Enter your username");
         usernameField.getStyleClass().add("retro-input");
         usernameField.setTextFormatter(new TextFormatter<>(usernameFilter));
-        usernameBox.getChildren().addAll(usernameLabel, usernameField);
+        usernameBox.getChildren().addAll(usernameLabel, usernameField, usernameErrorLabel);
 
         // Password Field
         VBox passwordBox = new VBox(8);
@@ -148,7 +245,7 @@ public class LoginView extends StackPane {
         passwordField.setPromptText("Enter your password");
         passwordField.getStyleClass().add("retro-input");
         passwordField.setTextFormatter(new TextFormatter<>(passwordFilter));
-        passwordBox.getChildren().addAll(passwordLabel, passwordField);
+        passwordBox.getChildren().addAll(passwordLabel, passwordField, passwordErrorLabel);
 
         // Action Button
         Button actionButton = new Button("Login >");
@@ -171,6 +268,14 @@ public class LoginView extends StackPane {
                 signupTab.getStyleClass().setAll("tab-button-inactive");
                 cardTitle.setText("Log in to continue");
                 actionButton.setText("Login >");
+
+                usernameErrorLabel.setVisible(false);
+                usernameErrorLabel.setManaged(false);
+                usernameTimer.stop();
+
+                passwordErrorLabel.setVisible(false);
+                passwordErrorLabel.setManaged(false);
+                passwordTimer.stop();
             }
         });
 
@@ -198,21 +303,26 @@ public class LoginView extends StackPane {
                 }
                 return;
             }
-
     
 
-            // 2. Signup Rules Check
-            if (isLoginMode || !isLoginMode) {
+            // Signup Rules Check
+            if (!isLoginMode) {
+
                 if (user.length() < 3) {
-                    showCustomAlert("Invalid Username", "Username must be at least 3 characters long.");
+                    showError(
+                        usernameErrorLabel,
+                        usernameTimer,
+                        "⚠ Username must be at least 3 characters!"
+                    );
                     return;
                 }
-                 if (!user.matches("^[a-zA-Z0-9_]+$")) {
-                showCustomAlert("Invalid Username", "Username can only contain letters, numbers, and underscores.");
-                return;
-                }
+
                 if (pass.length() < 8) {
-                    showCustomAlert("Weak Password", "Password must be at least 8 characters long.");
+                    showError(
+                        passwordErrorLabel,
+                        passwordTimer,
+                        "⚠ Password must be at least 8 characters!"
+                    );
                     return;
                 }
             }
@@ -232,6 +342,41 @@ public class LoginView extends StackPane {
 
         scrollPane.setContent(mainContainer);
         this.getChildren().add(scrollPane);
+    }
+
+     // 15. Create Error Popup
+    private Label createErrorPopup() {
+
+        Label popup = new Label();
+
+        popup.setStyle(
+            "-fx-font-family: 'Press Start 2P'; " +
+            "-fx-font-size: 9px; " +
+            "-fx-text-fill: #ffffff; " +
+            "-fx-background-color: #e63946; " +
+            "-fx-border-color: #453018; " +
+            "-fx-border-width: 2px; " +
+            "-fx-padding: 6px 10px;"
+        );
+
+        popup.setVisible(false);
+        popup.setManaged(false);
+
+        return popup;
+    }
+
+    // 16. Show Error Popup
+    private void showError(
+        Label errorLabel,
+        PauseTransition timer,
+        String message
+    ) {
+
+        errorLabel.setText(message);
+        errorLabel.setVisible(true);
+        errorLabel.setManaged(true);
+
+        timer.playFromStart();
     }
 
     private void showCustomAlert(String titleText, String messageText) {

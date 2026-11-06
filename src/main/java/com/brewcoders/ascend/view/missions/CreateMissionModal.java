@@ -322,7 +322,10 @@ public class CreateMissionModal {
                 hasError = true;
             }
 
-            if (hasError) return;
+            if (hasError) {
+                showIncompleteDetailsPopup(dialog);
+                return;
+            }
 
             int points = 0;
             switch (difficulty.toLowerCase()) {
@@ -374,6 +377,143 @@ public class CreateMissionModal {
 
         dialog.setScene(scene);
         dialog.showAndWait();
+    }
+    
+    // Show Mission details incomplete
+    private static void showIncompleteDetailsPopup(Stage owner) {
+        Stage popup = new Stage();
+        popup.initModality(Modality.APPLICATION_MODAL);
+        popup.initOwner(owner);
+        popup.initStyle(StageStyle.TRANSPARENT);
+
+        // Alert card
+        VBox alertBox = new VBox(16);
+        alertBox.setAlignment(Pos.TOP_LEFT);
+        alertBox.setPrefWidth(600);
+        alertBox.setMaxWidth(600);
+        alertBox.getStyleClass().add("alert-box");
+        // Fallback inline style in case CSS is not loaded
+        alertBox.setStyle(
+            "-fx-background-color: #fbe6af; " +
+            "-fx-border-color: #4a2810; " +
+            "-fx-border-width: 4px; " +
+            "-fx-padding: 36px 40px; " +
+            "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.45), 14, 0, 6, 6);"
+        );
+        alertBox.setMaxHeight(VBox.USE_PREF_SIZE);
+
+        // "NEW MISSION" badge
+        Label badge = new Label("NEW MISSION");
+        badge.getStyleClass().add("alert-welcome");
+        badge.setStyle(
+            "-fx-text-fill: #1b5230; " +
+            "-fx-font-family: 'Press Start 2P'; " +
+            "-fx-font-size: 10px;"
+        );
+
+        // Title
+        Label title = new Label("Mission details incomplete");
+        title.getStyleClass().add("alert-title");
+        title.setStyle(
+            "-fx-text-fill: #4a2810; " +
+            "-fx-font-family: 'Press Start 2P'; " +
+            "-fx-font-size: 18px; " +
+            "-fx-padding: 4px 0 6px 0; " +
+            "-fx-wrap-text: true; " +
+            "-fx-text-alignment: left;"
+        );
+       title.setWrapText(true);
+
+        // Message
+        Label message = new Label("Please complete all mission details before creating the mission.");
+        message.getStyleClass().add("alert-message");
+        message.setStyle(
+            "-fx-text-fill: #4a2810; " +
+            "-fx-font-family: 'Press Start 2P'; " +
+            "-fx-font-size: 10px; " +
+            "-fx-line-spacing: 10px; " +
+            "-fx-wrap-text: true; " +
+            "-fx-text-alignment: left;"
+        );
+        title.setWrapText(true);
+
+        // OK button
+        Button okBtn = new Button("OK");
+        okBtn.getStyleClass().add("alert-ok-button");
+        okBtn.setStyle(
+            "-fx-background-color: #ffc23d; " +
+            "-fx-text-fill: #4a2810; " +
+            "-fx-font-family: 'Press Start 2P'; " +
+            "-fx-font-size: 13px; " +
+            "-fx-border-color: #4a2810; " +
+            "-fx-border-width: 3px; " +
+            "-fx-padding: 10px 28px; " +
+            "-fx-background-radius: 0; " +
+            "-fx-border-radius: 0; " +
+            "-fx-cursor: hand;"
+        );
+        okBtn.setOnMouseEntered(e -> okBtn.setStyle(
+            "-fx-background-color: #f7b322; " +
+            "-fx-text-fill: #4a2810; " +
+            "-fx-font-family: 'Press Start 2P'; " +
+            "-fx-font-size: 13px; " +
+            "-fx-border-color: #4a2810; " +
+            "-fx-border-width: 3px; " +
+            "-fx-padding: 10px 28px; " +
+            "-fx-background-radius: 0; " +
+            "-fx-border-radius: 0; " +
+            "-fx-cursor: hand;"
+        ));
+        okBtn.setOnMouseExited(e -> okBtn.setStyle(
+            "-fx-background-color: #ffc23d; " +
+            "-fx-text-fill: #4a2810; " +
+            "-fx-font-family: 'Press Start 2P'; " +
+            "-fx-font-size: 13px; " +
+            "-fx-border-color: #4a2810; " +
+            "-fx-border-width: 3px; " +
+            "-fx-padding: 10px 28px; " +
+            "-fx-background-radius: 0; " +
+            "-fx-border-radius: 0; " +
+            "-fx-cursor: hand;"
+        ));
+        okBtn.setOnAction(e -> popup.close());
+
+        HBox buttonRow = new HBox(okBtn);
+        buttonRow.setAlignment(Pos.CENTER_RIGHT);
+        buttonRow.setMaxWidth(Double.MAX_VALUE);
+        buttonRow.setMinWidth(0);
+        buttonRow.setPadding(new Insets(12, 0, 0, 0));
+
+        alertBox.getChildren().addAll(
+            badge,
+            title,
+            message,
+            buttonRow
+        );
+        
+        // Overlay
+        StackPane overlay = new StackPane(alertBox);
+        overlay.setAlignment(Pos.CENTER);
+        overlay.getStyleClass().add("modal-overlay");
+        overlay.setStyle("-fx-background-color: rgba(15, 35, 35, 0.65);");
+
+        Scene scene = new Scene(overlay);
+        scene.setFill(Color.TRANSPARENT);
+
+        // Load the same CSS if available
+        URL cssUrl = CreateMissionModal.class.getResource("/css/styles.css");
+        if (cssUrl != null) {
+            scene.getStylesheets().add(cssUrl.toExternalForm());
+        }
+
+        // Cover the whole owner window
+        popup.setX(owner.getX());
+        popup.setY(owner.getY());
+        popup.setWidth(owner.getWidth());
+        popup.setHeight(owner.getHeight());
+
+        popup.setScene(scene);
+        popup.showAndWait();
     }
 
     private static Label createFieldLabel(String text) {
