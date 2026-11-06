@@ -1,6 +1,7 @@
 package com.brewcoders.ascend.view.missions;
 
 import com.brewcoders.ascend.model.Mission;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -12,10 +13,12 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
 
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 
 public class CreateMissionModal {
 
@@ -54,19 +57,65 @@ public class CreateMissionModal {
 
         VBox headerBox = new VBox(10, badge, title);
 
-        // Inputs
+        // Error Popups Setup
+        Label nameErrorLabel = createErrorPopup();
+        Label descErrorLabel = createErrorPopup();
+
+        PauseTransition nameTimer = new PauseTransition(Duration.seconds(3));
+        nameTimer.setOnFinished(e -> nameErrorLabel.setVisible(false));
+
+        PauseTransition descTimer = new PauseTransition(Duration.seconds(3));
+        descTimer.setOnFinished(e -> descErrorLabel.setVisible(false));
+
+        // Inputs: Mission Name( Max 50 chars, no special chars & spaces )
         Label nameLabel = createFieldLabel("Mission name");
         TextField nameInput = new TextField();
         nameInput.setPromptText("Enter mission name");
         nameInput.setPrefHeight(48);
         applyInputStyle(nameInput);
 
-        Label descLabel = createFieldLabel("Short note / description (100 character max)");
+        UnaryOperator<TextFormatter.Change> nameFilter = change -> {
+            String addedText = change.getText();
+            String newText = change.getControlNewText();
+
+            // Check if user is typing/pasting invalid content
+            if (!addedText.isEmpty()) {
+                if (newText.length() > 50) {
+                    showError(nameErrorLabel, nameTimer, "⚠ Max 50 characters allowed!");
+                    return null;
+                }
+                if (!addedText.matches("[a-zA-Z0-9 _]*")) {
+                    showError(nameErrorLabel, nameTimer, "⚠ Special character is not allowed!");
+                    return null;
+                }
+            }
+
+            nameErrorLabel.setVisible(false);
+            return change;
+        };
+        nameInput.setTextFormatter(new TextFormatter<>(nameFilter));
+
+        // Inputs: Short Note / Description (Max 62 chars)
+        Label descLabel = createFieldLabel("Short note / description (62 character max)");
         TextArea descInput = new TextArea();
         descInput.setPromptText("What needs to be done?");
         descInput.setPrefRowCount(4);
         descInput.setPrefHeight(130);
         descInput.setWrapText(true);
+
+        UnaryOperator<TextFormatter.Change> descFilter = change -> {
+            String addedText = change.getText();
+            String newText = change.getControlNewText();
+
+            if (!addedText.isEmpty() && newText.length() > 62) {
+                showError(descErrorLabel, descTimer, "⚠ Max 62 characters allowed!");
+                return null;
+            }
+
+            descErrorLabel.setVisible(false);
+            return change;
+        };
+        descInput.setTextFormatter(new TextFormatter<>(descFilter));
 
         descInput.setStyle(
             "-fx-font-family: 'Press Start 2P'; " +
@@ -99,6 +148,10 @@ public class CreateMissionModal {
                 n.setStyle("-fx-line-spacing: 12px; -fx-bounds-type: logical;");
             }
         });
+
+        // Containers with popups attached directly beneath inputs
+        VBox nameBox = new VBox(6, nameLabel, nameInput, nameErrorLabel);
+        VBox descBox = new VBox(6, descLabel, descInput, descErrorLabel);
 
         // Due Date & Category Row
         Label dateLabel = createFieldLabel("Due date");
@@ -230,6 +283,12 @@ public class CreateMissionModal {
         });
         rewardBox.getChildren().addAll(rewardText, spacer, rewardPoints);
 
+        // Clear error highlights on user interaction
+        nameInput.textProperty().addListener((obs, oldVal, newVal) -> applyInputStyle(nameInput));
+        datePicker.valueProperty().addListener((obs, oldVal, newVal) -> applyInputStyle(datePicker));
+        catCombo.valueProperty().addListener((obs, oldVal, newVal) -> applyInputStyle(catCombo));
+        diffCombo.valueProperty().addListener((obs, oldVal, newVal) -> applyInputStyle(diffCombo));
+
         // Action Buttons
         Button cancelBtn = new Button("Cancel");
         cancelBtn.setStyle("-fx-font-family: 'Press Start 2P'; -fx-font-size: 11px; -fx-background-color: #ff6b6b; -fx-text-fill: #ffffff; -fx-border-color: #453018; -fx-border-width: 3px; -fx-padding: 14 28; -fx-cursor: hand;");
@@ -287,8 +346,8 @@ public class CreateMissionModal {
 
         card.getChildren().addAll(
             headerBox,
-            new VBox(10, nameLabel, nameInput),
-            new VBox(10, descLabel, descInput),
+            nameBox,
+            descBox,
             dateCatRow,
             diffBox,
             rewardBox,
@@ -321,6 +380,29 @@ public class CreateMissionModal {
         Label lbl = new Label(text);
         lbl.setStyle("-fx-font-family: 'Press Start 2P'; -fx-font-size: 10px; -fx-text-fill: #1f2d18;");
         return lbl;
+    }
+
+    private static Label createErrorPopup() {
+        Label popup = new Label();
+        popup.setStyle(
+            "-fx-font-family: 'Press Start 2P'; " +
+            "-fx-font-size: 9px; " +
+            "-fx-text-fill: #ffffff; " +
+            "-fx-background-color: #e63946; " +
+            "-fx-border-color: #453018; " +
+            "-fx-border-width: 2px; " +
+            "-fx-padding: 6px 10px;"
+        );
+        popup.setVisible(false);
+        popup.setManaged(false); // Keeps layout compact until visible
+        return popup;
+    }
+
+    private static void showError(Label errorLabel, PauseTransition timer, String message) {
+        errorLabel.setText(message);
+        errorLabel.setVisible(true);
+        errorLabel.setManaged(true); 
+        timer.playFromStart();
     }
 
     private static void applyInputStyle(Control control) {

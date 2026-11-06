@@ -158,17 +158,17 @@ public class PersonalInfoView extends HBox {
         String quote = "\"Hello World! (And goodbye to my syntax errors.)\"";
         String desc = "Your journey into coding begins here. You are learning the ropes, setting up your first development cycles, and discovering that debugging takes twice as long as writing the code in the first place.";
 
-        if (totalPoints >= 3000) {
+        if (totalPoints >= 300) {
             imagePath = "/images/avatars/avatar_wildcard.jpg";
             title = "The Wildcard";
             quote = "\"Predictable? Never. Effective? Always.\"";
             desc = "Master of unexpected solutions and out-of-the-box thinking. You write code that surprises everyone, including yourself, and somehow it runs with zero errors.";
-        } else if (totalPoints >= 2000) {
+        } else if (totalPoints >= 200) {
             imagePath = "/images/avatars/avatar_grinder.jpg";
             title = "The Grinder";
             quote = "\"Consistency is key. One line at a time.\"";
             desc = "Pushing through endless mission logs and refactoring legacy code without flinching. Your discipline turns complex problems into clean, functional algorithms.";
-        } else if (totalPoints >= 1000) {
+        } else if (totalPoints >= 100) {
             imagePath = "/images/avatars/avatar_nightCoder.jpg";
             title = "The Night Coder";
             quote = "\"Powered by dark mode and late night breakthroughs.\"";
