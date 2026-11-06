@@ -1,7 +1,10 @@
 package com.brewcoders.ascend.view.profile;
 
+import com.brewcoders.ascend.controller.MissionManager;
+import com.brewcoders.ascend.view.auth.LoginView;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -49,7 +52,7 @@ public class PersonalInfoView extends HBox {
 
         userInfoCard.getChildren().addAll(avatarFrame, usernameBox, pointsBox);
 
-        // 2. Delete Card (Fixed width & text alignment)
+        // 2. Delete Card
         HBox deleteCard = new HBox(12);
         deleteCard.getStyleClass().add("profile-card");
         deleteCard.setAlignment(Pos.CENTER_LEFT);
@@ -67,6 +70,9 @@ public class PersonalInfoView extends HBox {
 
         Button deleteBtn = new Button("Delete");
         deleteBtn.getStyleClass().add("profile-delete-btn");
+
+        // Open Confirmation Modal
+        deleteBtn.setOnAction(e -> showDeleteConfirmationModal());
 
         deleteCard.getChildren().addAll(deleteTextGroup, deleteSpacer, deleteBtn);
 
@@ -124,5 +130,102 @@ public class PersonalInfoView extends HBox {
         rightColumn.getChildren().add(avatarInfoCard);
 
         this.getChildren().addAll(leftColumn, rightColumn);
+    }
+
+    private void showDeleteConfirmationModal() {
+        Scene scene = this.getScene();
+        if (scene == null) return;
+
+        // Wrap root scene in StackPane if needed so modal centers over full screen
+        if (!(scene.getRoot() instanceof StackPane)) {
+            Pane currentRoot = (Pane) scene.getRoot();
+            StackPane wrapperRoot = new StackPane();
+            scene.setRoot(wrapperRoot);
+            wrapperRoot.getChildren().add(currentRoot);
+        }
+
+        StackPane rootStackPane = (StackPane) scene.getRoot();
+
+        // Fullscreen translucent overlay layer
+        StackPane overlay = new StackPane();
+        overlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.45);");
+        overlay.setAlignment(Pos.CENTER);
+
+        // Retro Dialog Box Container
+        VBox alertCard = new VBox(20);
+        alertCard.setMaxWidth(540);
+        alertCard.setMaxHeight(VBox.USE_PREF_SIZE);
+        alertCard.setAlignment(Pos.TOP_LEFT);
+        alertCard.setPadding(new Insets(32, 36, 32, 36));
+        alertCard.setStyle(
+            "-fx-background-color: #fde8b4; " + 
+            "-fx-border-color: #4a2810; " +     
+            "-fx-border-width: 3.5px;"
+        );
+
+        Label categoryHeader = new Label("COURSE AND ACCOUNT");
+        categoryHeader.setStyle(
+            "-fx-font-family: 'Press Start 2P'; " +
+            "-fx-font-size: 10px; " +
+            "-fx-text-fill: #1b5e20;"
+        );
+
+        Label title = new Label("Delete all progress?");
+        title.setStyle(
+            "-fx-font-family: 'Press Start 2P'; " +
+            "-fx-font-size: 18px; " +
+            "-fx-text-fill: #3e2723;"
+        );
+        title.setWrapText(true);
+
+        Label message = new Label("Are you sure you want to delete all your current-course progress? This action cannot be undone.");
+        message.setStyle(
+            "-fx-font-family: 'Press Start 2P'; " +
+            "-fx-font-size: 10px; " +
+            "-fx-text-fill: #4a2810; " +
+            "-fx-line-spacing: 5px;"
+        );
+        message.setWrapText(true);
+
+        // Cancel Button
+        Button cancelBtn = new Button("Cancel");
+        cancelBtn.setStyle(
+            "-fx-font-family: 'Press Start 2P'; " +
+            "-fx-font-size: 11px; " +
+            "-fx-background-color: #f7be3b; " +
+            "-fx-text-fill: #1f2d18; " +
+            "-fx-border-color: #4a2810; " +
+            "-fx-border-width: 2.5px; " +
+            "-fx-padding: 12 24; " +
+            "-fx-cursor: hand;"
+        );
+        cancelBtn.setOnAction(e -> rootStackPane.getChildren().remove(overlay));
+
+        // Confirm Delete Button -> Clears state and redirects directly to LoginView
+        Button confirmDeleteBtn = new Button("Delete all progress");
+        confirmDeleteBtn.setStyle(
+            "-fx-font-family: 'Press Start 2P'; " +
+            "-fx-font-size: 11px; " +
+            "-fx-background-color: #ff585d; " +
+            "-fx-text-fill: #ffffff; " +
+            "-fx-border-color: #4a2810; " +
+            "-fx-border-width: 2.5px; " +
+            "-fx-padding: 12 24; " +
+            "-fx-cursor: hand;"
+        );
+        confirmDeleteBtn.setOnAction(e -> {
+            MissionManager.getInstance().clearMissions();
+            rootStackPane.getChildren().remove(overlay);
+            scene.setRoot(new LoginView());
+        });
+
+        HBox buttonContainer = new HBox(16, cancelBtn, confirmDeleteBtn);
+        buttonContainer.setAlignment(Pos.CENTER_RIGHT);
+        buttonContainer.setPadding(new Insets(10, 0, 0, 0));
+
+        alertCard.getChildren().addAll(categoryHeader, title, message, buttonContainer);
+        overlay.getChildren().add(alertCard);
+
+        rootStackPane.getChildren().add(overlay);
     }
 }
