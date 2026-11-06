@@ -67,9 +67,9 @@ public class AchievementsView extends VBox {
 
         Achievement[] achievements = new Achievement[] {
             new Achievement("The Noob", 0, "/images/avatars/avatar_noob.jpg"),
-            new Achievement("The Night Coder", 1000, "/images/avatars/avatar_nightCoder.jpg"),
-            new Achievement("The Grinder", 2000, "/images/avatars/avatar_grinder.jpg"),
-            new Achievement("The Wildcard", 3000, "/images/avatars/avatar_wildcard.jpg")
+            new Achievement("The Night Coder", 100, "/images/avatars/avatar_nightCoder.jpg"),
+            new Achievement("The Grinder", 200, "/images/avatars/avatar_grinder.jpg"),
+            new Achievement("The Wildcard", 300, "/images/avatars/avatar_wildcard.jpg")
         };
 
         for (Achievement ach : achievements) {
