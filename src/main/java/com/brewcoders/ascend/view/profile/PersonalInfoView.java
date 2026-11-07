@@ -15,6 +15,8 @@ import javafx.scene.text.TextAlignment;
 
 public class PersonalInfoView extends HBox {
 
+    private Label usernameValue;
+    private Label avatarInitial;
     private Label pointsValue;
     private ImageView rankImageView;
     private Label rankTitle;
@@ -39,13 +41,24 @@ public class PersonalInfoView extends HBox {
 
         StackPane avatarFrame = new StackPane();
         avatarFrame.getStyleClass().add("profile-initials-avatar-frame");
-        Label avatarInitial = new Label("R");
+        avatarFrame.setAlignment(Pos.CENTER); // Center container children
+        
+        // Dynamic Avatar Initial (Center Aligned)
+        avatarInitial = new Label("?");
         avatarInitial.getStyleClass().add("profile-avatar-initial");
+        avatarInitial.setAlignment(Pos.CENTER);
+        avatarInitial.setTextAlignment(TextAlignment.CENTER);
+        avatarInitial.setMaxWidth(Double.MAX_VALUE);
+        avatarInitial.setMaxHeight(Double.MAX_VALUE);
+
         avatarFrame.getChildren().add(avatarInitial);
+        StackPane.setAlignment(avatarInitial, Pos.CENTER);
 
         Label usernameHeader = new Label("Username");
         usernameHeader.getStyleClass().add("profile-card-header");
-        Label usernameValue = new Label("red");
+        
+        // Dynamic Username Label
+        usernameValue = new Label("Guest User");
         usernameValue.getStyleClass().add("profile-card-value");
         VBox usernameBox = new VBox(6, usernameHeader, usernameValue);
         usernameBox.setAlignment(Pos.CENTER);
@@ -142,11 +155,21 @@ public class PersonalInfoView extends HBox {
 
         this.getChildren().addAll(leftColumn, rightColumn);
 
-        // Synchronize dynamic user point totals and rank visuals
+        // Synchronize dynamic user account data, point totals, and rank visuals
         refreshUserData();
     }
 
     public void refreshUserData() {
+        // Fetch active username from MissionManager
+        String name = MissionManager.getInstance().getCurrentUsername();
+        usernameValue.setText(name);
+
+        if (name != null && !name.trim().isEmpty()) {
+            avatarInitial.setText(name.substring(0, 1).toUpperCase());
+        } else {
+            avatarInitial.setText("?");
+        }
+
         int totalPoints = MissionManager.getInstance().getTotalPoints();
         
         // Update Total Points label
@@ -263,7 +286,7 @@ public class PersonalInfoView extends HBox {
             "-fx-cursor: hand;"
         );
         confirmDeleteBtn.setOnAction(e -> {
-            MissionManager.getInstance().clearMissions();
+            MissionManager.getInstance().logout();
             rootStackPane.getChildren().remove(overlay);
             scene.setRoot(new LoginView());
         });

@@ -1,5 +1,6 @@
 package com.brewcoders.ascend.view.auth;
 
+import com.brewcoders.ascend.controller.MissionManager;
 import com.brewcoders.ascend.view.navigation.MainLayoutView;
 import javafx.animation.PauseTransition;
 import javafx.scene.image.Image;
@@ -17,12 +18,16 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
-
 import java.util.function.UnaryOperator;
 
 public class LoginView extends StackPane {
 
     private boolean isLoginMode = true;
+
+    private static final String ERROR_BORDER_STYLE = 
+        "-fx-border-color: #ff4d4d; -fx-border-width: 2.5px; -fx-border-radius: 4px;";
+    private static final String NORMAL_BORDER_STYLE = 
+        "-fx-border-color: #4a2810; -fx-border-width: 2.5px; -fx-border-radius: 4px;";
 
     public LoginView() {
         ScrollPane scrollPane = new ScrollPane();
@@ -135,9 +140,7 @@ public class LoginView extends StackPane {
         });
 
         // 7. Username Filter
-        // Maximum 30 characters
-        // Letters, numbers, and underscores only
-       UnaryOperator<TextFormatter.Change> usernameFilter = change -> {
+        UnaryOperator<TextFormatter.Change> usernameFilter = change -> {
 
             String addedText = change.getText();
             String newText = change.getControlNewText();
@@ -180,9 +183,6 @@ public class LoginView extends StackPane {
         };
 
         // 8. Password Filter
-        // min 8 chars
-        // Maximum 64 characters
-        // No whitespace allowed
         UnaryOperator<TextFormatter.Change> passwordFilter = change -> {
 
             String addedText = change.getText();
@@ -209,7 +209,7 @@ public class LoginView extends StackPane {
                 }
             }
 
-           // Minimum length warning
+            // Minimum length warning
             if (!newText.isEmpty() && newText.length() < 8) {
                 showError(
                     passwordErrorLabel,
@@ -233,6 +233,7 @@ public class LoginView extends StackPane {
         TextField usernameField = new TextField();
         usernameField.setPromptText("Enter your username");
         usernameField.getStyleClass().add("retro-input");
+        usernameField.setStyle(NORMAL_BORDER_STYLE);
         usernameField.setTextFormatter(new TextFormatter<>(usernameFilter));
         usernameBox.getChildren().addAll(usernameLabel, usernameField, usernameErrorLabel);
 
@@ -244,8 +245,13 @@ public class LoginView extends StackPane {
         PasswordField passwordField = new PasswordField();
         passwordField.setPromptText("Enter your password");
         passwordField.getStyleClass().add("retro-input");
+        passwordField.setStyle(NORMAL_BORDER_STYLE);
         passwordField.setTextFormatter(new TextFormatter<>(passwordFilter));
         passwordBox.getChildren().addAll(passwordLabel, passwordField, passwordErrorLabel);
+
+        // Reset red borders on user input change
+        usernameField.textProperty().addListener((obs, oldVal, newVal) -> usernameField.setStyle(NORMAL_BORDER_STYLE));
+        passwordField.textProperty().addListener((obs, oldVal, newVal) -> passwordField.setStyle(NORMAL_BORDER_STYLE));
 
         // Action Button
         Button actionButton = new Button("Login >");
@@ -269,6 +275,9 @@ public class LoginView extends StackPane {
                 cardTitle.setText("Log in to continue");
                 actionButton.setText("Login >");
 
+                usernameField.setStyle(NORMAL_BORDER_STYLE);
+                passwordField.setStyle(NORMAL_BORDER_STYLE);
+
                 usernameErrorLabel.setVisible(false);
                 usernameErrorLabel.setManaged(false);
                 usernameTimer.stop();
@@ -286,6 +295,9 @@ public class LoginView extends StackPane {
                 loginTab.getStyleClass().setAll("tab-button-inactive");
                 cardTitle.setText("Create your Account");
                 actionButton.setText("Signup >");
+
+                usernameField.setStyle(NORMAL_BORDER_STYLE);
+                passwordField.setStyle(NORMAL_BORDER_STYLE);
             }
         });
 
@@ -294,8 +306,25 @@ public class LoginView extends StackPane {
             String user = usernameField.getText().trim();
             String pass = passwordField.getText();
 
+            boolean hasError = false;
+
+            // Highlight empty input fields with a red border
+            if (user.isEmpty()) {
+                usernameField.setStyle(ERROR_BORDER_STYLE);
+                hasError = true;
+            } else {
+                usernameField.setStyle(NORMAL_BORDER_STYLE);
+            }
+
+            if (pass.isEmpty()) {
+                passwordField.setStyle(ERROR_BORDER_STYLE);
+                hasError = true;
+            } else {
+                passwordField.setStyle(NORMAL_BORDER_STYLE);
+            }
+
             // 1. Incomplete Details Check
-            if (user.isEmpty() || pass.isEmpty()) {
+            if (hasError) {
                 if (isLoginMode) {
                     showCustomAlert("Login details incomplete", "Please complete both the username and password\nbefore logging in.");
                 } else {
@@ -303,12 +332,12 @@ public class LoginView extends StackPane {
                 }
                 return;
             }
-    
 
             // Signup Rules Check
             if (!isLoginMode) {
 
                 if (user.length() < 3) {
+                    usernameField.setStyle(ERROR_BORDER_STYLE);
                     showError(
                         usernameErrorLabel,
                         usernameTimer,
@@ -318,6 +347,7 @@ public class LoginView extends StackPane {
                 }
 
                 if (pass.length() < 8) {
+                    passwordField.setStyle(ERROR_BORDER_STYLE);
                     showError(
                         passwordErrorLabel,
                         passwordTimer,
@@ -326,6 +356,9 @@ public class LoginView extends StackPane {
                     return;
                 }
             }
+
+            // Save the entered username to MissionManager
+            MissionManager.getInstance().setCurrentUsername(user);
 
             // Route to next view
             if (this.getScene() != null) {
@@ -344,7 +377,7 @@ public class LoginView extends StackPane {
         this.getChildren().add(scrollPane);
     }
 
-     // 15. Create Error Popup
+    // Create Error Popup
     private Label createErrorPopup() {
 
         Label popup = new Label();
@@ -365,7 +398,7 @@ public class LoginView extends StackPane {
         return popup;
     }
 
-    // 16. Show Error Popup
+    // Show Error Popup
     private void showError(
         Label errorLabel,
         PauseTransition timer,

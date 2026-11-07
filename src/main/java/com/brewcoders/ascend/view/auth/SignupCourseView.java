@@ -26,6 +26,11 @@ import java.util.function.UnaryOperator;
 
 public class SignupCourseView extends StackPane {
 
+    private static final String ERROR_BORDER_STYLE = 
+        "-fx-border-color: #ff4d4d; -fx-border-width: 2.5px; -fx-border-radius: 4px;";
+    private static final String NORMAL_BORDER_STYLE = 
+        "-fx-border-color: #4a2810; -fx-border-width: 2.5px; -fx-border-radius: 4px;";
+
     public SignupCourseView() {
 
         ScrollPane scrollPane = new ScrollPane();
@@ -129,9 +134,6 @@ public class SignupCourseView extends StackPane {
         });
 
         // 6. Course Name Filter
-        // Maximum: 50 characters
-        // Allowed: Letters, numbers, spaces, hyphens, underscores
-
         UnaryOperator<TextFormatter.Change> courseFilter = change -> {
 
             String addedText = change.getText();
@@ -139,7 +141,7 @@ public class SignupCourseView extends StackPane {
 
             if (!addedText.isEmpty()) {
 
-                // Maximum 50 characters
+                // Maximum 30 characters
                 if (newText.length() > 30) {
                     showError(
                         courseErrorLabel,
@@ -176,6 +178,7 @@ public class SignupCourseView extends StackPane {
         TextField courseField = new TextField();
         courseField.setPromptText("e.g. Object-Oriented Programming");
         courseField.getStyleClass().add("retro-input");
+        courseField.setStyle(NORMAL_BORDER_STYLE);
 
         courseField.setTextFormatter(
             new TextFormatter<>(courseFilter)
@@ -226,6 +229,7 @@ public class SignupCourseView extends StackPane {
         startDatePicker.setEditable(false);
         startDatePicker.setPromptText("mm/dd/yyyy");
         startDatePicker.getStyleClass().add("retro-date-picker");
+        startDatePicker.setStyle(NORMAL_BORDER_STYLE);
         startDatePicker.setMaxWidth(Double.MAX_VALUE);
 
         startBox.getChildren().addAll(
@@ -245,6 +249,7 @@ public class SignupCourseView extends StackPane {
         endDatePicker.setEditable(false);
         endDatePicker.setPromptText("mm/dd/yyyy");
         endDatePicker.getStyleClass().add("retro-date-picker");
+        endDatePicker.setStyle(NORMAL_BORDER_STYLE);
         endDatePicker.setMaxWidth(Double.MAX_VALUE);
 
         endBox.getChildren().addAll(
@@ -258,6 +263,11 @@ public class SignupCourseView extends StackPane {
             startBox,
             endBox
         );
+
+        // Reset error styling as the user inputs data
+        courseField.textProperty().addListener((obs, oldVal, newVal) -> courseField.setStyle(NORMAL_BORDER_STYLE));
+        startDatePicker.valueProperty().addListener((obs, oldVal, newVal) -> startDatePicker.setStyle(NORMAL_BORDER_STYLE));
+        endDatePicker.valueProperty().addListener((obs, oldVal, newVal) -> endDatePicker.setStyle(NORMAL_BORDER_STYLE));
 
         // 10. Date Restrictions Setup
 
@@ -346,12 +356,32 @@ public class SignupCourseView extends StackPane {
         createCourseBtn.setOnAction(e -> {
 
             String courseName = courseField.getText().trim();
+            boolean hasError = false;
+
+            // Highlight empty input fields with a red border
+            if (courseName.isEmpty()) {
+                courseField.setStyle(ERROR_BORDER_STYLE);
+                hasError = true;
+            } else {
+                courseField.setStyle(NORMAL_BORDER_STYLE);
+            }
+
+            if (startDatePicker.getValue() == null) {
+                startDatePicker.setStyle(ERROR_BORDER_STYLE);
+                hasError = true;
+            } else {
+                startDatePicker.setStyle(NORMAL_BORDER_STYLE);
+            }
+
+            if (endDatePicker.getValue() == null) {
+                endDatePicker.setStyle(ERROR_BORDER_STYLE);
+                hasError = true;
+            } else {
+                endDatePicker.setStyle(NORMAL_BORDER_STYLE);
+            }
 
             // Incomplete Details Check
-            if (courseName.isEmpty() ||
-                startDatePicker.getValue() == null ||
-                endDatePicker.getValue() == null) {
-
+            if (hasError) {
                 showCustomAlert(
                     "Course details incomplete",
                     "Please enter a course name and select both\n" +
@@ -363,6 +393,7 @@ public class SignupCourseView extends StackPane {
 
             // Course Name Length Check
             if (courseName.length() > 30) {
+                courseField.setStyle(ERROR_BORDER_STYLE);
                 showError(
                     courseErrorLabel,
                     courseTimer,

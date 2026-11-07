@@ -12,17 +12,15 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 
-
 public class SidebarView extends VBox {
     private java.time.LocalDate currentCycleStart;
     private java.time.LocalDate currentCycleEnd;
     private Button missionsBtn;
     private Button profileBtn;
-    
 
-   public SidebarView(String courseName, String focusCycleDates, Runnable onMissionsSelected, Runnable onProfileSelected){
-        // 1. Dynamically parse incoming focus cycle dates (e.g., "Nov 2, 2026 - Nov 26, 2026" or "Dec 1, 2026 - Dec 28, 2026")
-    parseAndSetCycleDates(focusCycleDates);
+    public SidebarView(String courseName, String focusCycleDates, Runnable onMissionsSelected, Runnable onProfileSelected){
+        // 1. Dynamically parse incoming focus cycle dates
+        parseAndSetCycleDates(focusCycleDates);
 
         this.setPrefWidth(260);
         this.setMinWidth(260);
@@ -55,7 +53,7 @@ public class SidebarView extends VBox {
 
         brandHeader.getChildren().addAll(logoBox, brandName);
 
-       // 2. Current Course Box
+        // 2. Current Course Box
         VBox courseCard = new VBox(10);
         courseCard.getStyleClass().add("sidebar-course-card");
         courseCard.setMaxWidth(Double.MAX_VALUE);
@@ -72,7 +70,7 @@ public class SidebarView extends VBox {
         courseTitle.setAlignment(Pos.CENTER);
         courseTitle.setMaxWidth(Double.MAX_VALUE);
 
-       String dateVal = (focusCycleDates != null && !focusCycleDates.isEmpty()) ? focusCycleDates : "Nov 4, 2026 - Nov 19, 2026";
+        String dateVal = (focusCycleDates != null && !focusCycleDates.isEmpty()) ? focusCycleDates : "Nov 4, 2026 - Nov 19, 2026";
         Label courseDates = new Label("FOCUS CYCLE:\n" + dateVal);
         courseDates.getStyleClass().add("sidebar-course-dates");
         courseDates.setWrapText(true);
@@ -107,9 +105,10 @@ public class SidebarView extends VBox {
 
         navBox.getChildren().addAll(navTitle, missionsBtn, profileBtn);
 
-        // 4. Back to Front Page Button
+        // 4. Back to Front Page Button (Configured to full width)
         Button backToFrontBtn = new Button("< Back to Front Page");
         backToFrontBtn.getStyleClass().add("sidebar-back-btn");
+        backToFrontBtn.setMaxWidth(Double.MAX_VALUE);
         backToFrontBtn.setOnAction(e -> {
             if (this.getScene() != null) {
                 this.getScene().setRoot(new LoginView());
@@ -123,13 +122,10 @@ public class SidebarView extends VBox {
         // 5. Footer Text
         Label footerLabel = new Label("BY BREW CODERS SINCE 2026");
         footerLabel.getStyleClass().add("sidebar-footer-text");
-
-        // 1. Center the text inside the Label node
         footerLabel.setTextAlignment(TextAlignment.CENTER);
         footerLabel.setAlignment(Pos.CENTER);
-        footerLabel.setMaxWidth(Double.MAX_VALUE); // Expands label across full parent width
+        footerLabel.setMaxWidth(Double.MAX_VALUE);
 
-        // 2. Wrap in a centered container (if using HBox/VBox at sidebar bottom)
         HBox footerContainer = new HBox(footerLabel);
         footerContainer.setAlignment(Pos.CENTER);
         footerContainer.setMaxWidth(Double.MAX_VALUE);
@@ -147,33 +143,31 @@ public class SidebarView extends VBox {
         }
     }
 
-
     // Method to parse date strings dynamically
-private void parseAndSetCycleDates(String rawDateString) {
-    try {
-        if (rawDateString != null && rawDateString.contains("-")) {
-            String[] parts = rawDateString.split("-");
-            java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("MMM d, yyyy", java.util.Locale.ENGLISH);
-            
-            this.currentCycleStart = java.time.LocalDate.parse(parts[0].trim(), formatter);
-            this.currentCycleEnd = java.time.LocalDate.parse(parts[1].trim(), formatter);
-            return;
+    private void parseAndSetCycleDates(String rawDateString) {
+        try {
+            if (rawDateString != null && rawDateString.contains("-")) {
+                String[] parts = rawDateString.split("-");
+                java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("MMM d, yyyy", java.util.Locale.ENGLISH);
+                
+                this.currentCycleStart = java.time.LocalDate.parse(parts[0].trim(), formatter);
+                this.currentCycleEnd = java.time.LocalDate.parse(parts[1].trim(), formatter);
+                return;
+            }
+        } catch (Exception e) {
+            // Fallback if format parsing fails
         }
-    } catch (Exception e) {
-        // Fallback if format parsing fails
+        // Default fallback if string is empty or invalid
+        this.currentCycleStart = java.time.LocalDate.now();
+        this.currentCycleEnd = this.currentCycleStart.plusDays(28);
     }
-    // Default fallback if string is empty or invalid
-    this.currentCycleStart = java.time.LocalDate.now();
-    this.currentCycleEnd = this.currentCycleStart.plusDays(28);
-}
 
-// Getters used by MainLayoutView
-public java.time.LocalDate getFocusCycleStart() {
-    return this.currentCycleStart;
-}
+    // Getters used by MainLayoutView
+    public java.time.LocalDate getFocusCycleStart() {
+        return this.currentCycleStart;
+    }
 
-public java.time.LocalDate getFocusCycleEnd() {
-    return this.currentCycleEnd;
+    public java.time.LocalDate getFocusCycleEnd() {
+        return this.currentCycleEnd;
+    }
 }
-}
-

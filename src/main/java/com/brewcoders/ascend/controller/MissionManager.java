@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 public class MissionManager {
     private static MissionManager instance;
     private final List<Mission> missions = new ArrayList<>();
+    private String currentUsername = "Guest User";
 
     private MissionManager() {}
 
@@ -19,14 +20,35 @@ public class MissionManager {
         return instance;
     }
 
+    // --- USERNAME CONTROLS ---
+
+    public String getCurrentUsername() {
+        return currentUsername;
+    }
+
+    public void setCurrentUsername(String username) {
+        if (username != null && !username.trim().isEmpty()) {
+            this.currentUsername = username.trim();
+        }
+    }
+
     // --- FRONTEND SESSION & USER CONTROLS ---
 
     /**
-     * Clears all in-memory missions.
-     * Call this when a user signs up for a new course or creates a new account.
+     * Clears all in-memory missions for a course cycle while preserving the active username.
+     * Call this when starting or resetting a course.
      */
     public void clearMissions() {
         this.missions.clear();
+    }
+
+    /**
+     * Full logout reset - clears missions AND resets user session identity to default fallback.
+     * Call this when logging out or deleting the account.
+     */
+    public void logout() {
+        this.missions.clear();
+        this.currentUsername = "Guest User";
     }
 
     /**
