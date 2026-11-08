@@ -37,7 +37,7 @@ public class MainLayoutView extends BorderPane {
     
     public MainLayoutView(String courseName, String focusCycleDates) {
         this.courseName = (courseName != null && !courseName.isEmpty()) ? courseName : "oop";
-        this.focusCycleDates = (focusCycleDates != null && !focusCycleDates.isEmpty()) ? focusCycleDates : "Nov 2, 2026 - Nov 26, 2026";
+        this.focusCycleDates = (focusCycleDates != null && !focusCycleDates.isEmpty()) ? focusCycleDates : "11/02/2026 - 11/26/2026";
 
         this.getStyleClass().add("main-layout-root");
 
@@ -158,6 +158,6 @@ public class MainLayoutView extends BorderPane {
     }
 
     public MainLayoutView() {
-        this("oop", "Nov 2, 2026 - Nov 26, 2026");
+        this("oop", "11/02/2026 - 11/26/2026");
     }
 }

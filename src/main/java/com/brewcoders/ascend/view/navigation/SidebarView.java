@@ -4,6 +4,7 @@ import com.brewcoders.ascend.view.auth.LoginView;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.OverrunStyle;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -56,8 +57,10 @@ public class SidebarView extends VBox {
         // 2. Current Course Box
         VBox courseCard = new VBox(10);
         courseCard.getStyleClass().add("sidebar-course-card");
+        courseCard.setMinWidth(0);
         courseCard.setMaxWidth(Double.MAX_VALUE);
         courseCard.setAlignment(Pos.CENTER);
+        courseCard.setFillWidth(true);
 
         Label courseBadge = new Label("CURRENT COURSE");
         courseBadge.getStyleClass().add("sidebar-course-badge");
@@ -67,9 +70,12 @@ public class SidebarView extends VBox {
         Label courseTitle = new Label(courseName != null && !courseName.isEmpty() ? courseName : "Course Title Here");
         courseTitle.getStyleClass().add("sidebar-course-title");
         courseTitle.setWrapText(true);
+        courseTitle.setTextOverrun(javafx.scene.control.OverrunStyle.CLIP);
         courseTitle.setAlignment(Pos.CENTER);
+        courseTitle.setTextAlignment(TextAlignment.CENTER);
+        courseTitle.setMinWidth(0);
         courseTitle.setMaxWidth(Double.MAX_VALUE);
-
+        
         String dateVal = (focusCycleDates != null && !focusCycleDates.isEmpty()) ? focusCycleDates : "11/04/2026 - 11/19/2026";
         Label courseDates = new Label("FOCUS CYCLE:\n" + dateVal);
         courseDates.getStyleClass().add("sidebar-course-dates");
