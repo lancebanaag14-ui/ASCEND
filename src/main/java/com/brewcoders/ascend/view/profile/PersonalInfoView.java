@@ -7,13 +7,14 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
 
-public class PersonalInfoView extends HBox {
+public class PersonalInfoView extends StackPane {
 
     private Label usernameValue;
     private Label avatarInitial;
@@ -24,14 +25,21 @@ public class PersonalInfoView extends HBox {
     private Label descLabel;
 
     public PersonalInfoView() {
-        this.setSpacing(24);
-        this.setAlignment(Pos.TOP_LEFT);
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+        scrollPane.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
+
+        HBox contentContainer = new HBox(24);
+        contentContainer.setAlignment(Pos.TOP_LEFT);
+        contentContainer.setPadding(new Insets(10));
 
         // --- LEFT COLUMN ---
         VBox leftColumn = new VBox(20);
-        leftColumn.setMinWidth(460);
-        leftColumn.setPrefWidth(460);
-        leftColumn.setMaxWidth(460);
+        leftColumn.setMinWidth(320);
+        leftColumn.setPrefWidth(420);
+        leftColumn.setMaxWidth(480);
+        HBox.setHgrow(leftColumn, Priority.SOMETIMES);
 
         // 1. User Info Card
         VBox userInfoCard = new VBox(20);
@@ -41,9 +49,8 @@ public class PersonalInfoView extends HBox {
 
         StackPane avatarFrame = new StackPane();
         avatarFrame.getStyleClass().add("profile-initials-avatar-frame");
-        avatarFrame.setAlignment(Pos.CENTER); // Center container children
+        avatarFrame.setAlignment(Pos.CENTER);
         
-        // Dynamic Avatar Initial (Center Aligned)
         avatarInitial = new Label("?");
         avatarInitial.getStyleClass().add("profile-avatar-initial");
         avatarInitial.setAlignment(Pos.CENTER);
@@ -57,16 +64,17 @@ public class PersonalInfoView extends HBox {
         Label usernameHeader = new Label("Username");
         usernameHeader.getStyleClass().add("profile-card-header");
         
-        // Dynamic Username Label
         usernameValue = new Label("Guest User");
         usernameValue.getStyleClass().add("profile-card-value");
+        usernameValue.setWrapText(true);
+        usernameValue.setMinHeight(Region.USE_PREF_SIZE);
+
         VBox usernameBox = new VBox(6, usernameHeader, usernameValue);
         usernameBox.setAlignment(Pos.CENTER);
 
         Label pointsHeader = new Label("Total Points");
         pointsHeader.getStyleClass().add("profile-card-header");
         
-        // Dynamic Total Points Label
         pointsValue = new Label("0");
         pointsValue.getStyleClass().add("profile-card-value");
         VBox pointsBox = new VBox(6, pointsHeader, pointsValue);
@@ -85,6 +93,8 @@ public class PersonalInfoView extends HBox {
         deleteTitle.getStyleClass().add("profile-delete-title");
         Label deleteSubtitle = new Label("Delete all current progress");
         deleteSubtitle.getStyleClass().add("profile-delete-subtitle");
+        deleteSubtitle.setWrapText(true);
+        deleteSubtitle.setMinHeight(Region.USE_PREF_SIZE);
         deleteTextGroup.getChildren().addAll(deleteTitle, deleteSubtitle);
 
         Region deleteSpacer = new Region();
@@ -92,8 +102,7 @@ public class PersonalInfoView extends HBox {
 
         Button deleteBtn = new Button("Delete");
         deleteBtn.getStyleClass().add("profile-delete-btn");
-
-        // Open Confirmation Modal
+        deleteBtn.setMinWidth(Region.USE_PREF_SIZE);
         deleteBtn.setOnAction(e -> showDeleteConfirmationModal());
 
         deleteCard.getChildren().addAll(deleteTextGroup, deleteSpacer, deleteBtn);
@@ -126,26 +135,39 @@ public class PersonalInfoView extends HBox {
 
         rankTitle = new Label("The Noob");
         rankTitle.getStyleClass().add("profile-rank-title");
+        rankTitle.setWrapText(true);
+        rankTitle.setTextAlignment(TextAlignment.CENTER);
+        rankTitle.setAlignment(Pos.CENTER);
+        rankTitle.setMaxWidth(Double.MAX_VALUE);
 
         // About Box
         VBox aboutCard = new VBox(16);
         aboutCard.getStyleClass().add("profile-about-card");
         aboutCard.setPadding(new Insets(20, 24, 20, 24));
+        aboutCard.setAlignment(Pos.CENTER);
 
         quoteLabel = new Label("\"Hello World! (And goodbye to my syntax errors.)\"");
         quoteLabel.getStyleClass().add("profile-quote");
         quoteLabel.setWrapText(true);
+        quoteLabel.setMinHeight(Region.USE_PREF_SIZE);
         quoteLabel.setTextAlignment(TextAlignment.CENTER);
+        quoteLabel.setAlignment(Pos.CENTER);
+        quoteLabel.setMaxWidth(Double.MAX_VALUE);
 
         descLabel = new Label("Your journey into coding begins here. You are learning the ropes, setting up your first development cycles, and discovering that debugging takes twice as long as writing the code in the first place.");
         descLabel.getStyleClass().add("profile-desc");
         descLabel.setWrapText(true);
+        descLabel.setMinHeight(Region.USE_PREF_SIZE);
         descLabel.setTextAlignment(TextAlignment.CENTER);
+        descLabel.setAlignment(Pos.CENTER);
+        descLabel.setMaxWidth(Double.MAX_VALUE);
 
         aboutCard.getChildren().addAll(quoteLabel, descLabel);
 
         Label aboutHeader = new Label("About");
         aboutHeader.getStyleClass().add("profile-about-header");
+        aboutHeader.setAlignment(Pos.CENTER);
+        aboutHeader.setMaxWidth(Double.MAX_VALUE);
 
         VBox rightContentGroup = new VBox(14, rankTitle, aboutHeader, aboutCard);
         rightContentGroup.setAlignment(Pos.CENTER);
@@ -153,14 +175,16 @@ public class PersonalInfoView extends HBox {
         avatarInfoCard.getChildren().addAll(rankImageFrame, rightContentGroup);
         rightColumn.getChildren().add(avatarInfoCard);
 
-        this.getChildren().addAll(leftColumn, rightColumn);
+        contentContainer.getChildren().addAll(leftColumn, rightColumn);
+        scrollPane.setContent(contentContainer);
 
-        // Synchronize dynamic user account data, point totals, and rank visuals
+        this.getChildren().add(scrollPane);
+
+        // Refresh user data & initial
         refreshUserData();
     }
 
     public void refreshUserData() {
-        // Fetch active username from MissionManager
         String name = MissionManager.getInstance().getCurrentUsername();
         usernameValue.setText(name);
 
@@ -171,11 +195,8 @@ public class PersonalInfoView extends HBox {
         }
 
         int totalPoints = MissionManager.getInstance().getTotalPoints();
-        
-        // Update Total Points label
         pointsValue.setText(String.valueOf(totalPoints));
 
-        // Dynamic threshold checks for current avatar rank display
         String imagePath = "/images/avatars/avatar_noob.jpg";
         String title = "The Noob";
         String quote = "\"Hello World! (And goodbye to my syntax errors.)\"";

@@ -39,6 +39,8 @@ public class MainApp extends Application {
     }
 
     public static void main(String[] args) {
-        launch(args);
-    }
+    // Enable system DPI scaling adaptation across different screens
+    System.setProperty("prism.allowhidpi", "true");
+    launch(args);
+}
 }
