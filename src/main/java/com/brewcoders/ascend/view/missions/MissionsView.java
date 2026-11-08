@@ -325,9 +325,10 @@ public class MissionsView extends ScrollPane {
 
         // 1. Date Badge (solid blue box with white dot)
         HBox dateBox = new HBox(10);
+        dateBox.setPrefHeight(42);
+        dateBox.setMinWidth(Region.USE_PREF_SIZE);
+        dateBox.setPadding(new Insets(0, 12, 0, 12));
         dateBox.setAlignment(Pos.CENTER);
-        dateBox.setPrefHeight(46);
-        dateBox.setPadding(new Insets(0, 16, 0, 16));
         dateBox.setStyle(
             "-fx-background-color: #0d9edb; " +
             "-fx-border-color: #453018; " +
@@ -339,19 +340,33 @@ public class MissionsView extends ScrollPane {
         whiteCircle.setMinSize(14, 14);
         whiteCircle.setMaxSize(14, 14);
 
-        DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.ENGLISH);
+        DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("MM/dd/yyyy", Locale.ENGLISH);
         Label dateLabel = new Label(mission.getDueDate() != null ? mission.getDueDate().format(dateFmt) : "");
         dateLabel.setStyle("-fx-font-family: 'Press Start 2P'; -fx-font-size: 10px; -fx-text-fill: #ffffff;");
+        
+        dateLabel.setMinWidth(Region.USE_PREF_SIZE);
+        dateLabel.setMaxWidth(Region.USE_PREF_SIZE);
+        dateLabel.setWrapText(false);
+    
         dateBox.getChildren().addAll(whiteCircle, dateLabel);
 
         // 2. Mission Info Column
         VBox infoBox = new VBox(6);
-        
+        infoBox.setMinWidth(0);
+        infoBox.setMaxWidth(Double.MAX_VALUE);
+
+        HBox.setHgrow(infoBox, Priority.ALWAYS);
+                
         HBox titleRow = new HBox(10);
         titleRow.setAlignment(Pos.CENTER_LEFT);
+        titleRow.setMinWidth(0);
+        titleRow.setMaxWidth(Double.MAX_VALUE);
 
         Label nameLabel = new Label(mission.getName());
         nameLabel.setStyle("-fx-font-family: 'Press Start 2P'; -fx-font-size: 13px; -fx-text-fill: #1f2d18;");
+        nameLabel.setWrapText(true);
+        nameLabel.setTextOverrun(javafx.scene.control.OverrunStyle.CLIP);
+        nameLabel.setMinWidth(0);
 
         Label diffBadge = new Label(mission.getDifficulty());
         diffBadge.setPadding(new Insets(3, 7, 3, 7));
@@ -363,22 +378,28 @@ public class MissionsView extends ScrollPane {
             "-fx-border-width: 1.5px; " +
             "-fx-text-fill: #1f2d18;"
         );
+        diffBadge.setMinWidth(Region.USE_PREF_SIZE);
+
         titleRow.getChildren().addAll(nameLabel, diffBadge);
+
+        HBox.setHgrow(nameLabel, Priority.ALWAYS);
 
         Label descLabel = new Label(mission.getDescription());
         descLabel.setStyle("-fx-font-family: 'Press Start 2P'; -fx-font-size: 10px; -fx-text-fill: #444444;");
+        descLabel.setMinWidth(0);
+        descLabel.setWrapText(true);
 
         Label catLabel = new Label(mission.getCategory());
         catLabel.setStyle("-fx-font-family: 'Press Start 2P'; -fx-font-size: 10px; -fx-text-fill: #006666;");
 
         infoBox.getChildren().addAll(titleRow, descLabel, catLabel);
 
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
+        titleRow.prefWidthProperty().bind(infoBox.widthProperty());
 
         // 3. Reward Banner & Point Count
-        VBox rewardBox = new VBox(4);
+        VBox rewardBox = new VBox(3);
         rewardBox.setAlignment(Pos.CENTER_RIGHT);
+        rewardBox.setMinWidth(Region.USE_PREF_SIZE);
 
         Label rewardTitle = new Label("REWARD");
         rewardTitle.setStyle("-fx-font-family: 'Press Start 2P'; -fx-font-size: 8px; -fx-text-fill: #453018;");
@@ -399,6 +420,7 @@ public class MissionsView extends ScrollPane {
             "-fx-padding: 12 20; " +
             "-fx-cursor: hand;"
         );
+        completeBtn.setMinWidth(Region.USE_PREF_SIZE);
 
         completeBtn.setOnAction(e -> {
             // Update status in shared store and refresh current view
@@ -406,7 +428,11 @@ public class MissionsView extends ScrollPane {
             refreshMissionsList();
         });
 
-        card.getChildren().addAll(dateBox, infoBox, spacer, rewardBox, completeBtn);
+        HBox.setHgrow(infoBox, Priority.ALWAYS);
+
+        card.getChildren().setAll(dateBox, infoBox, rewardBox, completeBtn);
+
         return card;
+
     }
 }

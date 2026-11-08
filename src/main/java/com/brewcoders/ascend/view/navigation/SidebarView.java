@@ -70,7 +70,7 @@ public class SidebarView extends VBox {
         courseTitle.setAlignment(Pos.CENTER);
         courseTitle.setMaxWidth(Double.MAX_VALUE);
 
-        String dateVal = (focusCycleDates != null && !focusCycleDates.isEmpty()) ? focusCycleDates : "Nov 4, 2026 - Nov 19, 2026";
+        String dateVal = (focusCycleDates != null && !focusCycleDates.isEmpty()) ? focusCycleDates : "11/04/2026 - 11/19/2026";
         Label courseDates = new Label("FOCUS CYCLE:\n" + dateVal);
         courseDates.getStyleClass().add("sidebar-course-dates");
         courseDates.setWrapText(true);
@@ -148,7 +148,7 @@ public class SidebarView extends VBox {
         try {
             if (rawDateString != null && rawDateString.contains("-")) {
                 String[] parts = rawDateString.split("-");
-                java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("MMM d, yyyy", java.util.Locale.ENGLISH);
+                java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("MM/dd/yyyy");
                 
                 this.currentCycleStart = java.time.LocalDate.parse(parts[0].trim(), formatter);
                 this.currentCycleEnd = java.time.LocalDate.parse(parts[1].trim(), formatter);
