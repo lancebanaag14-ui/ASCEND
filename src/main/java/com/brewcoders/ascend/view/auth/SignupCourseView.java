@@ -13,6 +13,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Control;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -163,6 +164,7 @@ public class SignupCourseView extends StackPane {
 
             return change;
         };
+
 
         // 7. Course Name
         VBox courseBox = new VBox(8);
@@ -335,6 +337,20 @@ public class SignupCourseView extends StackPane {
             }
         );
 
+        // Clear Error Highlights on User Interaction
+        courseField.textProperty().addListener(
+            (obs, oldVal, newVal) -> applyInputStyle(courseField)
+        );
+
+        startDatePicker.valueProperty().addListener(
+            (obs, oldVal, newVal) -> applyInputStyle(startDatePicker)
+        );
+
+        endDatePicker.valueProperty().addListener(
+            (obs, oldVal, newVal) -> applyInputStyle(endDatePicker)
+        );
+
+
         // 11. Create Course Button
         Button createCourseBtn = new Button("Create course >");
         createCourseBtn.getStyleClass().add("gold-action-button");
@@ -345,16 +361,28 @@ public class SignupCourseView extends StackPane {
             String courseName = courseField.getText().trim();
 
             // Incomplete Details Check
-            if (courseName.isEmpty() ||
-                startDatePicker.getValue() == null ||
-                endDatePicker.getValue() == null) {
+            boolean hasError = false;
 
+            if (courseName.isEmpty()) {
+                highlightInput(courseField);
+                hasError = true;
+            }
+
+            if (startDatePicker.getValue() == null) {
+                highlightInput(startDatePicker);
+                hasError = true;
+            }
+
+            if (endDatePicker.getValue() == null) {
+                highlightInput(endDatePicker);
+                hasError = true;
+            }
+
+            if (hasError) {
                 showCustomAlert(
                     "Course details incomplete",
-                    "Please enter a course name and select both\n" +
-                    "start and end dates."
+                    "Please complete all required fields."
                 );
-
                 return;
             }
 
@@ -426,6 +454,20 @@ public class SignupCourseView extends StackPane {
         scrollPane.setContent(mainContainer);
         this.getChildren().add(scrollPane);
     }
+
+     // 15. Apply Normal Input Style
+    private void applyInputStyle(Control input) {
+        input.setStyle("");
+    }
+
+    // 16. Highlight Invalid / Empty Input
+    private void highlightInput(Control input) {
+        input.setStyle(
+            "-fx-border-color: #e63946; " +
+            "-fx-border-width: 3px;"
+        );
+    }
+
 
     // 14. Create Error Popup
     private Label createErrorPopup() {
