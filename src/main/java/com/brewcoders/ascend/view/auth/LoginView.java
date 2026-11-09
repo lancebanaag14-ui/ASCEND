@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.ScrollPane;
@@ -242,6 +243,17 @@ public class LoginView extends StackPane {
         passwordField.setTextFormatter(new TextFormatter<>(passwordFilter));
         passwordBox.getChildren().addAll(passwordLabel, passwordField, passwordErrorLabel);
 
+         // Clear Error Highlights on User Interaction
+        usernameField.textProperty().addListener(
+            (obs, oldVal, newVal) ->
+                applyInputStyle(usernameField)
+        );
+
+        passwordField.textProperty().addListener(
+            (obs, oldVal, newVal) ->
+                applyInputStyle(passwordField)
+        );
+
         // Action Button
         Button actionButton = new Button("Login >");
         actionButton.getStyleClass().add("gold-action-button");
@@ -289,13 +301,27 @@ public class LoginView extends StackPane {
             String user = usernameField.getText().trim();
             String pass = passwordField.getText();
 
-            // 1. Incomplete Details Check
-            if (user.isEmpty() || pass.isEmpty()) {
+            // Incomplete Details Check
+            boolean hasError = false;
+
+            if (user.isEmpty()) {
+                highlightInput(usernameField);
+                hasError = true;
+            }
+
+            if (pass.isEmpty()) {
+                highlightInput(passwordField);
+                hasError = true;
+            }
+
+            if (hasError) {
+
                 if (isLoginMode) {
-                    showCustomAlert("Login details incomplete", "Please complete both the username and password\nbefore logging in.");
+                    showCustomAlert("Login details incomplete", "Please complete both the username and password\n" + "before logging in.");
                 } else {
-                    showCustomAlert("Signup details incomplete", "Please complete both the username and password\nbefore signing up.");
+                    showCustomAlert("Signup details incomplete", "Please complete both the username and password\n" + "before signing up.");
                 }
+
                 return;
             }
     
@@ -335,8 +361,30 @@ public class LoginView extends StackPane {
         authCard.getChildren().addAll(welcomeLabel, cardTitle, tabBar, usernameBox, passwordBox, actionButton);
         mainContainer.getChildren().addAll(logoHeader, badgePill, heroTitle, heroSubtitle, authCard);
 
+        // 16. ScrollPane Settings
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+
+        scrollPane.setStyle("-fx-background-color: transparent; " + "-fx-background: transparent;");
+
         scrollPane.setContent(mainContainer);
         this.getChildren().add(scrollPane);
+    }
+
+    // Apply Normal Input Style
+    private void applyInputStyle(Control input) {
+        input.setStyle("");
+    }
+
+    // Highlight Invalid / Empty Input
+    private void highlightInput(Control input) {
+        input.setStyle(
+            "-fx-border-color: #e63946; " +
+            "-fx-border-width: 3px;"
+        );
     }
 
      // Create Error Popup
