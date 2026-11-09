@@ -21,6 +21,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -48,7 +49,7 @@ public class MissionsView extends ScrollPane {
         this.onCreateMissionClicked = onCreateMissionClicked;
 
         this.setFitToWidth(true);
-        this.setFitToHeight(true);
+        this.setFitToHeight(false);
         this.getStyleClass().add("missions-scroll-pane");
 
         VBox contentContainer = new VBox(24);
@@ -106,21 +107,34 @@ public class MissionsView extends ScrollPane {
 
         VBox avatarInfo = new VBox(3);
         avatarInfo.setAlignment(Pos.CENTER_LEFT);
-        avatarInfo.setMinWidth(180);
+        avatarInfo.setMinWidth(0);
+        avatarInfo.setMaxWidth(Double.MAX_VALUE);
+        avatarInfo.setFillWidth(true);
+
+        HBox.setHgrow(avatarInfo, Priority.ALWAYS);
 
         Label currentAvatarBadge = new Label("CURRENT AVATAR");
         currentAvatarBadge.getStyleClass().add("missions-avatar-badge");
 
         avatarName.getStyleClass().add("missions-avatar-name");
+        avatarName.setWrapText(true);
+        avatarName.setMinWidth(0);
+        avatarName.setMaxWidth(Double.MAX_VALUE);
+        avatarName.setTextOverrun(javafx.scene.control.OverrunStyle.CLIP);
+
+        avatarName.maxWidthProperty().bind(avatarInfo.widthProperty());
 
         totalPointsValueLabel.getStyleClass().add("missions-total-points");
+        totalPointsValueLabel.setMinWidth(0);
+        totalPointsValueLabel.setMaxWidth(Double.MAX_VALUE);
 
         avatarInfo.getChildren().addAll(currentAvatarBadge, avatarName, totalPointsValueLabel);
 
         VBox progressBox = new VBox(6);
         progressBox.setAlignment(Pos.CENTER_LEFT);
-        progressBox.setPrefWidth(1000);
-        progressBox.setMaxWidth(1000);
+        progressBox.setMaxWidth(Double.MAX_VALUE);
+
+        HBox.setHgrow(progressBox, Priority.ALWAYS);
 
         BorderPane progressHeader = new BorderPane();
         progressHeader.setMaxWidth(Double.MAX_VALUE);
@@ -145,10 +159,7 @@ public class MissionsView extends ScrollPane {
 
         progressBox.getChildren().addAll(progressHeader, progressBar);
 
-        Region cardSpacer = new Region();
-        HBox.setHgrow(cardSpacer, Priority.ALWAYS);
-
-        avatarCard.getChildren().setAll(avatarFrame, avatarInfo, cardSpacer, progressBox);
+        avatarCard.getChildren().setAll(avatarFrame, avatarInfo, progressBox);
 
         // --- 3. Active Missions Section ---
         VBox missionsSection = new VBox(14);
@@ -242,6 +253,12 @@ public class MissionsView extends ScrollPane {
     public void refreshMissionsList() {
         this.missionsContainer.getChildren().clear();
         List<Mission> activeMissions = MissionManager.getInstance().getActiveMissions();
+        
+        // Sort to nearest due date 
+        activeMissions.sort(Comparator.comparing(
+            Mission::getDueDate,
+            Comparator.nullsLast(Comparator.naturalOrder())
+        ));
 
         // 1. Update Avatar Banner & Progress
         updateAvatarProgress();
@@ -318,6 +335,7 @@ public class MissionsView extends ScrollPane {
         card.setAlignment(Pos.CENTER_LEFT);
         card.setPadding(new Insets(16, 20, 16, 20));
         card.setMaxWidth(Double.MAX_VALUE);
+        card.setMinHeight(Region.USE_PREF_SIZE);
         card.setStyle(
             "-fx-background-color: #fff3cf; " +
             "-fx-border-width: 0px;"
@@ -345,7 +363,6 @@ public class MissionsView extends ScrollPane {
         dateLabel.setStyle("-fx-font-family: 'Press Start 2P'; -fx-font-size: 10px; -fx-text-fill: #ffffff;");
         
         dateLabel.setMinWidth(Region.USE_PREF_SIZE);
-        dateLabel.setMaxWidth(Region.USE_PREF_SIZE);
         dateLabel.setWrapText(false);
     
         dateBox.getChildren().addAll(whiteCircle, dateLabel);
@@ -365,11 +382,13 @@ public class MissionsView extends ScrollPane {
         Label nameLabel = new Label(mission.getName());
         nameLabel.setStyle("-fx-font-family: 'Press Start 2P'; -fx-font-size: 13px; -fx-text-fill: #1f2d18;");
         nameLabel.setWrapText(true);
-        nameLabel.setTextOverrun(javafx.scene.control.OverrunStyle.CLIP);
         nameLabel.setMinWidth(0);
+        nameLabel.setMaxWidth(Double.MAX_VALUE);
+        nameLabel.setTextOverrun(javafx.scene.control.OverrunStyle.CLIP);
 
         Label diffBadge = new Label(mission.getDifficulty());
         diffBadge.setPadding(new Insets(3, 7, 3, 7));
+        diffBadge.setMinWidth(Region.USE_PREF_SIZE);
         diffBadge.setStyle(
             "-fx-font-family: 'Press Start 2P'; " +
             "-fx-font-size: 8px; " +
@@ -378,19 +397,23 @@ public class MissionsView extends ScrollPane {
             "-fx-border-width: 1.5px; " +
             "-fx-text-fill: #1f2d18;"
         );
-        diffBadge.setMinWidth(Region.USE_PREF_SIZE);
 
         titleRow.getChildren().addAll(nameLabel, diffBadge);
 
-        HBox.setHgrow(nameLabel, Priority.ALWAYS);
-
         Label descLabel = new Label(mission.getDescription());
         descLabel.setStyle("-fx-font-family: 'Press Start 2P'; -fx-font-size: 10px; -fx-text-fill: #444444;");
-        descLabel.setMinWidth(0);
         descLabel.setWrapText(true);
+        descLabel.setMinWidth(0);
+        descLabel.setMaxWidth(Double.MAX_VALUE);
+        descLabel.setTextOverrun(javafx.scene.control.OverrunStyle.CLIP);
+
+        descLabel.maxWidthProperty().bind(infoBox.widthProperty());
 
         Label catLabel = new Label(mission.getCategory());
         catLabel.setStyle("-fx-font-family: 'Press Start 2P'; -fx-font-size: 10px; -fx-text-fill: #006666;");
+        catLabel.setWrapText(true);
+        catLabel.setMinWidth(0);
+        catLabel.setMaxWidth(Double.MAX_VALUE);
 
         infoBox.getChildren().addAll(titleRow, descLabel, catLabel);
 

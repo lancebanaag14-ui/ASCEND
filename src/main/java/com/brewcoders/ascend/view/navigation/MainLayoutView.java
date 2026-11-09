@@ -73,6 +73,10 @@ public class MainLayoutView extends BorderPane {
 
         // Main Content Area Container
         centerContainer = new VBox();
+        centerContainer.setFillWidth(true);
+        centerContainer.setMaxWidth(Double.MAX_VALUE);
+        centerContainer.setMaxHeight(Double.MAX_VALUE);
+
         VBox.setVgrow(centerContainer, Priority.ALWAYS);
 
         // Apply Pixel Grid Background Pattern
@@ -100,6 +104,11 @@ public class MainLayoutView extends BorderPane {
         } else {
             this.missionsView.refreshMissionsList();
         }
+        this.missionsView.setMaxWidth(Double.MAX_VALUE);
+        this.missionsView.setMaxHeight(Double.MAX_VALUE);
+
+        VBox.setVgrow(this.missionsView, Priority.ALWAYS);
+
         centerContainer.getChildren().setAll(this.missionsView);
     }
 
