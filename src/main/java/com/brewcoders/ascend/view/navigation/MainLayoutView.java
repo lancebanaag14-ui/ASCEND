@@ -29,12 +29,12 @@ public class MainLayoutView extends BorderPane {
     private Label breadcrumbLabel;
     private Button newMissionBtn;
     private VBox centerContainer;
-    private MissionsView missionsView; 
+    private MissionsView missionsView;
+    private ProfileMainView profileMainView;
 
     private String courseName;
     private String focusCycleDates;
 
-    
     public MainLayoutView(String courseName, String focusCycleDates) {
         this.courseName = (courseName != null && !courseName.isEmpty()) ? courseName : "oop";
         this.focusCycleDates = (focusCycleDates != null && !focusCycleDates.isEmpty()) ? focusCycleDates : "11/02/2026 - 11/26/2026";
@@ -97,6 +97,8 @@ public class MainLayoutView extends BorderPane {
 
         if (this.missionsView == null) {
             this.missionsView = new MissionsView(courseName, this::openCreateMissionPage);
+        } else {
+            this.missionsView.refreshMissionsList();
         }
         centerContainer.getChildren().setAll(this.missionsView);
     }
@@ -109,8 +111,13 @@ public class MainLayoutView extends BorderPane {
         newMissionBtn.setVisible(false);
         newMissionBtn.setManaged(false);
 
-        ProfileMainView profileView = new ProfileMainView();
-        centerContainer.getChildren().setAll(profileView);
+        if (this.profileMainView == null) {
+            this.profileMainView = new ProfileMainView();
+        }
+        
+        // Trigger explicit refresh for username and point stats from MissionManager
+        this.profileMainView.refreshData();
+        centerContainer.getChildren().setAll(this.profileMainView);
     }
 
     private void openCreateMissionPage() {

@@ -34,7 +34,7 @@ public class PersonalInfoView extends StackPane {
         contentContainer.setAlignment(Pos.TOP_LEFT);
         contentContainer.setPadding(new Insets(10));
 
-        //LEFT COLUMN 
+        // --- LEFT COLUMN ---
         VBox leftColumn = new VBox(20);
         leftColumn.setMinWidth(320);
         leftColumn.setPrefWidth(420);
@@ -109,7 +109,7 @@ public class PersonalInfoView extends StackPane {
 
         leftColumn.getChildren().addAll(userInfoCard, deleteCard);
 
-        //RIGHT COLUMN
+        // --- RIGHT COLUMN ---
         VBox rightColumn = new VBox(20);
         HBox.setHgrow(rightColumn, Priority.ALWAYS);
 
@@ -186,11 +186,12 @@ public class PersonalInfoView extends StackPane {
 
     public void refreshUserData() {
         String name = MissionManager.getInstance().getCurrentUsername();
-        usernameValue.setText(name);
-
+        
         if (name != null && !name.trim().isEmpty()) {
+            usernameValue.setText(name);
             avatarInitial.setText(name.substring(0, 1).toUpperCase());
         } else {
+            usernameValue.setText("Guest User");
             avatarInitial.setText("?");
         }
 

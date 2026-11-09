@@ -1,5 +1,6 @@
 package com.brewcoders.ascend.view.auth;
 
+import com.brewcoders.ascend.controller.MissionManager;
 import com.brewcoders.ascend.view.navigation.MainLayoutView;
 import javafx.animation.PauseTransition;
 import javafx.scene.image.Image;
@@ -17,7 +18,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
-
 
 import java.util.function.UnaryOperator;
 
@@ -74,7 +74,6 @@ public class LoginView extends StackPane {
         heroTitle.setWrapText(true);
         heroTitle.setAlignment(Pos.CENTER);
         heroTitle.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
-        // Bind width so text wraps dynamically as the parent resizes
         heroTitle.prefWidthProperty().bind(mainContainer.widthProperty().subtract(40));
 
         // Subtitle
@@ -118,57 +117,44 @@ public class LoginView extends StackPane {
         Label passwordErrorLabel = createErrorPopup();
 
         // Username Error Timer
-        PauseTransition usernameTimer =
-            new PauseTransition(Duration.seconds(3));
-
+        PauseTransition usernameTimer = new PauseTransition(Duration.seconds(3));
         usernameTimer.setOnFinished(e -> {
             usernameErrorLabel.setVisible(false);
             usernameErrorLabel.setManaged(false);
         });
 
         // Password Error Timer
-        PauseTransition passwordTimer =
-            new PauseTransition(Duration.seconds(3));
-
+        PauseTransition passwordTimer = new PauseTransition(Duration.seconds(3));
         passwordTimer.setOnFinished(e -> {
             passwordErrorLabel.setVisible(false);
             passwordErrorLabel.setManaged(false);
         });
 
         // Username Filter: Min 3, Max 30 characters, Letters, numbers, and underscores only
-       UnaryOperator<TextFormatter.Change> usernameFilter = change -> {
-
+        UnaryOperator<TextFormatter.Change> usernameFilter = change -> {
             String addedText = change.getText();
             String newText = change.getControlNewText();
 
             if (!addedText.isEmpty()) {
-
                 if (newText.length() > 30) {
-                    showError(usernameErrorLabel, usernameTimer,
-                            "⚠ Max 30 characters allowed!");
+                    showError(usernameErrorLabel, usernameTimer, "⚠ Max 30 characters allowed!");
                     return null;
                 }
 
                 if (addedText.matches(".*\\s+.*")) {
-                    showError(usernameErrorLabel, usernameTimer,
-                            "⚠ Whitespace is not allowed!");
+                    showError(usernameErrorLabel, usernameTimer, "⚠ Whitespace is not allowed!");
                     return null;
                 }
 
                 if (!addedText.matches("[a-zA-Z0-9_]+")) {
-                    showError(usernameErrorLabel, usernameTimer,
-                            "⚠ Special characters are not allowed!");
+                    showError(usernameErrorLabel, usernameTimer, "⚠ Special characters are not allowed!");
                     return null;
                 }
             }
 
             // Minimum length warning
             if (!newText.isEmpty() && newText.length() < 3) {
-                showError(
-                    usernameErrorLabel,
-                    usernameTimer,
-                    "⚠ Username must be at least 3 characters!"
-                );
+                showError(usernameErrorLabel, usernameTimer, "⚠ Username must be at least 3 characters!");
             } else {
                 usernameErrorLabel.setVisible(false);
                 usernameErrorLabel.setManaged(false);
@@ -178,40 +164,26 @@ public class LoginView extends StackPane {
             return change;
         };
 
-        // Password Filter: Min 8, Max 64 character, No whitespace allowed
+        // Password Filter: Min 8, Max 64 characters, No whitespace allowed
         UnaryOperator<TextFormatter.Change> passwordFilter = change -> {
-
             String addedText = change.getText();
             String newText = change.getControlNewText();
 
             if (!addedText.isEmpty()) {
-
                 if (newText.length() > 64) {
-                    showError(
-                        passwordErrorLabel,
-                        passwordTimer,
-                        "⚠ Max 64 characters allowed!"
-                    );
+                    showError(passwordErrorLabel, passwordTimer, "⚠ Max 64 characters allowed!");
                     return null;
                 }
 
                 if (addedText.matches(".*\\s+.*")) {
-                    showError(
-                        passwordErrorLabel,
-                        passwordTimer,
-                        "⚠ Whitespace is not allowed!"
-                    );
+                    showError(passwordErrorLabel, passwordTimer, "⚠ Whitespace is not allowed!");
                     return null;
                 }
             }
 
-           // Minimum length warning
+            // Minimum length warning
             if (!newText.isEmpty() && newText.length() < 8) {
-                showError(
-                    passwordErrorLabel,
-                    passwordTimer,
-                    "⚠ Password must be at least 8 characters!"
-                );
+                showError(passwordErrorLabel, passwordTimer, "⚠ Password must be at least 8 characters!");
             } else {
                 passwordErrorLabel.setVisible(false);
                 passwordErrorLabel.setManaged(false);
@@ -243,16 +215,9 @@ public class LoginView extends StackPane {
         passwordField.setTextFormatter(new TextFormatter<>(passwordFilter));
         passwordBox.getChildren().addAll(passwordLabel, passwordField, passwordErrorLabel);
 
-         // Clear Error Highlights on User Interaction
-        usernameField.textProperty().addListener(
-            (obs, oldVal, newVal) ->
-                applyInputStyle(usernameField)
-        );
-
-        passwordField.textProperty().addListener(
-            (obs, oldVal, newVal) ->
-                applyInputStyle(passwordField)
-        );
+        // Clear Error Highlights on User Interaction
+        usernameField.textProperty().addListener((obs, oldVal, newVal) -> applyInputStyle(usernameField));
+        passwordField.textProperty().addListener((obs, oldVal, newVal) -> applyInputStyle(passwordField));
 
         // Action Button
         Button actionButton = new Button("Login >");
@@ -276,6 +241,9 @@ public class LoginView extends StackPane {
                 cardTitle.setText("Log in to continue");
                 actionButton.setText("Login >");
 
+                applyInputStyle(usernameField);
+                applyInputStyle(passwordField);
+
                 usernameErrorLabel.setVisible(false);
                 usernameErrorLabel.setManaged(false);
                 usernameTimer.stop();
@@ -293,6 +261,9 @@ public class LoginView extends StackPane {
                 loginTab.getStyleClass().setAll("tab-button-inactive");
                 cardTitle.setText("Create your Account");
                 actionButton.setText("Signup >");
+
+                applyInputStyle(usernameField);
+                applyInputStyle(passwordField);
             }
         });
 
@@ -315,43 +286,37 @@ public class LoginView extends StackPane {
             }
 
             if (hasError) {
-
                 if (isLoginMode) {
-                    showCustomAlert("Login details incomplete", "Please complete both the username and password\n" + "before logging in.");
+                    showCustomAlert("Login details incomplete", "Please complete both the username and password\nbefore logging in.");
                 } else {
-                    showCustomAlert("Signup details incomplete", "Please complete both the username and password\n" + "before signing up.");
+                    showCustomAlert("Signup details incomplete", "Please complete both the username and password\nbefore signing up.");
                 }
-
                 return;
             }
-    
 
             // Signup Rules Check
             if (!isLoginMode) {
-
                 if (user.length() < 3) {
-                    showError(
-                        usernameErrorLabel,
-                        usernameTimer,
-                        "⚠ Username must be at least 3 characters!"
-                    );
+                    highlightInput(usernameField);
+                    showError(usernameErrorLabel, usernameTimer, "⚠ Username must be at least 3 characters!");
                     return;
                 }
 
                 if (pass.length() < 8) {
-                    showError(
-                        passwordErrorLabel,
-                        passwordTimer,
-                        "⚠ Password must be at least 8 characters!"
-                    );
+                    highlightInput(passwordField);
+                    showError(passwordErrorLabel, passwordTimer, "⚠ Password must be at least 8 characters!");
                     return;
                 }
             }
 
+            // Save session username to MissionManager Singleton
+            MissionManager.getInstance().setCurrentUsername(user);
+
             // Route to next view
             if (this.getScene() != null) {
                 if (!isLoginMode) {
-                    this.getScene().setRoot(new SignupCourseView());
+                    // Pass the entered username to SignupCourseView!
+                    this.getScene().setRoot(new SignupCourseView(user));
                 } else {
                     this.getScene().setRoot(new MainLayoutView("oop", "11/02/2026 - 11/26/2026"));
                 }
@@ -361,14 +326,12 @@ public class LoginView extends StackPane {
         authCard.getChildren().addAll(welcomeLabel, cardTitle, tabBar, usernameBox, passwordBox, actionButton);
         mainContainer.getChildren().addAll(logoHeader, badgePill, heroTitle, heroSubtitle, authCard);
 
-        // 16. ScrollPane Settings
+        // ScrollPane Settings
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
-
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-
-        scrollPane.setStyle("-fx-background-color: transparent; " + "-fx-background: transparent;");
+        scrollPane.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
 
         scrollPane.setContent(mainContainer);
         this.getChildren().add(scrollPane);
@@ -376,22 +339,21 @@ public class LoginView extends StackPane {
 
     // Apply Normal Input Style
     private void applyInputStyle(Control input) {
+        input.getStyleClass().remove("field-error");
         input.setStyle("");
     }
 
     // Highlight Invalid / Empty Input
     private void highlightInput(Control input) {
-        input.setStyle(
-            "-fx-border-color: #e63946; " +
-            "-fx-border-width: 3px;"
-        );
+        if (!input.getStyleClass().contains("field-error")) {
+            input.getStyleClass().add("field-error");
+        }
+        input.setStyle("-fx-border-color: #e63946; -fx-border-width: 3px;");
     }
 
-     // Create Error Popup
+    // Create Error Popup
     private Label createErrorPopup() {
-
         Label popup = new Label();
-
         popup.setStyle(
             "-fx-font-family: 'Press Start 2P'; " +
             "-fx-font-size: 9px; " +
@@ -401,24 +363,16 @@ public class LoginView extends StackPane {
             "-fx-border-width: 2px; " +
             "-fx-padding: 6px 10px;"
         );
-
         popup.setVisible(false);
         popup.setManaged(false);
-
         return popup;
     }
 
     // Show Error Popup
-    private void showError(
-        Label errorLabel,
-        PauseTransition timer,
-        String message
-    ) {
-
+    private void showError(Label errorLabel, PauseTransition timer, String message) {
         errorLabel.setText(message);
         errorLabel.setVisible(true);
         errorLabel.setManaged(true);
-
         timer.playFromStart();
     }
 

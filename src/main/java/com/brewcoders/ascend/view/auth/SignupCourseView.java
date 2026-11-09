@@ -27,8 +27,20 @@ import java.util.function.UnaryOperator;
 
 public class SignupCourseView extends StackPane {
 
-    public SignupCourseView() {
+    private String registeredUsername = "Guest User";
 
+    public SignupCourseView(String username) {
+        if (username != null && !username.trim().isEmpty()) {
+            this.registeredUsername = username.trim();
+        }
+        initUI();
+    }
+
+    public SignupCourseView() {
+        this("Guest User");
+    }
+
+    private void initUI() {
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.getStyleClass().add("auth-scroll-pane");
 
@@ -137,7 +149,7 @@ public class SignupCourseView extends StackPane {
 
             if (!addedText.isEmpty()) {
 
-                // Maximum 50 characters
+                // Maximum 30 characters
                 if (newText.length() > 30) {
                     showError(
                         courseErrorLabel,
@@ -164,7 +176,6 @@ public class SignupCourseView extends StackPane {
 
             return change;
         };
-
 
         // 7. Course Name
         VBox courseBox = new VBox(8);
@@ -350,7 +361,6 @@ public class SignupCourseView extends StackPane {
             (obs, oldVal, newVal) -> applyInputStyle(endDatePicker)
         );
 
-
         // 11. Create Course Button
         Button createCourseBtn = new Button("Create course >");
         createCourseBtn.getStyleClass().add("gold-action-button");
@@ -395,6 +405,9 @@ public class SignupCourseView extends StackPane {
                 );
                 return;
             }
+
+            // Explicitly sync the username to MissionManager Singleton
+            MissionManager.getInstance().setCurrentUsername(registeredUsername);
 
             // Clear previous session/course mission data
             MissionManager.getInstance().clearMissions();
@@ -455,12 +468,12 @@ public class SignupCourseView extends StackPane {
         this.getChildren().add(scrollPane);
     }
 
-     // 15. Apply Normal Input Style
+    // Apply Normal Input Style
     private void applyInputStyle(Control input) {
         input.setStyle("");
     }
 
-    // 16. Highlight Invalid / Empty Input
+    // Highlight Invalid / Empty Input
     private void highlightInput(Control input) {
         input.setStyle(
             "-fx-border-color: #e63946; " +
@@ -468,8 +481,7 @@ public class SignupCourseView extends StackPane {
         );
     }
 
-
-    // 14. Create Error Popup
+    // Create Error Popup
     private Label createErrorPopup() {
 
         Label popup = new Label();
@@ -490,7 +502,7 @@ public class SignupCourseView extends StackPane {
         return popup;
     }
 
-    // 15. Show Error Popup
+    // Show Error Popup
     private void showError(
         Label errorLabel,
         PauseTransition timer,
@@ -504,7 +516,7 @@ public class SignupCourseView extends StackPane {
         timer.playFromStart();
     }
 
-    // 16. Custom Alert
+    // Custom Alert
     private void showCustomAlert(
         String titleText,
         String messageText

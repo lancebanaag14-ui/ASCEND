@@ -22,6 +22,7 @@ public class ProfileMainView extends BorderPane {
     private final Button historyBtn;
     private final Button achievementsBtn;
     private final List<Button> tabButtons = new ArrayList<>();
+    private PersonalInfoView personalInfoView;
 
     public ProfileMainView() {
 
@@ -29,7 +30,7 @@ public class ProfileMainView extends BorderPane {
         this.getStyleClass().add("main-content-area");
 
         VBox contentContainer = new VBox(20);
-        contentContainer.setPadding(new Insets(70, 80, 80, 80));
+        contentContainer.setPadding(new Insets(30, 40, 40, 40));
         contentContainer.setMaxWidth(Double.MAX_VALUE);
 
         // Header Section
@@ -44,6 +45,7 @@ public class ProfileMainView extends BorderPane {
 
         Label subtitle = new Label("View your information, current-course history, and achievements.");
         subtitle.getStyleClass().add("profile-subtitle");
+        subtitle.setWrapText(true);
 
         VBox titleAndSubtitleGroup = new VBox(15);
         titleAndSubtitleGroup.getChildren().addAll(title, subtitle);
@@ -60,13 +62,24 @@ public class ProfileMainView extends BorderPane {
 
         tabsRow.getChildren().addAll(personalInfoBtn, historyBtn, achievementsBtn);
 
+        // Initialize PersonalInfoView
+        this.personalInfoView = new PersonalInfoView();
+
         // Dynamic Content Area
         tabContentArea = new StackPane();
-        tabContentArea.getChildren().add(new PersonalInfoView());
+        tabContentArea.getChildren().add(personalInfoView);
         VBox.setVgrow(tabContentArea, Priority.ALWAYS);
 
         // Tab Switching Actions
-        personalInfoBtn.setOnAction(e -> switchTab(personalInfoBtn, new PersonalInfoView()));
+        personalInfoBtn.setOnAction(e -> {
+            if (personalInfoView == null) {
+                personalInfoView = new PersonalInfoView();
+            } else {
+                personalInfoView.refreshUserData();
+            }
+            switchTab(personalInfoBtn, personalInfoView);
+        });
+
         historyBtn.setOnAction(e -> switchTab(historyBtn, new HistoryView()));
         achievementsBtn.setOnAction(e -> switchTab(achievementsBtn, new AchievementsView()));
 
@@ -81,6 +94,19 @@ public class ProfileMainView extends BorderPane {
         scrollPane.getStyleClass().add("transparent-scroll-pane");
 
         this.setCenter(scrollPane);
+
+        // Ensure user data is refreshed upon creation
+        refreshData();
+    }
+
+    /**
+     * Refreshes user details and point totals in PersonalInfoView.
+     * Call this when navigating to ProfileMainView from MainLayoutView.
+     */
+    public void refreshData() {
+        if (personalInfoView != null) {
+            personalInfoView.refreshUserData();
+        }
     }
 
     private Button createTabButton(String text, boolean isActive) {
