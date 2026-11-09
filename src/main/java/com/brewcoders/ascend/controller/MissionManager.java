@@ -20,7 +20,7 @@ public class MissionManager {
         return instance;
     }
 
-    // --- USERNAME CONTROLS ---
+    // USERNAME CONTROLS 
 
     public String getCurrentUsername() {
         return currentUsername;
@@ -32,7 +32,7 @@ public class MissionManager {
         }
     }
 
-    // --- FRONTEND SESSION & USER CONTROLS ---
+    // FRONTEND SESSION & USER CONTROLS 
 
     /**
      * Clears all in-memory missions for a course cycle while preserving the active username.
@@ -62,7 +62,7 @@ public class MissionManager {
         }
     }
 
-    // --- MISSION OPERATIONS ---
+    // MISSION OPERATIONS 
 
     public void addMission(Mission mission) {
         missions.add(mission);

@@ -37,8 +37,8 @@ public class AchievementsView extends VBox {
         topBanner.setAlignment(Pos.CENTER_LEFT);
         topBanner.setPadding(new Insets(20, 28, 20, 28));
         topBanner.setStyle(
-            "-fx-background-color: #167a47; " + // Retro dark green background
-            "-fx-border-color: #4a2810; " +     // Dark brown border
+            "-fx-background-color: #167a47; " + 
+            "-fx-border-color: #4a2810; " +     
             "-fx-border-width: 3px;"
         );
 
@@ -56,7 +56,7 @@ public class AchievementsView extends VBox {
         pointsLabel.setStyle(
             "-fx-font-family: 'Press Start 2P'; " +
             "-fx-font-size: 32px; " +
-            "-fx-text-fill: #f7ce68;" // Retro gold text
+            "-fx-text-fill: #f7ce68;" 
         );
 
         topBanner.getChildren().addAll(bannerText, spacer, pointsLabel);
@@ -90,13 +90,13 @@ public class AchievementsView extends VBox {
         // Style differences for Unlocked vs Locked state
         if (isUnlocked) {
             card.setStyle(
-                "-fx-background-color: #fce4b3; " + // Warm yellow highlight card
+                "-fx-background-color: #fce4b3; " + 
                 "-fx-border-color: #4a2810; " +
                 "-fx-border-width: 3px;"
             );
         } else {
             card.setStyle(
-                "-fx-background-color: #cfd8bd; " + // Desaturated muted card
+                "-fx-background-color: #cfd8bd; " + 
                 "-fx-border-color: #4a2810; " +
                 "-fx-border-width: 2.5px; " +
                 "-fx-opacity: 0.85;"

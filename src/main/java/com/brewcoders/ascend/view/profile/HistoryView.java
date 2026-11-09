@@ -25,7 +25,7 @@ public class HistoryView extends VBox {
         // Outer Retro Container (Yellow Box)
         VBox historyCardContainer = new VBox(16);
         historyCardContainer.getStyleClass().add("history-card-container");
-        historyCardContainer.setPadding(new Insets(16)); // Balanced 16px padding on all sides
+        historyCardContainer.setPadding(new Insets(16)); 
 
         // Load finished/failed missions dynamically from MissionManager
         List<Mission> historyItems = MissionManager.getInstance().getHistoryMissions();

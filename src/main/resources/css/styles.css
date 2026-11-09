@@ -915,7 +915,7 @@
     -fx-background-color: transparent !important;
 }
 
-/* --- HISTORY VIEW STYLING --- */
+/*  HISTORY VIEW STYLING  */
 
 .history-sort-label {
     -fx-font-family: 'Press Start 2P', monospace;
@@ -1019,3 +1019,4 @@
     -fx-border-color: #3b1d08;
     -fx-border-width: 2px;
 }
+
