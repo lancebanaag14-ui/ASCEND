@@ -1,5 +1,6 @@
 package com.brewcoders.ascend.view.navigation;
-
+// Purpose: Use the existing backend session manager for the Back button.
+import com.brewcoders.ascend.controller.MissionManager;
 import com.brewcoders.ascend.view.auth.LoginView;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -116,6 +117,7 @@ public class SidebarView extends VBox {
         backToFrontBtn.setMaxWidth(Double.MAX_VALUE);
         backToFrontBtn.setOnAction(e -> {
             if (this.getScene() != null) {
+                MissionManager.getInstance().logout();
                 this.getScene().setRoot(new LoginView());
             }
         });

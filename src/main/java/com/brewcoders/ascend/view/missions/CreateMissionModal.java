@@ -334,13 +334,19 @@ public class CreateMissionModal {
                 case "hard": points = 70; break;
             }
 
-            Mission newMission = new Mission(name, desc, dueDate, category, difficulty, points);
+            // NEW CHANGED
+            // Purpose: Keep backend validation errors from closing the original mission form.
+            try {
+                Mission newMission = new Mission(name, desc, dueDate, category, difficulty, points);
 
-            if (onMissionCreated != null) {
-                onMissionCreated.accept(newMission);
+                if (onMissionCreated != null) {
+                    onMissionCreated.accept(newMission);
+                }
+
+                dialog.close();
+            } catch (IllegalArgumentException | IllegalStateException ex) {
+                showMissionMessage(dialog, "Mission could not be created", ex.getMessage());
             }
-
-            dialog.close();
         });
 
         HBox actionRow = new HBox(16, cancelBtn, createBtn);
@@ -381,6 +387,13 @@ public class CreateMissionModal {
     
     // Show Mission details incomplete
     private static void showIncompleteDetailsPopup(Stage owner) {
+        // NEW CHANGED
+        // Purpose: Preserve the original missing-details message using the same popup layout.
+        showMissionMessage(owner, "Mission details incomplete",
+            "Please complete all mission details before creating the mission.");
+    }
+
+    private static void showMissionMessage(Stage owner, String titleText, String messageText) {
         Stage popup = new Stage();
         popup.initModality(Modality.APPLICATION_MODAL);
         popup.initOwner(owner);
@@ -412,7 +425,7 @@ public class CreateMissionModal {
         );
 
         // Title
-        Label title = new Label("Mission details incomplete");
+        Label title = new Label(titleText);
         title.getStyleClass().add("alert-title");
         title.setStyle(
             "-fx-text-fill: #4a2810; " +
@@ -425,7 +438,7 @@ public class CreateMissionModal {
        title.setWrapText(true);
 
         // Message
-        Label message = new Label("Please complete all mission details before creating the mission.");
+        Label message = new Label(messageText);
         message.getStyleClass().add("alert-message");
         message.setStyle(
             "-fx-text-fill: #4a2810; " +

@@ -123,6 +123,9 @@ public class SignupCourseView extends StackPane {
 
         backButton.setOnAction(e -> {
             if (this.getScene() != null) {
+                // NEW CHANGED
+                // Purpose: End the setup session while keeping the registered account for later login.
+                MissionManager.getInstance().logout();
                 this.getScene().setRoot(new LoginView());
             }
         });
@@ -408,6 +411,16 @@ public class SignupCourseView extends StackPane {
 
             // Explicitly sync the username to MissionManager Singleton
             MissionManager.getInstance().setCurrentUsername(registeredUsername);
+
+            // NEW CHANGED
+            // Purpose: Validate and save the course values before the original dashboard navigation.
+            try {
+                MissionManager.getInstance().createCourse(courseName,
+                    startDatePicker.getValue(), endDatePicker.getValue());
+            } catch (IllegalArgumentException | IllegalStateException ex) {
+                showCustomAlert("Course could not be created", ex.getMessage());
+                return;
+            }
 
             // Clear previous session/course mission data
             MissionManager.getInstance().clearMissions();

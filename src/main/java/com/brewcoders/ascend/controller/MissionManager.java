@@ -2,14 +2,18 @@ package com.brewcoders.ascend.controller;
 
 import com.brewcoders.ascend.model.Mission;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+// NEW CHANGED
+// Purpose: Delegate extra account, mission, storage and progression logic to the backend.
+import com.brewcoders.ascend.backend.service.MissionService;
+import com.brewcoders.ascend.backend.model.avatar.Avatar;
+import com.brewcoders.ascend.backend.model.Achievement;
 
 public class MissionManager {
     private static MissionManager instance;
-    private final List<Mission> missions = new ArrayList<>();
-    private String currentUsername = "Guest User";
+    // NEW CHANGED
+    // Purpose: Share the backend state instead of maintaining a second mission list and username.
+    private final MissionService backend = MissionService.getInstance();
 
     private MissionManager() {}
 
@@ -23,13 +27,15 @@ public class MissionManager {
     // USERNAME CONTROLS 
 
     public String getCurrentUsername() {
-        return currentUsername;
+        // NEW CHANGED
+        // Purpose: Read the authenticated username from the backend.
+        return backend.getCurrentUsername();
     }
 
     public void setCurrentUsername(String username) {
-        if (username != null && !username.trim().isEmpty()) {
-            this.currentUsername = username.trim();
-        }
+        // NEW CHANGED
+        // Purpose: Keep the original username-sync API with backend authentication checks.
+        backend.setCurrentUsername(username);
     }
 
     // FRONTEND SESSION & USER CONTROLS 
@@ -39,7 +45,9 @@ public class MissionManager {
      * Call this when starting or resetting a course.
      */
     public void clearMissions() {
-        this.missions.clear();
+        // NEW CHANGED
+        // Purpose: Clear and save only the current account's course missions.
+        backend.clearMissions();
     }
 
     /**
@@ -47,8 +55,9 @@ public class MissionManager {
      * Call this when logging out or deleting the account.
      */
     public void logout() {
-        this.missions.clear();
-        this.currentUsername = "Guest User";
+        // NEW CHANGED
+        // Purpose: Clear the displayed session while preserving the account's saved progress.
+        backend.logout();
     }
 
     /**
@@ -56,57 +65,98 @@ public class MissionManager {
      * Ready for backend integration later when loading saved user history on login.
      */
     public void setMissions(List<Mission> userMissions) {
-        this.missions.clear();
-        if (userMissions != null) {
-            this.missions.addAll(userMissions);
-        }
+        // NEW CHANGED
+        // Purpose: Validate and save the replacement through the backend.
+        backend.setMissions(userMissions);
     }
 
     // MISSION OPERATIONS 
 
     public void addMission(Mission mission) {
-        missions.add(mission);
+        // NEW CHANGED
+        // Purpose: Let the backend validate ownership, dates and saving.
+        backend.addMission(mission);
     }
 
     public List<Mission> getAllMissions() {
-        return new ArrayList<>(missions);
+        // NEW CHANGED
+        // Purpose: Read the current account's refreshed mission list.
+        return backend.getAllMissions();
     }
 
     public List<Mission> getActiveMissions() {
-        LocalDate today = LocalDate.now();
         // Automatically mark active missions whose due dates have passed as FAILED
-        for (Mission m : missions) {
-            if ("ACTIVE".equalsIgnoreCase(m.getStatus()) && m.getDueDate() != null && m.getDueDate().isBefore(today)) {
-                m.setStatus("FAILED");
-            }
-        }
-        return missions.stream()
-                .filter(m -> "ACTIVE".equalsIgnoreCase(m.getStatus()))
-                .collect(Collectors.toList());
+        // NEW CHANGED
+        // Purpose: Keep filtering, deadline checks and sorting in the backend.
+        return backend.getActiveMissions();
     }
 
     public List<Mission> getHistoryMissions() {
         // Returns all COMPLETED or FAILED missions for the History tab
-        return missions.stream()
-                .filter(m -> "COMPLETED".equalsIgnoreCase(m.getStatus()) || "FAILED".equalsIgnoreCase(m.getStatus()))
-                .collect(Collectors.toList());
+        // NEW CHANGED
+        // Purpose: Read refreshed completed/failed history from the backend.
+        return backend.getHistoryMissions();
     }
 
     /**
      * Sums up points earned from all completed missions.
      */
     public int getTotalPoints() {
-        return missions.stream()
-                .filter(m -> "COMPLETED".equalsIgnoreCase(m.getStatus()))
-                .mapToInt(Mission::getPoints)
-                .sum();
+        // NEW CHANGED
+        // Purpose: Use the backend's single completed-mission point calculation.
+        return backend.getTotalPoints();
     }
 
     public void completeMission(Mission mission) {
-        mission.setStatus("COMPLETED");
+        // NEW CHANGED
+        // Purpose: Apply guarded completion and saving without changing the existing button call.
+        backend.completeMission(mission);
     }
 
     public void failMission(Mission mission) {
-        mission.setStatus("FAILED");
+        // NEW CHANGED
+        // Purpose: Apply failure rules and saving in the backend.
+        backend.failMission(mission);
     }
+
+    // NEW CHANGED
+    // Purpose: Pass the existing form credentials to the backend.
+    public void authenticate(String username, String password, boolean loginMode) { backend.authenticate(username, password, loginMode); }
+
+    // NEW CHANGED
+    // Purpose: Let the existing login handler choose setup or dashboard.
+    public boolean hasCurrentCourse() { return backend.hasCurrentCourse(); }
+
+    // NEW CHANGED
+    // Purpose: Read the saved course name for the original dashboard constructor.
+    public String getCurrentCourseName() { return backend.getCurrentCourseName(); }
+
+    // NEW CHANGED
+    // Purpose: Keep saved-date formatting inside the backend.
+    public String getCurrentCourseDates() { return backend.getCurrentCourseDates(); }
+
+    // NEW CHANGED
+    // Purpose: Pass the original course form values to the backend.
+    public void createCourse(String name, LocalDate start, LocalDate end) { backend.createCourse(name, start, end); }
+
+    // NEW CHANGED
+    // Purpose: Keep confirmed deletion separate from ordinary logout.
+    public void deleteCurrentCourseAndLogout() { backend.deleteCurrentCourseAndLogout(); }
+
+    // NEW CHANGED
+    // Purpose: Preserve the boolean completion API for backend callers.
+    public boolean tryCompleteMission(Mission mission) { return backend.tryCompleteMission(mission); }
+
+    // NEW CHANGED
+    // Purpose: Preserve access to the backend completion outcome.
+    public String getLastActionMessage() { return backend.getLastActionMessage(); }
+
+    // NEW CHANGED
+    // Purpose: Preserve the earned-avatar API while calculation stays in the backend.
+    public Avatar getCurrentAvatar() { return backend.getCurrentAvatar(); }
+
+    // NEW CHANGED
+    // Purpose: Preserve achievement access while calculation stays in the backend.
+    public List<Achievement> getAchievements() { return backend.getAchievements(); }
+
 }
