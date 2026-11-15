@@ -309,16 +309,31 @@ public class LoginView extends StackPane {
                 }
             }
 
+            // NEW CHANGED
+            // Purpose: Check the entered credentials in the backend before navigating.
+            try {
+                MissionManager.getInstance().authenticate(user, pass, isLoginMode);
+            } catch (IllegalArgumentException | IllegalStateException ex) {
+                showCustomAlert("Account could not be opened", ex.getMessage());
+                return;
+            }
+
             // Save session username to MissionManager Singleton
             MissionManager.getInstance().setCurrentUsername(user);
 
             // Route to next view
             if (this.getScene() != null) {
-                if (!isLoginMode) {
+                // NEW CHANGED
+                // Purpose: Resume setup when an existing account has no current course.
+                if (!isLoginMode || !MissionManager.getInstance().hasCurrentCourse()) {
                     // Pass the entered username to SignupCourseView!
                     this.getScene().setRoot(new SignupCourseView(user));
                 } else {
-                    this.getScene().setRoot(new MainLayoutView("oop", "11/02/2026 - 11/26/2026"));
+                    // NEW CHANGED
+                    // Purpose: Open this user's saved course instead of the placeholder course.
+                    this.getScene().setRoot(new MainLayoutView(
+                        MissionManager.getInstance().getCurrentCourseName(),
+                        MissionManager.getInstance().getCurrentCourseDates()));
                 }
             }
         });

@@ -308,7 +308,9 @@ public class PersonalInfoView extends StackPane {
             "-fx-cursor: hand;"
         );
         confirmDeleteBtn.setOnAction(e -> {
-            MissionManager.getInstance().logout();
+            // NEW CHANGED
+            // Purpose: Clear only this account's current course before signing out.
+            MissionManager.getInstance().deleteCurrentCourseAndLogout();
             rootStackPane.getChildren().remove(overlay);
             scene.setRoot(new LoginView());
         });
