@@ -12,6 +12,7 @@ public class ProgressionService {
 
     private ProgressionService() {}
 
+    // Purpose: Calculate the total points earned from completed missions.
     public static int totalPoints(List<Mission> missions) {
         int total = 0;
         for (int i = 0; i < missions.size(); i++) {
@@ -20,6 +21,7 @@ public class ProgressionService {
         return total;
     }
 
+    // Purpose: Determine the current avatar based on total points earned.
     public static Avatar currentAvatar(int points) {
         if (points >= 3000) return new Wildcard();
         if (points >= 2000) return new Grinder();
@@ -27,6 +29,7 @@ public class ProgressionService {
         return new Noob();
     }
 
+    // Purpose: Determine the achievements unlocked based on total points earned.
     public static List<Achievement> achievements(int points) {
         Avatar[] avatars = {new Noob(), new NightCoder(), new Grinder(), new Wildcard()};
         List<Achievement> results = new ArrayList<>();

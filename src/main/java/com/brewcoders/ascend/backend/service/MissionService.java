@@ -23,6 +23,7 @@ public class MissionService {
         return instance;
     }
 
+    // Purpose: Return user username
     public String getCurrentUsername() {
         User user = AuthService.getInstance().getCurrentUser();
         if (user == null) {
@@ -31,6 +32,7 @@ public class MissionService {
         return user.getUsername();
     }
 
+    // Purpose:  Log out for "Guest User" and prevent switching accounts by changing the username without logging in.
     public void setCurrentUsername(String username) {
         if ("Guest User".equals(username)) {
             logout();
@@ -39,26 +41,31 @@ public class MissionService {
         }
     }
 
+    // Remove all missions from the current user and save the change.
     public void clearMissions() {
         AuthService.getInstance().requireCurrentUser().clearMissions();
         AuthService.getInstance().saveData();
     }
 
+    // Clear the current user.
     public void logout() {
         lastActionMessage = "";
         AuthService.getInstance().logout();
     }
 
+    // Request deletioon of the current course and log out the user.
     public void deleteCurrentCourseAndLogout() {
         AuthService.getInstance().deleteCurrentCourse();
         logout();
     }
 
+    // Replace the current user's missions with a new list and save the change.
     public void setMissions(List<Mission> userMissions) {
         AuthService.getInstance().requireCurrentUser().setMissions(userMissions);
         AuthService.getInstance().saveData();
     }
 
+    // Update the current user's missions by adding a new mission and saving the changes.
     public void addMission(Mission mission) {
         User user = AuthService.getInstance().requireCurrentUser();
         if (MissionRules.refresh(user.getMissions(), user.getCurrentCourse(), LocalDate.now())) {
@@ -69,6 +76,7 @@ public class MissionService {
         AuthService.getInstance().saveData();
     }
 
+    // Return the curretnt user's missions.
     public List<Mission> getAllMissions() {
         User user = AuthService.getInstance().getCurrentUser();
         if (user == null) {
@@ -82,6 +90,7 @@ public class MissionService {
         return missions;
     }
 
+    // Return active missions.
     public List<Mission> getActiveMissions() {
         List<Mission> missions = getAllMissions();
         List<Mission> active = new ArrayList<>();
@@ -95,7 +104,7 @@ public class MissionService {
         return MissionSorter.byDueDate(active);
     }
 
-    
+    //Return completed and failed missions.
     public List<Mission> getHistoryMissions() {
         List<Mission> history = new ArrayList<>();
         List<Mission> missions = getAllMissions();
@@ -118,6 +127,7 @@ public class MissionService {
         tryCompleteMission(mission);
     }
 
+    // Purpose: Complete a mission only if it is active, not overdue, and the course is still active.
     public boolean tryCompleteMission(Mission mission) {
         User user = AuthService.getInstance().getCurrentUser();
         if (user == null || mission == null || !user.getMissions().contains(mission)) {
@@ -139,11 +149,13 @@ public class MissionService {
 
     public String getLastActionMessage() { return lastActionMessage; }
 
+    // Purpose: Mark a mission as failed and save the change.
     public void failMission(Mission mission) {
         requireOwnedMission(mission);
         if (MissionLifecycle.fail(mission)) AuthService.getInstance().saveData();
     }
 
+    // Purpose: Stop the operation if the mission does not belong to the current user.
     private void requireOwnedMission(Mission mission) {
         User user = AuthService.getInstance().requireCurrentUser();
         if (mission == null || !user.getMissions().contains(mission)) {
@@ -155,6 +167,7 @@ public class MissionService {
 
     public List<Achievement> getAchievements() { return ProgressionService.achievements(getTotalPoints()); }
 
+    //  Login or register the user and save the change. The loginMode parameter determines whether to log in or register.
     public void authenticate(String username, String password, boolean loginMode) {
         if (loginMode) {
             AuthService.getInstance().login(username, password);
@@ -163,16 +176,19 @@ public class MissionService {
         }
     }
 
+    // Check if the current user has a course. 
     public boolean hasCurrentCourse() {
         User user = AuthService.getInstance().getCurrentUser();
         return user != null && user.hasCourse();
     }
 
+    // Return the current course name for the current user
     public String getCurrentCourseName() {
         if (!hasCurrentCourse()) throw new IllegalStateException("Create a course first.");
         return AuthService.getInstance().requireCurrentUser().getCurrentCourse().getCourseName();
     }
 
+    // Return the current course dates for the current user
     public String getCurrentCourseDates() {
         if (!hasCurrentCourse()) throw new IllegalStateException("Create a course first.");
         CourseCycle course = AuthService.getInstance().requireCurrentUser().getCurrentCourse();
@@ -180,6 +196,7 @@ public class MissionService {
         return course.getStartDate().format(format) + " - " + course.getEndDate().format(format);
     }
 
+    // Purpose: Create a new course for the current user and save the change.
     public void createCourse(String courseName, LocalDate start, LocalDate end) {
         AuthService.getInstance().createCourse(courseName, start, end);
     }

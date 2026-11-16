@@ -13,6 +13,7 @@ public class MissionStorage {
 
     private MissionStorage() {}
 
+    //  Purpose: Write the mission details to the account save file.
     public static void write(Mission mission, DataOutputStream output) throws IOException {
         output.writeUTF(mission.getName());
         output.writeUTF(mission.getDescription());
@@ -21,7 +22,8 @@ public class MissionStorage {
         output.writeUTF(mission.getDifficulty());
         output.writeUTF(mission.getStatus());
     }
-
+    
+    // Purpose: Read the mission details from the account save file and return a new mission status.
     public static Mission read(DataInputStream input) throws IOException {
         String name = input.readUTF();
         String notes = input.readUTF();
