@@ -10,6 +10,7 @@ import com.brewcoders.ascend.model.Mission;
 public class MissionRules {
     private MissionRules() {}
 
+    // Purpose: Check that a new mission is active, is not overdue, and has a due date within the currently active course.
     public static void validateNewMission(Mission mission, CourseCycle course, LocalDate today) {
         if (course == null) throw new IllegalStateException("Create a course first.");
         if (today == null) throw new IllegalArgumentException("A date is required.");
@@ -29,6 +30,7 @@ public class MissionRules {
         }
     }
 
+    // Purspose: Mark unfinished missions as failed when their deadlines passed and return when status changed.
     public static boolean refresh(List<Mission> missions, CourseCycle course, LocalDate today) {
         if (today == null) throw new IllegalArgumentException("A date is required.");
         boolean changed = false;
@@ -43,6 +45,7 @@ public class MissionRules {
         return changed;
     }
 
+    // Purpose: Complete a mission only if it is active, not overdue, and the course is still active.
     public static boolean complete(Mission mission, CourseCycle course, LocalDate today) {
         if (mission == null) return false;
         MissionLifecycle.refreshDeadline(mission, today);

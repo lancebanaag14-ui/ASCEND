@@ -12,6 +12,7 @@ public class AccountStore {
     private final Path directory;
     private final Path file;
 
+    // Choose the account storage folder and set the accounts.dat file path. */
     public AccountStore() {
         String custom = System.getProperty("ascend.dataDir");
         if (custom == null || custom.isBlank()) {
@@ -22,8 +23,10 @@ public class AccountStore {
         file = directory.resolve("accounts.dat");
     }
 
+    // Return the full location of the account data file. */
     public String getFilePath() { return file.toAbsolutePath().toString(); }
 
+    // Read saved accounts, reject invalid or incomplete data, and return an empty list if no save file exists.
     public ArrayList<Account> load() throws IOException {
         ArrayList<Account> accounts = new ArrayList<>();
         if (!Files.exists(file)) return accounts;
@@ -49,6 +52,7 @@ public class AccountStore {
         return accounts;
     }
 
+    //  Write accounts to a temporary file, back up the previous save, and replace the main account file with the new data.
     public void save(List<Account> accounts) throws IOException {
         Files.createDirectories(directory);
         Path temporary = directory.resolve("accounts.dat.tmp");
@@ -63,8 +67,6 @@ public class AccountStore {
             try {
                 Files.move(temporary, file, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
             } catch (AtomicMoveNotSupportedException e) {
-                // Purpose: Support filesystems without atomic rename after the complete file is closed.
-                // Connection to Frontend: Save remains available on ordinary supported desktop filesystems.
                 Files.move(temporary, file, StandardCopyOption.REPLACE_EXISTING);
             }
         } finally {

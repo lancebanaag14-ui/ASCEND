@@ -51,7 +51,7 @@ public class Account {
         for (int i = 0; i < missions.size(); i++) MissionStorage.write(missions.get(i), output);
     }
 
-    /* Purpose: Validate a saved account before making it available to the service.
+    /* Purpose: Validate a saved account before making it available
      */
     public static Account readFrom(DataInputStream input) throws IOException {
         User user = new User(input.readUTF());

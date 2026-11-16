@@ -2,7 +2,7 @@ package com.brewcoders.ascend.backend.model.mission;
 
 import java.time.LocalDate;
 
-/* Purpose: Represent a practice mission using the shared mission rules.
+/* Purpose: Represent the mission using the shared mission rules.
  */
 public class PracticeMission extends ParentMission {
 

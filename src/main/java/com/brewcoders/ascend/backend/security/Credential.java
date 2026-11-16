@@ -20,7 +20,7 @@ public class Credential {
      */
     public Credential(String password) {
         validatePassword(password);
-        salt = new byte[16];
+        salt = new byte[16]; // salt is a random value that is different for each account, so that the same password will not produce the same hash.
         new SecureRandom().nextBytes(salt);
         passwordHash = calculateHash(password);
     }
