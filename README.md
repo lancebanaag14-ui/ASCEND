@@ -1,7 +1,7 @@
-<p align="center">
-  <b><font size="6">ASCEND</font></b><br>
-  <strong>Advancing Skills through Challenges, Experiences, and Navigating Development</strong>
-</p>
+<div align="center">
+  <h3>ASCEND</h3>
+  <p><strong>Advancing Skills through Challenges, Experiences, and Navigating Development</strong></p>
+</div>
 
 ## Project Description
 **ASCEND (Advancing Skills through Challenges, Experiences, and Navigating Development)** is an offline, gamified Java desktop productivity application built for student programmers and aspiring developers. Designed with a retro pixel-art interface, ASCEND transforms daily coding tasks, coursework, and study goals into structured in-game "Missions". By completing tasks before their deadlines, users earn experience points (XP), level up their virtual developer avatars, and unlock achievement ranks within time-bound Focus Cycles.
@@ -91,10 +91,10 @@ The project aims to:
 - **Apache Maven** installed (or use the Maven extension in VS Code / IntelliJ IDEA).
 
 ### Steps to Run
-1. Clone the repository from GitHub ([https://github.com/lancebanaag14-ui/ASCEND.git](https://github.com/lancebanaag14-ui/ASCEND.git)) and open the project folder in your terminal or IDE.
-2. Run the application using the Maven command:
+1. Clone the repository from GitHub ([https://github.com/lancebanaag14-ui/ASCEND.git](https://github.com/lancebanaag14-ui/ASCEND.git)) and open the project folder in your IDE (e.g., VS Code).
+2. Open `pom.xml` (or ensure your terminal is inside the project's root directory where `pom.xml` is located), open a **New Terminal**, and run:
    ```bash
-   mvn clean javafx:run
+   mvn javafx:run
    ```
 3. On the launch screen, switch to the **Signup** tab, enter a valid username (3–30 characters) and password (8–64 characters), and click **Signup >**.
 4. Enter your **Course Name** and pick your **Focus Cycle** start and end dates, then click **Create course >**.
@@ -108,6 +108,7 @@ The project aims to:
 | :--- | :---: |
 | **Login Screen** | ![Login Screen](screenshots/login.png) |
 | **Signup Screen** | ![Signup Screen](screenshots/signup.png) |
+| **Course & Focus Cycle Setup** | ![Course Setup](screenshots/course_setup.png) |
 | **Active Missions Dashboard** | ![Missions Dashboard](screenshots/missions_dashboard.png) |
 | **Create a Mission Modal** | ![Create Mission Modal](screenshots/create_mission.png) |
 | **Profile — Personal Information** | ![Profile Personal Info](screenshots/profile_info.png) |
