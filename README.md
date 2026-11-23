@@ -1,9 +1,7 @@
 <p align="center">
-  <img src="src/main/resources/images/logo.png" width="38" style="vertical-align: middle;" alt="ASCEND Logo">
-  <span style="vertical-align: middle;"><b><font size="6"> ASCEND</font></b></span><br>
+  <b><font size="6">ASCEND</font></b><br>
   <strong>Advancing Skills through Challenges, Experiences, and Navigating Development</strong>
 </p>
-
 
 ## Project Description
 **ASCEND (Advancing Skills through Challenges, Experiences, and Navigating Development)** is an offline, gamified Java desktop productivity application built for student programmers and aspiring developers. Designed with a retro pixel-art interface, ASCEND transforms daily coding tasks, coursework, and study goals into structured in-game "Missions". By completing tasks before their deadlines, users earn experience points (XP), level up their virtual developer avatars, and unlock achievement ranks within time-bound Focus Cycles.
