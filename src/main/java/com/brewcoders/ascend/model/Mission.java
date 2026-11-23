@@ -12,16 +12,14 @@ public class Mission {
     private String category;
     private String difficulty;
     private int points;
-    private String status; // "ACTIVE", "COMPLETED", "FAILED"
+    private String status; 
 
     public Mission(String name, String description, LocalDate dueDate, String category, String difficulty, int points) {
-        // NEW CHANGED
         // Purpose: Validate the existing constructor values before assigning the private fields.
         MissionValidation.validate(name, description, dueDate, category, difficulty);
         this.name = name.trim();
         this.description = description == null ? "" : description;
         this.dueDate = dueDate;
-        // NEW CHANGED
         // Purpose: Normalize valid choices and derive the correct reward in the backend.
         this.category = MissionValidation.category(category);
         this.difficulty = MissionValidation.difficulty(difficulty);
@@ -42,7 +40,7 @@ public class Mission {
 
     // Status Tracking Getters and Setters
     public String getStatus() { return status; }
-    // NEW CHANGED
+   
     // Purpose: Keep the original setter while rejecting unknown or reversed final states.
     public void setStatus(String status) {
         MissionLifecycle.validateTransition(this, status);

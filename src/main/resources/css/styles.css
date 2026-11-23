@@ -79,7 +79,7 @@
     -fx-alignment: center;
 }
 
-/* Main Form Card (Targeting 680px Width) */
+/* Main Form Card */
 .auth-card {
     -fx-background-color: #fbe6af;
     -fx-border-color: #4a2810;
@@ -484,7 +484,6 @@
 }
 
 /* Avatar Card */
-/* Card Container */
 .missions-avatar-card {
     -fx-background-color: #fbe6af;      
     -fx-border-color: #4a2810;          
@@ -527,7 +526,7 @@
     -fx-text-fill: #1b4d3e;
 }
 
-/* Progress Bar (Matching reference image) */
+/* Progress Bar */
 .missions-progress-bar {
     -fx-pref-height: 20px;
 }
@@ -654,7 +653,7 @@
     -fx-margin: 0 0 4px 0;
 }
 
-/* Course title ("OOP") */
+/* Course title */
 .header-course-title {
     -fx-font-family: "Press Start 2P";
     -fx-font-size: 24px;
@@ -768,7 +767,7 @@
     -fx-text-fill: #594539;
 }
 
-/* Initials Avatar Box (Dark Green Square) */
+/* Initials Avatar Box */
 .profile-initials-avatar-frame {
     -fx-background-color: #0b3c2c;
     -fx-border-color: #041711;
@@ -859,7 +858,7 @@
     -fx-line-spacing: 5px;
 }
 
-/* Style for pixel-art TextArea with internal breathing room */
+/* Style for pixel-art TextArea */
 .text-area .scroll-pane .content {
     -fx-background-color: #ffffff;
     -fx-background-insets: 0;
@@ -982,7 +981,7 @@
     -fx-text-fill: #ffffff;
 }
 
-/* Icon Box - Failed (Red) */
+/* Icon Box - Failed */
 .status-icon-box-failed {
     -fx-background-color: #c84c4c;
     -fx-border-color: #3b1d08;
