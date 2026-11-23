@@ -9,7 +9,7 @@
 
 
 ## Problem Being Addressed
-Learning programming requires consistent, hands-on practice, yet student programmers and self-taught developers often struggle to maintain focus and structured study habits. Standard productivity tools—such as generic to-do lists and plain calendars—lack immediate feedback, visual progression, or built-in motivation. As a result, learners preparing for coding exams, laboratory exercises, and software projects frequently experience burnout, procrastination, and abandoned study routines. ASCEND solves this by offering a distraction-free, offline environment that rewards discipline with tangible progression loops.
+Learning programming requires consistent, hands-on practice, yet student programmers and aspiring developers frequently struggle to maintain focus and structured study habits. Standard productivity tools, such as basic to-do lists and generic calendars, are often ineffective because they do not offer immediate feedback or display personal growth. Consequently, learners preparing for academic coursework, technical examinations, and software projects often lose motivation and abandon their study routines. ASCEND: Advancing Skills through Challenges, Experiences & Navigating Development addresses this challenge by converting daily coding tasks into a structured, offline Java desktop application. Operating offline ensures a distraction-free environment while allowing users to organize goals into actionable coding "Missions". 
 
 
 
