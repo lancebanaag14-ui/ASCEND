@@ -3,7 +3,7 @@
 </p>
 
 <div align="center">
-  <h1>🎮 Ascend</h1>
+  <h1>🎮 ASCEND</h1>
   <h3>Advancing Skills through Challenges, Experiences, and Navigating Development</h3>
 </div>
 
