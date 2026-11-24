@@ -312,21 +312,19 @@ ASCEND/
 ## 📝 Other Sections
 
 ### Known Limitations
-- **Offline-Only Storage:** Progress is saved locally in `.dat` files and does not sync across devices or cloud databases.
-- **Single-Player Focus:** Does not include online leaderboards, peer-to-peer task sharing, or social features.
-- **Manual Mission Confirmation:** Does not automatically scan or compile IDE code files; task completions rely on manual confirmation.
-- **No External Calendar Alerts:** Operates independently without external push notifications or Google Calendar / Outlook integration.
 
-### Future Enhancements
-- **Multi-Course Switching:** Allow users to manage multiple active courses simultaneously without resetting current cycle progress.
-- **Archived Cycle Analytics:** Add visual charts comparing productivity and completion rates across past Focus Cycles.
-- **Custom Avatar Cosmetics & Chiptune Audio:** Introduce unlockable retro pixel themes, badges, and sound effects for mission completions and rank-ups.
-- **Optional JSON / SQLite Backup Export:** Support exporting and importing save files across computers.
+1. **Online Synchronization and Cloud Storage:** The application operates strictly as an offline desktop tool, meaning user data, mission logs, and progress are stored locally and will not synchronize across multiple devices or cloud databases.
+2. **Multiplayer or Social Collaboration:** The system does not support online leaderboards, peer-to-peer task sharing, friends lists, or direct communication between users.
+3. **Automated Integrated Development Environment (IDE) Code Tracking:** The application does not automatically monitor or compile a user's local code files; mission completions rely on manual user submission and task confirmation.
+4. **Third-Party Calendar and Notification Integration:** The system will not send external email alerts, mobile push notifications, or synchronize with external calendar services like Google Calendar or Outlook.
+5. **Real-Money In-App Transactions:** Avatar ranks, rewards, and customization options are unlocked exclusively through in-game experience points earned via task completions and cannot be purchased.
 
-### References
-- Java 17+ Standard Library & Java NIO Binary Streams
-- JavaFX 21 UI Framework & Apache Maven
-- Object-Oriented Design Principles (Encapsulation, Abstraction, Inheritance, Polymorphism)
+### Future Improvements
+
+* **Multi-Course Switching:** Allow users to maintain multiple active courses simultaneously rather than resetting progress when starting a new course.
+* **Archived Cycle Analytics:** Add charts and summary statistics comparing productivity across past completed Focus Cycles.
+* **Custom Avatar Cosmetics & Sound Effects:** Introduce unlockable retro pixel themes, badges, and chiptune audio feedback upon mission completion and rank-ups.
+* **Optional Cloud Backup:** Add JSON/SQLite export and import functionality so users can back up or transfer their save files between computers.
 
 
 
