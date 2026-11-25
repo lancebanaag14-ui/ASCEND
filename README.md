@@ -158,19 +158,6 @@ In this example:
 
 ```text
 ASCEND/
-├── screenshots/
-│   ├── Ascend_Banner.gif
-│   ├── course_setup.png
-│   ├── create_mission.png
-│   ├── Lance_Vhincent_M_Banaag.png
-│   ├── login.png
-│   ├── Mheven_B_Francisco.png
-│   ├── missions_dashboard.png
-│   ├── Nadine_C_Evangelio.png
-│   ├── profile_achievements.png
-│   ├── profile_history.png
-│   ├── profile_info.png
-│   └── signup.png
 ├── src/
 │   ├── main/
 │   │   ├── java/com/brewcoders/ascend/
