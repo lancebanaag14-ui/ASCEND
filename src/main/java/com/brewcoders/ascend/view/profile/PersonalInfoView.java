@@ -89,7 +89,7 @@ public class PersonalInfoView extends StackPane {
         deleteCard.setPadding(new Insets(16, 20, 16, 20));
 
         VBox deleteTextGroup = new VBox(4);
-        Label deleteTitle = new Label("Course and Account");
+        Label deleteTitle = new Label("Current Course");
         deleteTitle.getStyleClass().add("profile-delete-title");
         Label deleteSubtitle = new Label("Delete all current progress");
         deleteSubtitle.getStyleClass().add("profile-delete-subtitle");
@@ -259,7 +259,7 @@ public class PersonalInfoView extends StackPane {
             "-fx-border-width: 3.5px;"
         );
 
-        Label categoryHeader = new Label("COURSE AND ACCOUNT");
+        Label categoryHeader = new Label("DELETE COURSE");
         categoryHeader.setStyle(
             "-fx-font-family: 'Press Start 2P'; " +
             "-fx-font-size: 10px; " +
@@ -274,7 +274,7 @@ public class PersonalInfoView extends StackPane {
         );
         title.setWrapText(true);
 
-        Label message = new Label("Are you sure you want to delete all your current-course progress? This action cannot be undone.");
+        Label message = new Label("Are you sure you want to delete all your current course progress? This action cannot be undone.");
         message.setStyle(
             "-fx-font-family: 'Press Start 2P'; " +
             "-fx-font-size: 10px; " +
